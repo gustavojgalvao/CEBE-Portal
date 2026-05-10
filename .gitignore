@@ -1,0 +1,22 @@
+# dependências
+node_modules/
+
+# build
+dist/
+build/
+
+# variáveis de ambiente
+.env
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor de texto
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

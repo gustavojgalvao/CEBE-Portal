@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CEBE - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="../assets/style.css" rel="stylesheet" />
+</head>
+
+<body class="login-body">
+    <main class="login-container">
+        <div class="login-header">
+            <img alt="Centro Educacional Boa Esperança Logo" class="login-logo"
+                data-alt="Logotipo oficial do Centro Educacional Boa Esperança (CEBE) com as cores verde e branco."
+                src="/client/public/logo.png" />
+            <h1 class="login-title">Bem-vindo(a)</h1>
+            <p class="login-subtitle">Acesse o portal acadêmico</p>
+        </div>
+        <div class="login-card">
+            <form action="#" class="login-form" method="POST">
+                <div class="form-group">
+                    <label class="form-label" for="cpf">CPF do Responsável ou Aluno</label>
+                    <div class="input-wrapper">
+                        <span class="material-symbols-outlined input-icon">person</span>
+                        <input class="form-input" id="cpf" name="cpf" placeholder="000.000.000-00" required=""
+                            type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-label-wrapper">
+                        <label class="form-label" for="password">Senha</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="material-symbols-outlined input-icon">lock</span>
+                        <input class="form-input password-input" id="password" name="password" placeholder="••••••••"
+                            required="" type="password" />
+                        <button aria-label="Toggle password visibility" class="botao-ocultar-senha" type="button" onclick="togglePassword()">
+                            <span class="material-symbols-outlined" id="toggle-icon">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" type="submit">
+                        Entrar
+                        <span class="material-symbols-outlined btn-icon">login</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="login-footer">
+            <p class="footer-text">
+                Ainda não é aluno?
+                <a class="signup-link" href="/client/src/pages/matricula.html">Matricule-se aqui</a>
+            </p>
+        </div>
+    </main>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggle-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = 'visibility_off';
+            }
+        }
+    </script>
+</body>
+
+</html>

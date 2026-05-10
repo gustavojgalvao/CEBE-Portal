@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CEBE - Matrícula Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="../assets/style.css" rel="stylesheet" />
+</head>
+
+<body class="matricula-body">
+    <header class="matricula-header">
+        <div class="header-content">
+            <a href="/client/src/pages/login.html" class="logo-container">
+                <img alt="Logo CEBE" class="logo-img" data-alt="Logotipo do CEBE" src="/client/public/logo.png" />
+            </a>
+            <a class="btn-voltar" href="/client/src/pages/login.html">
+                <span class="material-symbols-outlined icon-sm">arrow_back</span>
+                <span>Voltar</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="matricula-main">
+        <div class="matricula-card">
+
+            <div class="overlay-sucesso escondido">
+                <div class="icone-sucesso-container">
+                    <span class="material-symbols-outlined icone-sucesso"
+                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                </div>
+                <h3 class="titulo-sucesso">Matrícula realizada com sucesso!</h3>
+                <p class="texto-sucesso">Use seu CPF para entrar no portal do aluno.</p>
+                <button class="botao-acessar" type="button">
+                    Acessar Portal
+                </button>
+            </div>
+
+            <div class="cabecalho-formulario">
+                <h1 class="titulo-formulario">Matrícula Online</h1>
+
+                <div class="stepper-container">
+                    <div class="stepper-linha-fundo"></div>
+                    <div class="stepper-linha-progresso" id="stepper-linha"></div>
+
+                    <div class="passo-container" id="stepper-passo-1">
+                        <div class="passo-circulo-ativo">
+                            1
+                        </div>
+                        <span class="passo-texto-ativo">Dados Pessoais</span>
+                    </div>
+
+                    <div class="passo-container" id="stepper-passo-2">
+                        <div class="passo-circulo-inativo">
+                            2
+                        </div>
+                        <span class="passo-texto-inativo">Escolha do Curso</span>
+                    </div>
+
+                    <div class="passo-container" id="stepper-passo-3">
+                        <div class="passo-circulo-inativo">
+                            3
+                        </div>
+                        <span class="passo-texto-inativo">Criação de Acesso</span>
+                    </div>
+                </div>
+            </div>
+
+            <form class="formulario-matricula">
+
+                <div class="secao-formulario" id="secao-1">
+                    <h2 class="titulo-secao-ativa">
+                        <span class="material-symbols-outlined icon-sm">person</span>
+                        Etapa 1: Dados Pessoais
+                    </h2>
+                    <div class="grid-campos">
+                        <div class="grupo-campo">
+                            <label class="rotulo-campo" for="fullName">Nome Completo</label>
+                            <input class="campo-entrada-matricula" id="fullName" name="fullName" type="text"
+                                placeholder="Ex: João Silva" />
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="rotulo-campo" for="cpf">CPF</label>
+                            <input class="campo-entrada-matricula" id="cpf" name="cpf" type="text"
+                                placeholder="000.000.000-00" />
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="rotulo-campo" for="email">E-mail</label>
+                            <input class="campo-entrada-matricula" id="email" name="email" type="email"
+                                placeholder="exemplo@email.com" />
+                        </div>
+                        <div class="grupo-campo">
+                            <label class="rotulo-campo" for="whatsapp">WhatsApp</label>
+                            <input class="campo-entrada-matricula" id="whatsapp" name="whatsapp" type="tel"
+                                placeholder="(11) 90000-0000" />
+                        </div>
+                    </div>
+                    <div class="acoes-formulario">
+                        <button class="botao-finalizar" type="button" onclick="avancarEtapa(2)" style="width: auto;">
+                            Continuar
+                        </button>
+                    </div>
+                </div>
+
+                <hr class="divisor-secao" />
+
+                <div class="secao-formulario-inativa" id="secao-2">
+                    <h2 class="titulo-secao">Etapa 2: Escolha do Curso</h2>
+                    <div class="grupo-campo-selecao">
+                        <label class="rotulo-campo" for="course">Selecione o Curso Desejado</label>
+                        <select class="campo-selecao" id="course" name="course" disabled>
+                            <option disabled="" selected="" value="">Escolha uma opção...</option>
+                            <option value="confeitaria">Confeitaria</option>
+                            <option value="auxiliar">Auxiliar Administrativo</option>
+                            <option value="informatica">Informática Básica</option>
+                        </select>
+                        <div class="icone-selecao-container">
+                            <span class="material-symbols-outlined">arrow_drop_down</span>
+                        </div>
+                    </div>
+                    <div class="acoes-formulario" id="acoes-secao-2" style="display: none;">
+                        <button class="botao-voltar-etapa" type="button" onclick="voltarEtapa(1)">
+                            Voltar
+                        </button>
+                        <button class="botao-finalizar" type="button" onclick="avancarEtapa(3)" style="width: auto;">
+                            Continuar
+                        </button>
+                    </div>
+                </div>
+
+                <hr class="divisor-secao" />
+
+                <div class="secao-formulario-inativa" id="secao-3">
+                    <h2 class="titulo-secao">Etapa 3: Criação de Acesso</h2>
+                    <div class="grupo-campo">
+                        <label class="rotulo-campo" for="birthdate">Data de Nascimento (Sua Senha)</label>
+                        <div class="input-wrapper">
+                            <input class="campo-entrada-matricula" id="birthdate" name="birthdate"
+                                placeholder="DD/MM/AAAA" type="text" maxlength="10" />
+                        </div>
+                        <p class="texto-ajuda">Sua data de nascimento (DD/MM/AAAA) será usada como senha para acessar o
+                            portal.</p>
+                    </div>
+
+                    <div class="acoes-formulario" id="acoes-secao-3" style="display: none;">
+                        <button class="botao-voltar-etapa" type="button" onclick="voltarEtapa(2)">
+                            Voltar
+                        </button>
+                        <button class="botao-finalizar" type="button" onclick="concluirMatricula()">
+                            Finalizar Matrícula
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function avancarEtapa(etapa) {
+            // Atualiza barra de progresso e ícones
+            const linhaProgresso = document.getElementById('stepper-linha');
+            const passoAnterior = document.getElementById(`stepper-passo-${etapa - 1}`);
+            const passoAtual = document.getElementById(`stepper-passo-${etapa}`);
+
+            if (etapa === 2) {
+                linhaProgresso.style.width = '50%';
+            } else if (etapa === 3) {
+                linhaProgresso.style.width = '100%';
+            }
+
+            // Atualiza círculo anterior para concluído
+            const circuloAnterior = passoAnterior.querySelector('div');
+            circuloAnterior.className = 'passo-circulo-concluido';
+            const textoAnterior = passoAnterior.querySelector('span');
+            textoAnterior.className = 'passo-texto-ativo';
+
+            // Atualiza círculo atual para ativo
+            const circuloAtual = passoAtual.querySelector('div');
+            circuloAtual.className = 'passo-circulo-ativo';
+            const textoAtual = passoAtual.querySelector('span');
+            textoAtual.className = 'passo-texto-ativo';
+
+            // Oculta o botão de continuar da etapa anterior
+            const acoesAnteriores = passoAnterior.id === 'stepper-passo-1' ? document.querySelector('#secao-1 .acoes-formulario') : document.getElementById(`acoes-secao-${etapa - 1}`);
+            if (acoesAnteriores) {
+                acoesAnteriores.style.display = 'none';
+            }
+
+            // Torna inativo a seção anterior
+            const secaoAnterior = document.getElementById(`secao-${etapa - 1}`);
+            secaoAnterior.className = 'secao-formulario-inativa';
+            // Pega o h2 da secao anterior
+            const tituloAnterior = secaoAnterior.querySelector('h2');
+            tituloAnterior.className = 'titulo-secao';
+            const iconeAnterior = tituloAnterior.querySelector('.material-symbols-outlined');
+            if (iconeAnterior) iconeAnterior.remove();
+
+            const inputsAnteriores = secaoAnterior.querySelectorAll('input, select');
+            inputsAnteriores.forEach(input => input.disabled = true);
+
+            // Ativa a seção atual
+            const secaoAtual = document.getElementById(`secao-${etapa}`);
+            secaoAtual.className = 'secao-formulario';
+            const tituloAtual = secaoAtual.querySelector('h2');
+            const tituloTexto = tituloAtual.innerText;
+            tituloAtual.className = 'titulo-secao-ativa';
+
+            // Adiciona o ícone baseado na etapa
+            const icone = etapa === 2 ? 'school' : 'lock';
+            tituloAtual.innerHTML = `<span class="material-symbols-outlined icon-sm">${icone}</span> ${tituloTexto}`;
+
+            const inputsAtuais = secaoAtual.querySelectorAll('input, select');
+            inputsAtuais.forEach(input => input.disabled = false);
+
+            const acoesAtuais = document.getElementById(`acoes-secao-${etapa}`);
+            if (acoesAtuais) {
+                acoesAtuais.style.display = 'flex';
+            }
+
+            // Foca suavemente na nova etapa
+            secaoAtual.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function voltarEtapa(etapaDestino) {
+            const linhaProgresso = document.getElementById('stepper-linha');
+            const passoAtual = document.getElementById(`stepper-passo-${etapaDestino + 1}`);
+            const passoDestino = document.getElementById(`stepper-passo-${etapaDestino}`);
+
+            if (etapaDestino === 1) {
+                linhaProgresso.style.width = '0%';
+            } else if (etapaDestino === 2) {
+                linhaProgresso.style.width = '50%';
+            }
+
+            // Atualiza círculo atual para inativo
+            const circuloAtual = passoAtual.querySelector('div');
+            circuloAtual.className = 'passo-circulo-inativo';
+            const textoAtual = passoAtual.querySelector('span');
+            textoAtual.className = 'passo-texto-inativo';
+
+            // Atualiza círculo destino para ativo
+            const circuloDestino = passoDestino.querySelector('div');
+            circuloDestino.className = 'passo-circulo-ativo';
+            const textoDestino = passoDestino.querySelector('span');
+            textoDestino.className = 'passo-texto-ativo';
+
+            // Oculta o botão de continuar/finalizar da etapa atual
+            const acoesAtuais = document.getElementById(`acoes-secao-${etapaDestino + 1}`);
+            if (acoesAtuais) {
+                acoesAtuais.style.display = 'none';
+            }
+
+            // Torna inativa a seção atual
+            const secaoAtual = document.getElementById(`secao-${etapaDestino + 1}`);
+            secaoAtual.className = 'secao-formulario-inativa';
+            const tituloAtual = secaoAtual.querySelector('h2');
+            tituloAtual.className = 'titulo-secao';
+            const iconeAtual = tituloAtual.querySelector('.material-symbols-outlined');
+            if (iconeAtual) iconeAtual.remove();
+
+            const inputsAtuais = secaoAtual.querySelectorAll('input, select');
+            inputsAtuais.forEach(input => input.disabled = true);
+
+            // Ativa a seção destino
+            const secaoDestino = document.getElementById(`secao-${etapaDestino}`);
+            secaoDestino.className = 'secao-formulario';
+            const tituloDestino = secaoDestino.querySelector('h2');
+            const tituloTexto = tituloDestino.innerText;
+            tituloDestino.className = 'titulo-secao-ativa';
+
+            const icone = etapaDestino === 1 ? 'person' : 'school';
+            tituloDestino.innerHTML = `<span class="material-symbols-outlined icon-sm">${icone}</span> ${tituloTexto}`;
+
+            const inputsDestino = secaoDestino.querySelectorAll('input, select');
+            inputsDestino.forEach(input => input.disabled = false);
+
+            const acoesDestino = etapaDestino === 1 ? document.querySelector('#secao-1 .acoes-formulario') : document.getElementById(`acoes-secao-${etapaDestino}`);
+            if (acoesDestino) {
+                acoesDestino.style.display = 'flex';
+            }
+
+            // Foca suavemente na etapa de destino
+            secaoDestino.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function concluirMatricula() {
+            // Mostra o overlay de sucesso
+            const overlay = document.querySelector('.overlay-sucesso');
+            overlay.classList.remove('escondido');
+
+            // Aqui enviaria os dados ao servidor no mundo real
+        }
+
+        // Máscara para Data de Nascimento
+        const dataInput = document.getElementById('birthdate');
+        dataInput.addEventListener('input', function (e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            if (valor.length > 2) {
+                valor = valor.substring(0, 2) + '/' + valor.substring(2);
+            }
+            if (valor.length > 5) {
+                valor = valor.substring(0, 5) + '/' + valor.substring(5, 9);
+            }
+            e.target.value = valor;
+        });
+
+        // Máscara para CPF
+        const cpfInput = document.getElementById('cpf');
+        cpfInput.addEventListener('input', function (e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            if (valor.length > 3) {
+                valor = valor.substring(0, 3) + '.' + valor.substring(3);
+            }
+            if (valor.length > 7) {
+                valor = valor.substring(0, 7) + '.' + valor.substring(7);
+            }
+            if (valor.length > 11) {
+                valor = valor.substring(0, 11) + '-' + valor.substring(11, 13);
+            }
+            e.target.value = valor;
+        });
+
+        // Máscara para WhatsApp
+        const whatsInput = document.getElementById('whatsapp');
+        whatsInput.addEventListener('input', function (e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            if (valor.length > 0) {
+                valor = '(' + valor;
+            }
+            if (valor.length > 3) {
+                valor = valor.substring(0, 3) + ') ' + valor.substring(3);
+            }
+            if (valor.length > 10) {
+                valor = valor.substring(0, 10) + '-' + valor.substring(10, 14);
+            }
+            e.target.value = valor;
+        });
+    </script>
+</body>
+
+</html>
