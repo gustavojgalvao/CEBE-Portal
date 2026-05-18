@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEBE - Portal do Aluno</title>
+    <meta name="description" content="Portal de Cursos Profissionalizantes do Centro Educacional Boa Esperança">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS and JS -->
+    <link rel="stylesheet" href="./src/index.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+                <h1>Portal CEBE</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="#cursos">Cursos e Turmas</a>
+                <a href="#matricula">Fazer Matrícula</a>
+                <a href="#agendamento" class="btn-primary">Agendar Visita</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Construa seu futuro com o Centro Educacional Boa Esperança</h2>
+            <p>Esqueça a burocracia de papel. Encontre sua turma, faça sua matrícula e tire dúvidas, tudo em um só lugar.</p>
+            <div class="hero-actions">
+                <a href="#cursos" class="btn-primary large">Ver Cursos</a>
+                <a href="#matricula" class="btn-outline large">Área do Aluno</a>
+            </div>
+        </div>
+        
+        <!-- Decorative Shapes for Aesthetics -->
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </section>
+
+    <main class="container">
+        
+        <!-- Section: Available Classes -->
+        <section id="cursos" class="dashboard-section">
+            <div class="section-header">
+                <h3>Turmas e Vagas Disponíveis</h3>
+                <p>Veja em tempo real a lotação de cada turma.</p>
+            </div>
+            
+            <div class="grid" id="classes-grid">
+                <!-- Classes will be injected here via JS -->
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </section>
+
+        <!-- Section: Registration (Matrícula) -->
+        <section id="matricula" class="dashboard-section split-layout">
+            <div class="form-container glass-panel">
+                <h3>Nova Matrícula</h3>
+                <form id="enrollment-form">
+                    <div class="form-group">
+                        <label for="studentName">Nome Completo</label>
+                        <input type="text" id="studentName" required placeholder="Ex: Maria Souza">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPhone">Telefone</label>
+                        <input type="tel" id="studentPhone" required placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="courseSelect">Curso Desejado</label>
+                        <select id="courseSelect" required>
+                            <!-- Options will be populated -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="shiftSelect">Turno</label>
+                        <select id="shiftSelect" required>
+                            <option value="Manhã">Manhã</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noite">Noite</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Realizar Matrícula</button>
+                    <div id="enrollment-feedback" class="feedback-msg"></div>
+                </form>
+            </div>
+
+            <!-- Section: Appointment -->
+            <div class="form-container glass-panel" id="agendamento">
+                <h3>Agendar Atendimento ou Dúvida</h3>
+                <form id="appointment-form">
+                    <div class="form-group">
+                        <label for="appType">Tipo de Atendimento</label>
+                        <select id="appType" required>
+                            <option value="Visita">Conhecer as Instalações</option>
+                            <option value="Duvida">Dúvida Geral</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appName">Seu Nome</label>
+                        <input type="text" id="appName" required>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="appDate">Data</label>
+                            <input type="date" id="appDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appTime">Horário</label>
+                            <input type="time" id="appTime" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">Agendar</button>
+                    <div id="appointment-feedback" class="feedback-msg"></div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Centro Educacional Boa Esperança. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Main JS Application -->
+    <script type="module" src="./src/pages/main.js"></script>
+</body>
+</html>
