@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Meus Cursos – CEBE Portal. Acompanhe seu progresso e acesse o material didático." />
+    <meta name="description" content="Meus Cursos – CEBE Portal. Acompanhe seu progresso, notas e faltas." />
     <title>Meus Cursos – CEBE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,41 +16,39 @@
 <body class="dashboard-body">
 
 <div class="dashboard-layout">
-    <!-- sidebar + topbar injetados por nav.js -->
     <div class="main-wrapper">
         <main class="cursos-main">
             <div class="cursos-content">
 
-                <!-- Cabeçalho da página -->
+                <!-- Cabeçalho -->
                 <div class="page-header">
                     <div>
                         <h1 class="page-title">Meus Cursos</h1>
                         <p class="page-subtitle">Acompanhe seu progresso e acesse o material didático das suas formações.</p>
                     </div>
                     <div class="tab-switcher" role="tablist" aria-label="Filtro de cursos">
-                        <button class="tab-btn active" role="tab" aria-selected="true" id="tab-andamento">Em andamento</button>
-                        <button class="tab-btn" role="tab" aria-selected="false" id="tab-concluidos">Concluídos</button>
+                        <button class="tab-btn active" role="tab" aria-selected="true"  id="tab-andamento">Em andamento</button>
+                        <button class="tab-btn"        role="tab" aria-selected="false" id="tab-concluidos">Concluídos</button>
                     </div>
                 </div>
 
                 <!-- Grade principal -->
                 <div class="cursos-grid">
 
-                    <!-- ── Coluna esquerda: lista de cursos ────────────── -->
+                    <!-- ── Coluna esquerda: lista de cursos ─────────── -->
                     <div class="cursos-left-col">
                         <h2 class="cursos-section-title">Cursos Ativos</h2>
 
-                        <!-- Card selecionado -->
-                        <article class="course-card-selected" id="card-confeitaria" tabindex="0"
-                            aria-label="Confeitaria Básica e Avançada – selecionado">
-                            <div class="course-card-selected-bg"></div>
+                        <!-- Card: Confeitaria -->
+                        <article class="course-card-inactive" id="card-confeitaria" tabindex="0"
+                            aria-label="Confeitaria Básica e Avançada" role="button">
                             <div class="course-card-inner">
                                 <div class="course-card-top">
                                     <span class="course-category-tag primary-tag">Profissionalizante</span>
                                     <span class="material-symbols-outlined course-star-icon"
                                         style="font-variation-settings:'FILL' 1;" aria-label="Favorito">star</span>
                                 </div>
-                                <h3 class="course-card-name">Confeitaria Básica e Avançada</h3>
+                                <h3 class="course-card-name secondary-color">Confeitaria Básica e Avançada</h3>
                                 <div class="course-info-grid">
                                     <div class="course-info-item">
                                         <span class="material-symbols-outlined">person</span> Prof. Mariana Silva
@@ -64,7 +62,7 @@
                                 </div>
                                 <div class="course-progress-section">
                                     <div class="course-progress-label-row">
-                                        <span>Progresso do Curso</span>
+                                        <span>Progresso</span>
                                         <span class="course-progress-value">45%</span>
                                     </div>
                                     <div class="progress-bar-track">
@@ -74,9 +72,9 @@
                             </div>
                         </article>
 
-                        <!-- Card inativo -->
+                        <!-- Card: Auxiliar de Escritório -->
                         <article class="course-card-inactive" id="card-escritorio" tabindex="0"
-                            aria-label="Auxiliar de Escritório">
+                            aria-label="Auxiliar de Escritório" role="button">
                             <div class="course-card-inner">
                                 <div class="course-card-top">
                                     <span class="course-category-tag secondary-tag">Apoio Administrativo</span>
@@ -95,7 +93,7 @@
                                 </div>
                                 <div class="course-progress-section">
                                     <div class="course-progress-label-row">
-                                        <span>Progresso do Curso</span>
+                                        <span>Progresso</span>
                                         <span class="course-progress-value muted">10%</span>
                                     </div>
                                     <div class="progress-bar-track">
@@ -106,135 +104,225 @@
                         </article>
                     </div><!-- /cursos-left-col -->
 
-                    <!-- ── Coluna direita: detalhes do curso ───────────── -->
-                    <div class="cursos-right-col" id="course-details">
+                    <!-- ── Coluna direita: estado vazio ou detalhes ─── -->
+                    <div class="cursos-right-col" id="course-details-col">
 
-                        <!-- Banner -->
-                        <div class="course-banner">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlJppfKMUdoCARtzZ0EeG63HRMRojLkxO50zw3NJEAQDgOwdxLw4M0giIBB1vFR9sA_mzDyPSCLo4e6o-2Lt-PPRQhhNJVOrHyF4-718QQt6DN_C2-FGC0HK-jMOug3FrqRY6mdqThz4uZHXn06SO9_hLGieKus9mNodK_lJcQqoDLYvjHCqDNfQWgN6JLPfldeizdVhv580rrzh7KO_MdvCyMQ5W_V3bfBXozcuD6UC3cw7SxAHk9BJpN-OxX_V0JKrrfdk5X4Jw"
-                                alt="Banner – Confeitaria Básica e Avançada" class="course-banner-img" />
-                            <div class="course-banner-overlay">
-                                <div class="course-banner-text">
-                                    <h2 class="course-banner-title">Confeitaria Básica e Avançada</h2>
-                                    <p class="course-banner-subtitle">Turma 2024.1 • Turno Tarde</p>
-                                </div>
+                        <!-- Estado vazio (padrão) -->
+                        <div class="course-empty-state" id="course-empty-state">
+                            <div class="course-empty-icon">
+                                <span class="material-symbols-outlined">school</span>
                             </div>
-                            <a href="#" class="btn-acessar-conteudo" id="btn-acessar">
-                                Acessar Conteúdo
-                                <span class="material-symbols-outlined">arrow_forward</span>
-                            </a>
+                            <p class="course-empty-title">Selecione um curso</p>
+                            <p class="course-empty-sub">Clique em um dos seus cursos ao lado para ver notas, faltas e detalhes.</p>
                         </div>
 
-                        <h2 class="details-section-title">Detalhes: Confeitaria Básica e Avançada</h2>
+                        <!-- Detalhes (injetados por JS) -->
+                        <div id="course-detail-panel" style="display:none;"></div>
 
-                        <div class="details-grid">
-
-                            <!-- Provas e Notas -->
-                            <div class="detail-panel full-width">
-                                <div class="detail-panel-header">
-                                    <span class="material-symbols-outlined">assignment</span>
-                                    <h3 class="detail-panel-title">Provas e Notas</h3>
-                                </div>
-                                <div class="assessments-list">
-                                    <div class="assessment-item">
-                                        <div class="assessment-left">
-                                            <span class="material-symbols-outlined">description</span>
-                                            <div>
-                                                <p class="assessment-name">Avaliação Teórica</p>
-                                                <p class="assessment-date">Realizada em 15/09</p>
-                                            </div>
-                                        </div>
-                                        <div class="assessment-right">
-                                            <span class="assessment-nota-label">Nota</span>
-                                            <span class="assessment-nota-value">9.5</span>
-                                        </div>
-                                    </div>
-                                    <div class="assessment-item">
-                                        <div class="assessment-left">
-                                            <span class="material-symbols-outlined">description</span>
-                                            <div>
-                                                <p class="assessment-name">Avaliação Prática</p>
-                                                <p class="assessment-date">Realizada em 22/09</p>
-                                            </div>
-                                        </div>
-                                        <div class="assessment-right">
-                                            <span class="assessment-nota-label">Nota</span>
-                                            <span class="assessment-nota-value">8.0</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Tabela: Notas e Frequência -->
-                            <div class="table-panel full-width">
-                                <div class="table-panel-header">
-                                    <div class="table-panel-header-left">
-                                        <span class="material-symbols-outlined">analytics</span>
-                                        <h3 class="table-panel-header-title">Notas e Frequência</h3>
-                                    </div>
-                                </div>
-                                <div class="table-scroll">
-                                    <table class="grades-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Matéria</th>
-                                                <th class="center">Nota</th>
-                                                <th class="right">Frequência</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Teoria: Higiene e Segurança</td>
-                                                <td class="nota-cell">9.5</td>
-                                                <td class="freq-cell">100%</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Prática: Massas Base</td>
-                                                <td class="nota-cell">8.0</td>
-                                                <td class="freq-cell">90%</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Teoria: Empreendedorismo</td>
-                                                <td class="nota-cell pendente">Pendente</td>
-                                                <td class="freq-cell">100%</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div><!-- /details-grid -->
                     </div><!-- /cursos-right-col -->
                 </div><!-- /cursos-grid -->
             </div><!-- /cursos-content -->
         </main>
     </div><!-- /main-wrapper -->
 </div><!-- /dashboard-layout -->
-<!-- bottom-nav injetado por nav.js -->
 
+<script src="../services/notifications.js"></script>
 <script src="../components/nav.js"></script>
 <script>
-    // Tab switcher
-    const tabs = document.querySelectorAll('.tab-btn');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-            tab.classList.add('active');
-            tab.setAttribute('aria-selected', 'true');
-        });
+// ── Dados dos cursos ──────────────────────────────────────────────────────────
+const CURSOS = {
+    'card-confeitaria': {
+        nome:      'Confeitaria Básica e Avançada',
+        categoria: 'Profissionalizante',
+        turma:     'Turma 2024.1 • Turno Tarde',
+        professor: 'Prof. Mariana Silva',
+        sala:      'Sala 104 – Lab 2',
+        horario:   'Seg e Qua, 14h – 18h',
+        progresso: 45,
+        banner:    'https://lh3.googleusercontent.com/aida-public/AB6AXuAlJppfKMUdoCARtzZ0EeG63HRMRojLkxO50zw3NJEAQDgOwdxLw4M0giIBB1vFR9sA_mzDyPSCLo4e6o-2Lt-PPRQhhNJVOrHyF4-718QQt6DN_C2-FGC0HK-jMOug3FrqRY6mdqThz4uZHXn06SO9_hLGieKus9mNodK_lJcQqoDLYvjHCqDNfQWgN6JLPfldeizdVhv580rrzh7KO_MdvCyMQ5W_V3bfBXozcuD6UC3cw7SxAHk9BJpN-OxX_V0JKrrfdk5X4Jw',
+        avaliacoes: [
+            { nome: 'Avaliação Teórica',  data: '15/09', nota: 9.5 },
+            { nome: 'Avaliação Prática',  data: '22/09', nota: 8.0 },
+        ],
+        materias: [
+            { nome: 'Teoria: Higiene e Segurança',  nota: 9.5, freq: 100 },
+            { nome: 'Prática: Massas Base',         nota: 8.0, freq: 90  },
+            { nome: 'Teoria: Empreendedorismo',     nota: null, freq: 100 },
+        ]
+    },
+    'card-escritorio': {
+        nome:      'Auxiliar de Escritório',
+        categoria: 'Apoio Administrativo',
+        turma:     'Turma 2024.1 • Turno Manhã',
+        professor: 'Prof. Carlos Mendes',
+        sala:      'Sala 201',
+        horario:   'Ter e Qui, 08h – 12h',
+        progresso: 10,
+        banner:    null,
+        avaliacoes: [
+            { nome: 'Avaliação Introdutória', data: '10/09', nota: 7.5 },
+        ],
+        materias: [
+            { nome: 'Introdução ao Escritório', nota: 7.5, freq: 80  },
+            { nome: 'Informática Básica',       nota: null, freq: 90  },
+            { nome: 'Comunicação Empresarial',  nota: null, freq: 100 },
+        ]
+    }
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function notaClass(nota) {
+    if (nota === null) return 'nota-cell pendente';
+    if (nota >= 7) return 'nota-cell aprovado';
+    return 'nota-cell reprovado';
+}
+
+function notaText(nota) {
+    return nota !== null ? nota.toFixed(1) : 'Pendente';
+}
+
+function freqClass(freq) {
+    if (freq >= 75) return 'freq-cell ok';
+    return 'freq-cell baixa';
+}
+
+// ── Renderização do painel de detalhes ────────────────────────────────────────
+function renderCurso(id) {
+    const c = CURSOS[id];
+    if (!c) return;
+
+    const bannerHTML = c.banner
+        ? `<img src="${c.banner}" alt="Banner – ${c.nome}" class="course-banner-img" />`
+        : `<div class="course-banner-placeholder"><span class="material-symbols-outlined">school</span></div>`;
+
+    const avaliacoesHTML = c.avaliacoes.map(a => `
+        <div class="assessment-item">
+            <div class="assessment-left">
+                <span class="material-symbols-outlined">description</span>
+                <div>
+                    <p class="assessment-name">${a.nome}</p>
+                    <p class="assessment-date">Realizada em ${a.data}</p>
+                </div>
+            </div>
+            <div class="assessment-right">
+                <span class="assessment-nota-label">Nota</span>
+                <span class="assessment-nota-value">${a.nota.toFixed(1)}</span>
+            </div>
+        </div>`).join('');
+
+    const materiasHTML = c.materias.map(m => `
+        <tr>
+            <td>${m.nome}</td>
+            <td class="${notaClass(m.nota)}">${notaText(m.nota)}</td>
+            <td class="${freqClass(m.freq)}">${m.freq}%</td>
+        </tr>`).join('');
+
+    document.getElementById('course-detail-panel').innerHTML = `
+        <div class="course-detail-animated">
+
+            <!-- Banner -->
+            <div class="course-banner">
+                ${bannerHTML}
+                <div class="course-banner-overlay">
+                    <div class="course-banner-text">
+                        <h2 class="course-banner-title">${c.nome}</h2>
+                        <p class="course-banner-subtitle">${c.turma}</p>
+                    </div>
+                </div>
+                <a href="#" class="btn-acessar-conteudo">
+                    Acessar Conteúdo
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- Título seção -->
+            <h2 class="details-section-title">Detalhes: ${c.nome}</h2>
+
+            <div class="details-grid">
+
+                <!-- Provas e Notas -->
+                <div class="detail-panel full-width">
+                    <div class="detail-panel-header">
+                        <span class="material-symbols-outlined">assignment</span>
+                        <h3 class="detail-panel-title">Provas e Notas</h3>
+                    </div>
+                    <div class="assessments-list">${avaliacoesHTML}</div>
+                </div>
+
+                <!-- Tabela: Notas e Frequência -->
+                <div class="table-panel full-width">
+                    <div class="table-panel-header">
+                        <div class="table-panel-header-left">
+                            <span class="material-symbols-outlined">analytics</span>
+                            <h3 class="table-panel-header-title">Notas e Frequência</h3>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="grades-table">
+                            <thead>
+                                <tr>
+                                    <th>Matéria</th>
+                                    <th class="center">Nota</th>
+                                    <th class="right">Frequência</th>
+                                </tr>
+                            </thead>
+                            <tbody>${materiasHTML}</tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div><!-- /details-grid -->
+        </div><!-- /course-detail-animated -->`;
+}
+
+// ── Seleção de card ───────────────────────────────────────────────────────────
+const emptyState   = document.getElementById('course-empty-state');
+const detailPanel  = document.getElementById('course-detail-panel');
+let   selectedCard = null;
+
+function selectCard(card) {
+    // Reset visual
+    document.querySelectorAll('.course-card-selected, .course-card-inactive').forEach(c => {
+        c.className = 'course-card-inactive';
+        c.querySelector('.course-card-name')?.classList.add('secondary-color');
     });
 
-    // Seleção de card de curso
-    const cards = document.querySelectorAll('.course-card-selected, .course-card-inactive');
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            document.querySelectorAll('[class^="course-card-"]').forEach(c => c.className = 'course-card-inactive');
-            card.className = 'course-card-selected';
-        });
-        card.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
-        });
+    // Ativa o card clicado
+    card.className = 'course-card-selected';
+    card.querySelector('.course-card-name')?.classList.remove('secondary-color');
+
+    // Remove a decoração verde nos selecionados
+    if (!card.querySelector('.course-card-selected-bg')) {
+        const bg = document.createElement('div');
+        bg.className = 'course-card-selected-bg';
+        card.insertBefore(bg, card.firstChild);
+    }
+
+    // Renderiza detalhes
+    renderCurso(card.id);
+    emptyState.style.display  = 'none';
+    detailPanel.style.display = 'block';
+    selectedCard = card.id;
+}
+
+document.querySelectorAll('.course-card-inactive, .course-card-selected').forEach(card => {
+    card.addEventListener('click', () => selectCard(card));
+    card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCard(card); }
     });
+});
+
+// ── Tab switcher ──────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+    });
+});
 </script>
 </body>
 </html>
