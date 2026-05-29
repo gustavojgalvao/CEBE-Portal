@@ -1,0 +1,632 @@
+/* ===================================================
+   Cursos – CSS dedicado
+   Depende de: style.css  |  dashboard.css (sidebar/topbar/bottom-nav)
+   =================================================== */
+
+/* ===================================================
+   MAIN CANVAS
+   =================================================== */
+.cursos-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-bottom: 96px;
+}
+
+@media (min-width: 768px) {
+    .cursos-main {
+        padding: 32px;
+        padding-bottom: 48px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .cursos-main {
+        padding: 48px;
+        padding-bottom: 48px;
+    }
+}
+
+.cursos-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ===================================================
+   PAGE HEADER
+   =================================================== */
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 48px;
+}
+
+@media (min-width: 768px) {
+    .page-header {
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 24px;
+    }
+}
+
+.page-title {
+    font-size: 48px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    color: #556158;
+}
+
+/* Segmented control (tab switcher) */
+.tab-switcher {
+    display: flex;
+    background-color: #e1e3e4;
+    padding: 4px;
+    border-radius: 8px;
+    align-self: flex-start;
+    flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    .tab-switcher {
+        align-self: auto;
+    }
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    transition: color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    color: #556158;
+    background: transparent;
+}
+
+.tab-btn.active {
+    background-color: #ffffff;
+    color: var(--primary);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.tab-btn:not(.active):hover {
+    color: var(--primary);
+}
+
+/* ===================================================
+   BENTO GRID
+   =================================================== */
+.cursos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 1024px) {
+    .cursos-grid {
+        grid-template-columns: 5fr 7fr;
+    }
+}
+
+/* ---------- Coluna esquerda ---------- */
+.cursos-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.cursos-section-title {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: 8px;
+}
+
+/* Card de curso – selecionado */
+.course-card-selected {
+    background-color: #ffffff;
+    border: 1.5px solid #11693d;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 24px rgba(17, 105, 61, 0.12);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.course-card-selected-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 96px;
+    height: 96px;
+    background: rgba(162, 244, 188, 0.2);
+    border-bottom-left-radius: 9999px;
+    margin-right: -16px;
+    margin-top: -16px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.course-card-inner {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.course-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.course-category-tag {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.course-category-tag.primary-tag {
+    background-color: #d9e6da;
+    color: var(--primary);
+}
+
+.course-category-tag.secondary-tag {
+    background-color: #e7e8e9;
+    color: #3f4941;
+}
+
+.course-star-icon {
+    color: var(--primary);
+    font-size: 24px;
+}
+
+.course-card-name {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.course-card-name.secondary-color {
+    color: var(--on-surface);
+    transition: color 0.2s;
+}
+
+.course-card-inactive:hover .course-card-name {
+    color: var(--primary);
+}
+
+/* Grade de detalhes (professor, sala, horário) */
+.course-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 8px;
+    margin-top: 8px;
+}
+
+.course-info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #556158;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+.course-info-item .material-symbols-outlined {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.course-info-item.full-width {
+    grid-column: span 2;
+}
+
+/* Barra de progresso */
+.course-progress-section {
+    margin-top: 16px;
+}
+
+.course-progress-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #556158;
+    margin-bottom: 4px;
+}
+
+.course-progress-value {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.course-progress-value.muted {
+    color: var(--on-surface);
+}
+
+.progress-bar-track {
+    width: 100%;
+    background-color: #edeeef;
+    height: 8px;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background-color: var(--primary);
+}
+
+.progress-bar-fill.dim {
+    background-color: #87d8a1;
+}
+
+/* Card de curso – inativo */
+.course-card-inactive {
+    background-color: #ffffff;
+    border: 1px solid #bfc9be;
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.course-card-inactive:hover {
+    box-shadow: 0 4px 24px rgba(17, 105, 61, 0.08);
+    border-color: rgba(0, 79, 43, 0.3);
+}
+
+/* ===================================================
+   COLUNA DIREITA – Detalhes do curso
+   =================================================== */
+.cursos-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Banner do curso */
+.course-banner {
+    width: 100%;
+    height: 192px;
+    border-radius: 12px;
+    background-color: #e1e3e4;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #bfc9be;
+    flex-shrink: 0;
+}
+
+.course-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    mix-blend-mode: multiply;
+    display: block;
+}
+
+.course-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 79, 43, 0.9), transparent);
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+}
+
+.course-banner-text {
+    color: #ffffff;
+}
+
+.course-banner-title {
+    font-size: 32px;
+    line-height: 1.3;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.course-banner-subtitle {
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-acessar-conteudo {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: var(--primary);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+    font-family: var(--font-family);
+    text-decoration: none;
+}
+
+.btn-acessar-conteudo:hover {
+    background-color: #11693d;
+}
+
+.btn-acessar-conteudo .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* Subtítulo seção detalhes */
+.details-section-title {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+/* Bento de detalhes (notas, tabela) */
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Painel genérico */
+.detail-panel {
+    background-color: #ffffff;
+    border: 1px solid #bfc9be;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-panel.full-width {
+    grid-column: span 2;
+}
+
+.detail-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--primary);
+}
+
+.detail-panel-header .material-symbols-outlined {
+    font-size: 24px;
+}
+
+.detail-panel-title {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Lista de avaliações */
+.assessments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.assessment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #bfc9be;
+}
+
+.assessment-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.assessment-left .material-symbols-outlined {
+    color: var(--primary);
+    font-size: 24px;
+}
+
+.assessment-name {
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+    color: var(--on-surface);
+}
+
+.assessment-date {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #556158;
+}
+
+.assessment-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.assessment-nota-label {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #556158;
+}
+
+.assessment-nota-value {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* ===================================================
+   TABELA: Notas e Frequência
+   =================================================== */
+.table-panel {
+    background-color: #ffffff;
+    border: 1px solid #bfc9be;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+}
+
+.table-panel.full-width {
+    grid-column: span 2;
+}
+
+.table-panel-header {
+    padding: 16px;
+    border-bottom: 1px solid #e1e3e4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(248, 249, 250, 0.5);
+}
+
+.table-panel-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+}
+
+.table-panel-header-left .material-symbols-outlined {
+    font-size: 24px;
+}
+
+.table-panel-header-title {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.grades-table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.grades-table thead tr {
+    background-color: #f8f9fa;
+    color: #3f4941;
+    border-bottom: 1px solid #e1e3e4;
+}
+
+.grades-table th {
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+}
+
+.grades-table th.center { text-align: center; }
+.grades-table th.right  { text-align: right; }
+
+.grades-table tbody {
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.grades-table tbody tr {
+    border-bottom: 1px solid #e1e3e4;
+    transition: background-color 0.15s;
+}
+
+.grades-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.grades-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.grades-table td {
+    padding: 12px 16px;
+    color: var(--on-surface);
+}
+
+.grades-table td.nota-cell {
+    text-align: center;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.grades-table td.nota-cell.pendente {
+    color: #6f7a70;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.grades-table td.freq-cell {
+    text-align: right;
+}
+
+/* ===================================================
+   BOTTOM NAV (Mobile)
+   Reutiliza o de dashboard.css, mas a classe .active
+   aponta para "Cursos".
+   =================================================== */

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Meus Cursos – CEBE Portal. Acompanhe seu progresso e acesse o material didático." />
+    <title>Meus Cursos – CEBE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="stylesheet" href="../assets/dashboard.css" />
+    <link rel="stylesheet" href="../assets/cursos.css" />
+</head>
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+    <!-- sidebar + topbar injetados por nav.js -->
+    <div class="main-wrapper">
+        <main class="cursos-main">
+            <div class="cursos-content">
+
+                <!-- Cabeçalho da página -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Meus Cursos</h1>
+                        <p class="page-subtitle">Acompanhe seu progresso e acesse o material didático das suas formações.</p>
+                    </div>
+                    <div class="tab-switcher" role="tablist" aria-label="Filtro de cursos">
+                        <button class="tab-btn active" role="tab" aria-selected="true" id="tab-andamento">Em andamento</button>
+                        <button class="tab-btn" role="tab" aria-selected="false" id="tab-concluidos">Concluídos</button>
+                    </div>
+                </div>
+
+                <!-- Grade principal -->
+                <div class="cursos-grid">
+
+                    <!-- ── Coluna esquerda: lista de cursos ────────────── -->
+                    <div class="cursos-left-col">
+                        <h2 class="cursos-section-title">Cursos Ativos</h2>
+
+                        <!-- Card selecionado -->
+                        <article class="course-card-selected" id="card-confeitaria" tabindex="0"
+                            aria-label="Confeitaria Básica e Avançada – selecionado">
+                            <div class="course-card-selected-bg"></div>
+                            <div class="course-card-inner">
+                                <div class="course-card-top">
+                                    <span class="course-category-tag primary-tag">Profissionalizante</span>
+                                    <span class="material-symbols-outlined course-star-icon"
+                                        style="font-variation-settings:'FILL' 1;" aria-label="Favorito">star</span>
+                                </div>
+                                <h3 class="course-card-name">Confeitaria Básica e Avançada</h3>
+                                <div class="course-info-grid">
+                                    <div class="course-info-item">
+                                        <span class="material-symbols-outlined">person</span> Prof. Mariana Silva
+                                    </div>
+                                    <div class="course-info-item">
+                                        <span class="material-symbols-outlined">meeting_room</span> Sala 104 – Lab 2
+                                    </div>
+                                    <div class="course-info-item full-width">
+                                        <span class="material-symbols-outlined">schedule</span> Seg e Qua, 14h – 18h
+                                    </div>
+                                </div>
+                                <div class="course-progress-section">
+                                    <div class="course-progress-label-row">
+                                        <span>Progresso do Curso</span>
+                                        <span class="course-progress-value">45%</span>
+                                    </div>
+                                    <div class="progress-bar-track">
+                                        <div class="progress-bar-fill" style="width:45%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card inativo -->
+                        <article class="course-card-inactive" id="card-escritorio" tabindex="0"
+                            aria-label="Auxiliar de Escritório">
+                            <div class="course-card-inner">
+                                <div class="course-card-top">
+                                    <span class="course-category-tag secondary-tag">Apoio Administrativo</span>
+                                </div>
+                                <h3 class="course-card-name secondary-color">Auxiliar de Escritório</h3>
+                                <div class="course-info-grid">
+                                    <div class="course-info-item">
+                                        <span class="material-symbols-outlined">person</span> Prof. Carlos Mendes
+                                    </div>
+                                    <div class="course-info-item">
+                                        <span class="material-symbols-outlined">meeting_room</span> Sala 201
+                                    </div>
+                                    <div class="course-info-item full-width">
+                                        <span class="material-symbols-outlined">schedule</span> Ter e Qui, 08h – 12h
+                                    </div>
+                                </div>
+                                <div class="course-progress-section">
+                                    <div class="course-progress-label-row">
+                                        <span>Progresso do Curso</span>
+                                        <span class="course-progress-value muted">10%</span>
+                                    </div>
+                                    <div class="progress-bar-track">
+                                        <div class="progress-bar-fill dim" style="width:10%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div><!-- /cursos-left-col -->
+
+                    <!-- ── Coluna direita: detalhes do curso ───────────── -->
+                    <div class="cursos-right-col" id="course-details">
+
+                        <!-- Banner -->
+                        <div class="course-banner">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlJppfKMUdoCARtzZ0EeG63HRMRojLkxO50zw3NJEAQDgOwdxLw4M0giIBB1vFR9sA_mzDyPSCLo4e6o-2Lt-PPRQhhNJVOrHyF4-718QQt6DN_C2-FGC0HK-jMOug3FrqRY6mdqThz4uZHXn06SO9_hLGieKus9mNodK_lJcQqoDLYvjHCqDNfQWgN6JLPfldeizdVhv580rrzh7KO_MdvCyMQ5W_V3bfBXozcuD6UC3cw7SxAHk9BJpN-OxX_V0JKrrfdk5X4Jw"
+                                alt="Banner – Confeitaria Básica e Avançada" class="course-banner-img" />
+                            <div class="course-banner-overlay">
+                                <div class="course-banner-text">
+                                    <h2 class="course-banner-title">Confeitaria Básica e Avançada</h2>
+                                    <p class="course-banner-subtitle">Turma 2024.1 • Turno Tarde</p>
+                                </div>
+                            </div>
+                            <a href="#" class="btn-acessar-conteudo" id="btn-acessar">
+                                Acessar Conteúdo
+                                <span class="material-symbols-outlined">arrow_forward</span>
+                            </a>
+                        </div>
+
+                        <h2 class="details-section-title">Detalhes: Confeitaria Básica e Avançada</h2>
+
+                        <div class="details-grid">
+
+                            <!-- Provas e Notas -->
+                            <div class="detail-panel full-width">
+                                <div class="detail-panel-header">
+                                    <span class="material-symbols-outlined">assignment</span>
+                                    <h3 class="detail-panel-title">Provas e Notas</h3>
+                                </div>
+                                <div class="assessments-list">
+                                    <div class="assessment-item">
+                                        <div class="assessment-left">
+                                            <span class="material-symbols-outlined">description</span>
+                                            <div>
+                                                <p class="assessment-name">Avaliação Teórica</p>
+                                                <p class="assessment-date">Realizada em 15/09</p>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-right">
+                                            <span class="assessment-nota-label">Nota</span>
+                                            <span class="assessment-nota-value">9.5</span>
+                                        </div>
+                                    </div>
+                                    <div class="assessment-item">
+                                        <div class="assessment-left">
+                                            <span class="material-symbols-outlined">description</span>
+                                            <div>
+                                                <p class="assessment-name">Avaliação Prática</p>
+                                                <p class="assessment-date">Realizada em 22/09</p>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-right">
+                                            <span class="assessment-nota-label">Nota</span>
+                                            <span class="assessment-nota-value">8.0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tabela: Notas e Frequência -->
+                            <div class="table-panel full-width">
+                                <div class="table-panel-header">
+                                    <div class="table-panel-header-left">
+                                        <span class="material-symbols-outlined">analytics</span>
+                                        <h3 class="table-panel-header-title">Notas e Frequência</h3>
+                                    </div>
+                                </div>
+                                <div class="table-scroll">
+                                    <table class="grades-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Matéria</th>
+                                                <th class="center">Nota</th>
+                                                <th class="right">Frequência</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Teoria: Higiene e Segurança</td>
+                                                <td class="nota-cell">9.5</td>
+                                                <td class="freq-cell">100%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Prática: Massas Base</td>
+                                                <td class="nota-cell">8.0</td>
+                                                <td class="freq-cell">90%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Teoria: Empreendedorismo</td>
+                                                <td class="nota-cell pendente">Pendente</td>
+                                                <td class="freq-cell">100%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div><!-- /details-grid -->
+                    </div><!-- /cursos-right-col -->
+                </div><!-- /cursos-grid -->
+            </div><!-- /cursos-content -->
+        </main>
+    </div><!-- /main-wrapper -->
+</div><!-- /dashboard-layout -->
+<!-- bottom-nav injetado por nav.js -->
+
+<script src="../components/nav.js"></script>
+<script>
+    // Tab switcher
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+        });
+    });
+
+    // Seleção de card de curso
+    const cards = document.querySelectorAll('.course-card-selected, .course-card-inactive');
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            document.querySelectorAll('[class^="course-card-"]').forEach(c => c.className = 'course-card-inactive');
+            card.className = 'course-card-selected';
+        });
+        card.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+        });
+    });
+</script>
+</body>
+</html>
