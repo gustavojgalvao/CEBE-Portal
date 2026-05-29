@@ -3,9 +3,11 @@ package com.cebe.portal_aluno.service;
 import com.cebe.portal_aluno.dto.request.AlunoRequestDTO;
 import com.cebe.portal_aluno.dto.response.AlunoResponseDTO;
 import com.cebe.portal_aluno.entity.Aluno;
+import com.cebe.portal_aluno.exception.RecursoNaoEncontradoException;
 import com.cebe.portal_aluno.repository.AlunoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +18,18 @@ public class AlunoService {
     @Autowired
     private AlunoRepository repository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public AlunoResponseDTO criarAluno(AlunoRequestDTO dto) {
 
         Aluno aluno = new Aluno();
 
-        aluno.setNome(dto.getNome());
-        aluno.setTelefone(dto.getTelefone());
-        aluno.setCpf(dto.getCpf());
-        aluno.setEmail(dto.getEmail());
-        aluno.setSenha(dto.getSenha());
+        aluno.setNome(dto.nome());
+        aluno.setTelefone(dto.telefone());
+        aluno.setCpf(dto.cpf());
+        aluno.setEmail(dto.email());
+        aluno.setSenha(passwordEncoder.encode(dto.senha()));
 
         Aluno salvo = repository.save(aluno);
 
@@ -44,7 +49,7 @@ public class AlunoService {
 
         Aluno aluno = repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Aluno não encontrado"));
+                        new RecursoNaoEncontradoException("Aluno não encontrado com o ID: " + id));
 
         return converterParaDTO(aluno);
     }
@@ -55,13 +60,13 @@ public class AlunoService {
 
         Aluno aluno = repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Aluno não encontrado"));
+                        new RecursoNaoEncontradoException("Aluno não encontrado com o ID: " + id));
 
-        aluno.setNome(dto.getNome());
-        aluno.setTelefone(dto.getTelefone());
-        aluno.setCpf(dto.getCpf());
-        aluno.setEmail(dto.getEmail());
-        aluno.setSenha(dto.getSenha());
+        aluno.setNome(dto.nome());
+        aluno.setTelefone(dto.telefone());
+        aluno.setCpf(dto.cpf());
+        aluno.setEmail(dto.email());
+        aluno.setSenha(passwordEncoder.encode(dto.senha()));
 
         Aluno atualizado = repository.save(aluno);
 
@@ -72,21 +77,18 @@ public class AlunoService {
 
         Aluno aluno = repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Aluno não encontrado"));
+                        new RecursoNaoEncontradoException("Aluno não encontrado com o ID: " + id));
 
         repository.delete(aluno);
     }
 
     private AlunoResponseDTO converterParaDTO(Aluno aluno) {
-
-        AlunoResponseDTO dto = new AlunoResponseDTO();
-
-        dto.setId(aluno.getId());
-        dto.setNome(aluno.getNome());
-        dto.setTelefone(aluno.getTelefone());
-        dto.setCpf(aluno.getCpf());
-        dto.setEmail(aluno.getEmail());
-
-        return dto;
+        return new AlunoResponseDTO(
+                aluno.getId(),
+                aluno.getNome(),
+                aluno.getTelefone(),
+                aluno.getCpf(),
+                aluno.getEmail()
+        );
     }
 }

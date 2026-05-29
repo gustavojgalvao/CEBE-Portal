@@ -2,13 +2,11 @@ package com.cebe.portal_aluno.controller;
 
 import com.cebe.portal_aluno.dto.request.ProfessorRequestDTO;
 import com.cebe.portal_aluno.dto.response.ProfessorResponseDTO;
-import com.cebe.portal_aluno.entity.Professor;
 import com.cebe.portal_aluno.service.ProfessorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/professores")
@@ -22,13 +20,13 @@ public class ProfessorController {
     }
 
     @GetMapping
-    public List<Professor> listarTodos() {
-        return professorService.listarTodos();
+    public ResponseEntity<List<ProfessorResponseDTO>> listar() {
+        return ResponseEntity.ok(professorService.listar());
     }
 
     @GetMapping("/{id}")
-    public Optional<Professor> buscarPorId(@PathVariable Integer id) {
-        return professorService.buscarPorId(id);
+    public ResponseEntity<ProfessorResponseDTO> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(professorService.buscarPorId(id));
     }
 
     @PostMapping
@@ -39,16 +37,16 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public Professor atualizar(
+    public ResponseEntity<ProfessorResponseDTO> atualizar(
             @PathVariable Integer id,
-            @RequestBody Professor professor
+            @RequestBody ProfessorRequestDTO dto
     ) {
-        professor.setId(id);
-        return professorService.criar(professor);
+        return ResponseEntity.ok(professorService.atualizar(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         professorService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

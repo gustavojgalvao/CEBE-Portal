@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
+@CrossOrigin("*")
 public class AlunoController {
 
     @Autowired
