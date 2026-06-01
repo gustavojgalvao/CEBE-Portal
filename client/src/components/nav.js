@@ -1,70 +1,68 @@
 /**
- * nav.js — Navegação compartilhada do portal CEBE
+ * nav.js
  * Injeta sidebar, topbar e bottom-nav em todas as páginas.
- * Carrega após notifications.js (se disponível) para exibir badges.
- * Coloque ao final do <body>.
  */
 (function () {
-    'use strict';
+  'use strict';
 
-    const page = location.pathname.split('/').pop() || 'dashboard.html';
+  const page = location.pathname.split('/').pop() || 'dashboard.html';
 
-    // ─── Contagem de notificações (lê localStorage diretamente) ───────────────
-    function getUnreadCount() {
-        try {
-            const raw = localStorage.getItem('cebe_notificacoes');
-            if (!raw) return 0;
-            return JSON.parse(raw).filter(n => !n.read).length;
-        } catch { return 0; }
-    }
+  // ─── Contagem de notificações (lê localStorage diretamente) ───────────────
+  function getUnreadCount() {
+    try {
+      const raw = localStorage.getItem('cebe_notificacoes');
+      if (!raw) return 0;
+      return JSON.parse(raw).filter(n => !n.read).length;
+    } catch { return 0; }
+  }
 
-    function badgeHTML(count) {
-        if (!count) return '';
-        return `<span class="nav-badge" aria-label="${count} não lidas">${count > 99 ? '99+' : count}</span>`;
-    }
+  function badgeHTML(count) {
+    if (!count) return '';
+    return `<span class="nav-badge" aria-label="${count} não lidas">${count > 99 ? '99+' : count}</span>`;
+  }
 
-    // ─── Itens de navegação ───────────────────────────────────────────────────
-    const NAV_ITEMS = [
-        { href: 'dashboard.html',      icon: 'dashboard',     label: 'Dashboard'    },
-        { href: 'cursos.html',         icon: 'school',        label: 'Meus Cursos'  },
-        { href: 'atendimento.html',    icon: 'support_agent', label: 'Atendimento'  },
-        { href: 'notificacoes.html',   icon: 'notifications', label: 'Notificações', notifBadge: true },
-        { href: '#',                   icon: 'payments',      label: 'Financeiro'   },
-    ];
+  // ─── Itens de navegação ───────────────────────────────────────────────────
+  const NAV_ITEMS = [
+    { href: 'dashboard.html', icon: 'dashboard', label: 'Dashboard' },
+    { href: 'cursos.html', icon: 'school', label: 'Meus Cursos' },
+    { href: 'atendimento.html', icon: 'support_agent', label: 'Atendimento' },
+    { href: 'notificacoes.html', icon: 'notifications', label: 'Notificações', notifBadge: true },
+    { href: '#', icon: 'payments', label: 'Financeiro' },
+  ];
 
-    const MOBILE_ITEMS = [
-        { href: 'dashboard.html',    icon: 'home',          label: 'Início'  },
-        { href: 'cursos.html',       icon: 'menu_book',     label: 'Cursos'  },
-        { href: 'atendimento.html',  icon: 'chat_bubble',   label: 'Suporte' },
-        { href: 'notificacoes.html', icon: 'notifications', label: 'Avisos', mobileBadge: true },
-    ];
+  const MOBILE_ITEMS = [
+    { href: 'dashboard.html', icon: 'home', label: 'Início' },
+    { href: 'cursos.html', icon: 'menu_book', label: 'Cursos' },
+    { href: 'atendimento.html', icon: 'chat_bubble', label: 'Suporte' },
+    { href: 'notificacoes.html', icon: 'notifications', label: 'Avisos', mobileBadge: true },
+  ];
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
-    const isActive = href => href !== '#' && href === page;
-    const filled   = href => isActive(href) ? "font-variation-settings:'FILL' 1;" : '';
+  // ─── Helpers ──────────────────────────────────────────────────────────────
+  const isActive = href => href !== '#' && href === page;
+  const filled = href => isActive(href) ? "font-variation-settings:'FILL' 1;" : '';
 
-    function navLink(item, unread) {
-        const badge = (item.notifBadge && unread) ? badgeHTML(unread) : '';
-        return `<a class="nav-link${isActive(item.href) ? ' active' : ''}" href="${item.href}">
+  function navLink(item, unread) {
+    const badge = (item.notifBadge && unread) ? badgeHTML(unread) : '';
+    return `<a class="nav-link${isActive(item.href) ? ' active' : ''}" href="${item.href}">
       <span class="material-symbols-outlined" style="${filled(item.href)}">${item.icon}</span>
       <span>${item.label}</span>
       ${badge}
     </a>`;
-    }
+  }
 
-    function mobileLink(item, unread) {
-        const dot = (item.mobileBadge && unread)
-            ? `<span class="bottom-nav-dot" aria-label="${unread} não lidas"></span>` : '';
-        return `<a class="bottom-nav-link${isActive(item.href) ? ' active' : ''}" href="${item.href}">
+  function mobileLink(item, unread) {
+    const dot = (item.mobileBadge && unread)
+      ? `<span class="bottom-nav-dot" aria-label="${unread} não lidas"></span>` : '';
+    return `<a class="bottom-nav-link${isActive(item.href) ? ' active' : ''}" href="${item.href}">
       ${dot}
       <span class="material-symbols-outlined" style="${filled(item.href)}">${item.icon}</span>
       <span class="bottom-nav-label">${item.label}</span>
     </a>`;
-    }
+  }
 
-    // ─── Templates ────────────────────────────────────────────────────────────
-    function buildSidebar(unread) {
-        return `<aside class="sidebar" id="sidebar">
+  // ─── Templates ────────────────────────────────────────────────────────────
+  function buildSidebar(unread) {
+    return `<aside class="sidebar" id="sidebar">
       <button class="sidebar-toggle-btn" aria-label="Fechar menu">
         <span class="material-symbols-outlined">menu_open</span>
       </button>
@@ -83,9 +81,9 @@
         </button>
       </div>
     </aside>`;
-    }
+  }
 
-    const TOPBAR = `<header class="top-bar">
+  const TOPBAR = `<header class="top-bar">
       <div class="top-bar-inner">
         <a href="dashboard.html" class="top-bar-mobile-logo">
           <div class="top-bar-mobile-logo-img-wrapper">
@@ -115,68 +113,68 @@
       </div>
     </header>`;
 
-    function buildBottomNav(unread) {
-        return `<nav class="bottom-nav" aria-label="Navegação principal">
+  function buildBottomNav(unread) {
+    return `<nav class="bottom-nav" aria-label="Navegação principal">
       ${MOBILE_ITEMS.map(i => mobileLink(i, unread)).join('')}
     </nav>`;
+  }
+
+  // ─── Injeção no DOM ───────────────────────────────────────────────────────
+  const layout = document.querySelector('.dashboard-layout');
+  if (!layout) return;
+
+  const unread = getUnreadCount();
+
+  layout.insertAdjacentHTML('afterbegin', buildSidebar(unread));
+  layout.querySelector('.main-wrapper')?.insertAdjacentHTML('afterbegin', TOPBAR);
+  layout.insertAdjacentHTML('afterend', buildBottomNav(unread));
+
+  // Badge da topbar
+  function refreshTopbarBadge() {
+    const count = getUnreadCount();
+    const badge = document.getElementById('topbar-notif-badge');
+    if (!badge) return;
+    if (count > 0) {
+      badge.textContent = count > 99 ? '99+' : count;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
     }
+  }
+  refreshTopbarBadge();
 
-    // ─── Injeção no DOM ───────────────────────────────────────────────────────
-    const layout = document.querySelector('.dashboard-layout');
-    if (!layout) return;
-
-    const unread = getUnreadCount();
-
-    layout.insertAdjacentHTML('afterbegin', buildSidebar(unread));
-    layout.querySelector('.main-wrapper')?.insertAdjacentHTML('afterbegin', TOPBAR);
-    layout.insertAdjacentHTML('afterend', buildBottomNav(unread));
-
-    // Badge da topbar
-    function refreshTopbarBadge() {
-        const count = getUnreadCount();
-        const badge = document.getElementById('topbar-notif-badge');
-        if (!badge) return;
-        if (count > 0) {
-            badge.textContent = count > 99 ? '99+' : count;
-            badge.style.display = '';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
+  // Atualiza badges quando notificações mudam (mesma aba)
+  document.addEventListener('notifications-updated', () => {
+    const count = getUnreadCount();
+    // Sidebar badge
+    document.querySelectorAll('.nav-link .nav-badge').forEach(el => {
+      const link = el.closest('.nav-link');
+      if (link?.href?.includes('notificacoes')) {
+        if (count > 0) { el.textContent = count > 99 ? '99+' : count; el.style.display = ''; }
+        else el.style.display = 'none';
+      }
+    });
+    // Bottom nav dot
+    document.querySelectorAll('.bottom-nav-dot').forEach(el => {
+      el.style.display = count > 0 ? '' : 'none';
+    });
+    // Topbar
     refreshTopbarBadge();
+  });
 
-    // Atualiza badges quando notificações mudam (mesma aba)
-    document.addEventListener('notifications-updated', () => {
-        const count = getUnreadCount();
-        // Sidebar badge
-        document.querySelectorAll('.nav-link .nav-badge').forEach(el => {
-            const link = el.closest('.nav-link');
-            if (link?.href?.includes('notificacoes')) {
-                if (count > 0) { el.textContent = count > 99 ? '99+' : count; el.style.display = ''; }
-                else el.style.display = 'none';
-            }
-        });
-        // Bottom nav dot
-        document.querySelectorAll('.bottom-nav-dot').forEach(el => {
-            el.style.display = count > 0 ? '' : 'none';
-        });
-        // Topbar
-        refreshTopbarBadge();
-    });
+  // Sincroniza com outras abas abertas
+  window.addEventListener('storage', e => {
+    if (e.key === 'cebe_notif_sync') {
+      document.dispatchEvent(new CustomEvent('notifications-updated'));
+    }
+  });
 
-    // Sincroniza com outras abas abertas
-    window.addEventListener('storage', e => {
-        if (e.key === 'cebe_notif_sync') {
-            document.dispatchEvent(new CustomEvent('notifications-updated'));
-        }
-    });
+  // ─── Comportamentos compartilhados ────────────────────────────────────────
+  document.getElementById('btn-logout')?.addEventListener('click', () => {
+    window.location.href = 'login.html';
+  });
 
-    // ─── Comportamentos compartilhados ────────────────────────────────────────
-    document.getElementById('btn-logout')?.addEventListener('click', () => {
-        window.location.href = 'login.html';
-    });
-
-    document.getElementById('btn-novo-chamado')?.addEventListener('click', () => {
-        if (page !== 'atendimento.html') window.location.href = 'atendimento.html';
-    });
+  document.getElementById('btn-novo-chamado')?.addEventListener('click', () => {
+    if (page !== 'atendimento.html') window.location.href = 'atendimento.html';
+  });
 })();
