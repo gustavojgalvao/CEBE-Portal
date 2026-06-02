@@ -114,3 +114,30 @@ O tratamento de falhas da API foi completamente centralizado utilizando a anota�
   - Intercepta `MethodArgumentNotValidException` (gerados quando campos anotados com `@NotBlank`, `@NotNull` no DTO falham) e mapeia cada campo inválido individualmente no objeto `FieldErrorDTO`.
 * **Resposta Padronizada**:
   Todas as exceções retornam um JSON formatado com o `ErrorResponseDTO` contendo: `timestamp`, `status`, `error`, `message`, `path` e a lista `fields` (caso haja validações pendentes).
+
+---
+
+## 6. Frontend e Interface do Aluno
+
+O frontend da aplicação foi construído com arquitetura Client-side utilizando HTML5, CSS3 moderno e JavaScript puro (vanilla), sem o uso de empacotadores (como Webpack) ou frameworks complexos (como React/Vue), garantindo leveza e carregamento instantâneo no navegador.
+
+### Estrutura de Pastas do Frontend
+
+O frontend é servido a partir da pasta `client/` e organizado para máxima separação de responsabilidades:
+
+```text
+client/
+├── public/                 # Arquivos estáticos globais (imagens, logos institucionais)
+└── src/
+    ├── assets/             # Folhas de estilo (CSS). Variáveis no style.css e módulos por tela (financeiro.css).
+    ├── components/         # Scripts globais (nav.js injeta dinamicamente Menu, Topbar e Bottom Navigation).
+    ├── pages/              # Interface de visualização (HTML), como login.html, dashboard.html.
+    └── services/           # Integração HTTP com o Spring Boot. O arquivo api.js gerencia a função apiFetch() que anexa o JWT.
+```
+
+### Gerenciamento de Sessão e Estado
+Toda a persistência local de sessão e notificações baseia-se no **`localStorage`** do navegador:
+1. **Sessão JWT**: O token retornado após o sucesso do `POST /auth/login` é armazenado na chave `cebe_token`. O Logout simplesmente destrói essa chave e devolve o aluno para a tela de login.
+2. **Notificações Locais**: As mensagens do sino de notificações (Avisos Gerais) são guardadas de forma assíncrona e local utilizando scripts e emissões de eventos (`CustomEvent`) diretamente em Vanilla JS, atualizando o contador de alertas em tempo real.
+
+---
