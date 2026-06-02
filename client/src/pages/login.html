@@ -34,16 +34,12 @@
                 </div>
                 <div class="form-group">
                     <div class="form-label-wrapper">
-                        <label class="form-label" for="password">Senha</label>
+                        <label class="form-label" for="data-nascimento">Data de Nascimento</label>
                     </div>
                     <div class="input-wrapper">
-                        <span class="material-symbols-outlined input-icon">lock</span>
-                        <input class="form-input password-input" id="password" name="password" placeholder="••••••••"
-                            required="" type="password" />
-                        <button aria-label="Toggle password visibility" class="botao-ocultar-senha" type="button"
-                            onclick="togglePassword()">
-                            <span class="material-symbols-outlined" id="toggle-icon">visibility_off</span>
-                        </button>
+                        <span class="material-symbols-outlined input-icon">cake</span>
+                        <input class="form-input" id="data-nascimento" name="data-nascimento"
+                            placeholder="DD/MM/AAAA" required="" type="date" />
                     </div>
                 </div>
                 <div class="form-actions">
@@ -64,20 +60,6 @@
         </div>
     </main>
 
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggle-icon');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.textContent = 'visibility';
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.textContent = 'visibility_off';
-            }
-        }
-    </script>
     <!-- Scripts: ordem importa! api.js primeiro, depois auth.js, depois o evento do form -->
     <script src="../services/api.js"></script>
     <script src="../services/auth.js"></script>
@@ -89,18 +71,20 @@
             msgErro.style.display = 'none';
             msgErro.textContent = '';
 
+            // Converte a data do input (YYYY-MM-DD) para DDMMYYYY
+            const dataRaw = document.getElementById('data-nascimento').value; // ex: "1990-01-01"
+            const [ano, mes, dia] = dataRaw.split('-');
+            const dataNascimento = dia + mes + ano; // ex: "01011990"
+
             try {
-                // O back-end usa e-mail como "usuário" e a senha cadastrada
-                // O campo CPF do HTML está sendo passado como e-mail aqui
-                // (adapte quando o back-end for atualizado para aceitar CPF)
                 await login(
-                    document.getElementById('cpf').value,    // campo CPF do HTML
-                    document.getElementById('password').value // campo senha do HTML
+                    document.getElementById('cpf').value,
+                    dataNascimento
                 );
                 window.location.href = 'dashboard.html';
             } catch (erro) {
                 msgErro.style.display = 'block';
-                msgErro.textContent = erro?.message || 'CPF ou senha incorretos. Tente novamente.';
+                msgErro.textContent = 'CPF ou data de nascimento incorretos. Tente novamente.';
             }
         });
     </script>

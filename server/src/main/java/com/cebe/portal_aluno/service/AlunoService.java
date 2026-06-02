@@ -29,7 +29,7 @@ public class AlunoService {
         aluno.setTelefone(dto.telefone());
         aluno.setCpf(dto.cpf());
         aluno.setEmail(dto.email());
-        aluno.setSenha(passwordEncoder.encode(dto.senha()));
+        aluno.setSenha(passwordEncoder.encode(dto.dataNascimento())); // aniversário vira senha
 
         Aluno salvo = repository.save(aluno);
 
@@ -66,7 +66,7 @@ public class AlunoService {
         aluno.setTelefone(dto.telefone());
         aluno.setCpf(dto.cpf());
         aluno.setEmail(dto.email());
-        aluno.setSenha(passwordEncoder.encode(dto.senha()));
+        aluno.setSenha(passwordEncoder.encode(dto.dataNascimento())); // aniversário vira senha
 
         Aluno atualizado = repository.save(aluno);
 

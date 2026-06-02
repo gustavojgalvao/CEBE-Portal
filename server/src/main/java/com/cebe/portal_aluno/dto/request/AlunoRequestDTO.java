@@ -5,5 +5,5 @@ public record AlunoRequestDTO(
     String telefone,
     String cpf,
     String email,
-    String senha
+    String dataNascimento   // formato: DDMMYYYY — usada como senha inicial de acesso
 ) {}

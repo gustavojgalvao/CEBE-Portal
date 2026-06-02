@@ -1,3 +1,4 @@
+// Mudar de acordo com o IP do host
 const API_URL = "http://localhost:8080";
 
 async function apiFetch(rota, opcoes = {}) {

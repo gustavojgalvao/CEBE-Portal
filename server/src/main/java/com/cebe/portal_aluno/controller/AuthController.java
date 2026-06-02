@@ -25,7 +25,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO dto) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
+                new UsernamePasswordAuthenticationToken(dto.cpf(), dto.dataNascimento());
 
         Authentication auth = authenticationManager.authenticate(authenticationToken);
         Aluno principal = (Aluno) auth.getPrincipal();

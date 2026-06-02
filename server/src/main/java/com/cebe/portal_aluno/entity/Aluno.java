@@ -50,7 +50,7 @@ public class Aluno implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.cpf;
     }
 
     @Override

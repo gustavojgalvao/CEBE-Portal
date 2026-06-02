@@ -1,6 +1,6 @@
 package com.cebe.portal_aluno.dto.request;
 
 public record LoginRequestDTO(
-    String email,
-    String senha
+    String cpf,
+    String dataNascimento   // formato: DDMMYYYY (ex: "01011990")
 ) {}
