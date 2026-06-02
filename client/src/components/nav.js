@@ -27,7 +27,7 @@
     { href: 'cursos.html', icon: 'school', label: 'Meus Cursos' },
     { href: 'atendimento.html', icon: 'support_agent', label: 'Atendimento' },
     { href: 'notificacoes.html', icon: 'notifications', label: 'Notificações', notifBadge: true },
-    { href: '#', icon: 'payments', label: 'Financeiro' },
+    { href: 'financeiro.html', icon: 'payments', label: 'Financeiro' },
   ];
 
   const MOBILE_ITEMS = [
