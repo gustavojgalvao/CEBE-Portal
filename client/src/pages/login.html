@@ -23,7 +23,7 @@
             <p class="login-subtitle">Acesse o portal acadêmico</p>
         </div>
         <div class="login-card">
-            <form action="#" class="login-form" method="POST">
+            <form action="#" class="login-form" id="form-login" method="POST">
                 <div class="form-group">
                     <label class="form-label" for="cpf">CPF do Responsável ou Aluno</label>
                     <div class="input-wrapper">
@@ -40,7 +40,8 @@
                         <span class="material-symbols-outlined input-icon">lock</span>
                         <input class="form-input password-input" id="password" name="password" placeholder="••••••••"
                             required="" type="password" />
-                        <button aria-label="Toggle password visibility" class="botao-ocultar-senha" type="button" onclick="togglePassword()">
+                        <button aria-label="Toggle password visibility" class="botao-ocultar-senha" type="button"
+                            onclick="togglePassword()">
                             <span class="material-symbols-outlined" id="toggle-icon">visibility_off</span>
                         </button>
                     </div>
@@ -51,6 +52,8 @@
                         <span class="material-symbols-outlined btn-icon">login</span>
                     </button>
                 </div>
+                <!-- Mensagem de erro exibida quando o login falha -->
+                <p class="form-error" id="msg-erro" style="display:none; color:#e53e3e; font-size:0.875rem; margin-top:0.5rem;"></p>
             </form>
         </div>
         <div class="login-footer">
@@ -65,7 +68,7 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('toggle-icon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.textContent = 'visibility';
@@ -74,6 +77,32 @@
                 toggleIcon.textContent = 'visibility_off';
             }
         }
+    </script>
+    <!-- Scripts: ordem importa! api.js primeiro, depois auth.js, depois o evento do form -->
+    <script src="../services/api.js"></script>
+    <script src="../services/auth.js"></script>
+    <script>
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const msgErro = document.getElementById('msg-erro');
+            msgErro.style.display = 'none';
+            msgErro.textContent = '';
+
+            try {
+                // O back-end usa e-mail como "usuário" e a senha cadastrada
+                // O campo CPF do HTML está sendo passado como e-mail aqui
+                // (adapte quando o back-end for atualizado para aceitar CPF)
+                await login(
+                    document.getElementById('cpf').value,    // campo CPF do HTML
+                    document.getElementById('password').value // campo senha do HTML
+                );
+                window.location.href = 'dashboard.html';
+            } catch (erro) {
+                msgErro.style.display = 'block';
+                msgErro.textContent = erro?.message || 'CPF ou senha incorretos. Tente novamente.';
+            }
+        });
     </script>
 </body>
 
