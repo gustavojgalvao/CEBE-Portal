@@ -113,9 +113,6 @@
                         <label class="rotulo-campo" for="course">Selecione o Curso Desejado</label>
                         <select class="campo-selecao" id="course" name="course" disabled>
                             <option disabled="" selected="" value="">Escolha uma opção...</option>
-                            <option value="confeitaria">Confeitaria</option>
-                            <option value="auxiliar">Auxiliar Administrativo</option>
-                            <option value="informatica">Informática Básica</option>
                         </select>
                         <div class="icone-selecao-container">
                             <span class="material-symbols-outlined">arrow_drop_down</span>
@@ -158,7 +155,11 @@
             </form>
         </div>
     </main>
-
+    <script src="../services/api.js"></script>
+    <script src="../services/cursos.js"></script>
+    <script src="../services/auth.js"></script>
+    <script src="../services/matriculas.js"></script>
+    <script src="../components/nav.js"></script>
     <script>
         function avancarEtapa(etapa) {
             // Atualiza barra de progresso e ícones
@@ -339,33 +340,47 @@
             }
             e.target.value = valor;
         });
+
+        // Quando a página abrir, ir buscar os cursos no servidor
+        async function carregarCursos() {
+            const select = document.getElementById('course');
+
+            try {
+                const cursos = await listarCursos();
+                select.innerHTML = '<option value="">Selecione o curso</option>';
+                cursos.forEach(curso => {
+                    const option = document.createElement('option');
+                    option.value = curso.id;
+                    option.textContent = curso.nome;
+                    select.appendChild(option);
+                });
+            }
+            catch (erro) {
+                select.innerHTML = '<option disabled selected>Erro ao carregar cursos</option>';
+            }
+        }
+        carregarCursos();
+
+        async function concluirMatricula() {
+            const nome = document.getElementById('fullName').value;
+            const cpf = document.getElementById('cpf').value;
+            const email = document.getElementById('email').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const curso = document.getElementById('course').value;
+            const dataNascimento = document.getElementById('birthdate').value.replace(/\D/g, ''); // "DDMMYYYY"
+
+            try {
+                // Exemplo chamando a função cadastrar do auth.js
+                await cadastrar(nome, whatsapp, cpf, email, dataNascimento);
+
+                // Exibe o feedback visual de sucesso
+                const overlay = document.querySelector('.overlay-sucesso');
+                overlay.classList.remove('escondido');
+            } catch (erro) {
+                alert('Erro ao realizar matrícula: ' + (erro.message || 'Verifique seus dados.'));
+            }
+        }
     </script>
 </body>
-<script src="../services/api.js"></script>
-<script src="../services/auth.js"></script>
-<script src="../services/cursos.js"></script>
-<script src="../services/matriculas.js"></script>
-<script src="../components/nav.js"></script>
-<script>
-    async function concluirMatricula() {
-        const nome = document.getElementById('fullName').value;
-        const cpf = document.getElementById('cpf').value;
-        const email = document.getElementById('email').value;
-        const whatsapp = document.getElementById('whatsapp').value;
-        const curso = document.getElementById('course').value;
-        const dataNascimento = document.getElementById('birthdate').value.replace(/\D/g, ''); // "DDMMYYYY"
-
-        try {
-            // Exemplo chamando a função cadastrar do auth.js
-            await cadastrar(nome, whatsapp, cpf, email, dataNascimento);
-
-            // Exibe o feedback visual de sucesso
-            const overlay = document.querySelector('.overlay-sucesso');
-            overlay.classList.remove('escondido');
-        } catch (erro) {
-            alert('Erro ao realizar matrícula: ' + (erro.message || 'Verifique seus dados.'));
-        }
-    }
-</script>
 
 </html>

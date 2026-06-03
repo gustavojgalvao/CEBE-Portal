@@ -1,209 +1,221 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Financeiro – CEBE Portal. Acompanhe seus boletos, pagamentos e situação financeira." />
+    <meta name="description"
+        content="Financeiro – CEBE Portal. Acompanhe seus boletos, pagamentos e situação financeira." />
     <title>Financeiro – CEBE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="../assets/style.css" />
     <link rel="stylesheet" href="../assets/dashboard.css" />
     <link rel="stylesheet" href="../assets/financeiro.css" />
 </head>
+
 <body class="dashboard-body">
 
-<div class="dashboard-layout">
-    <div class="main-wrapper">
-        <main class="fin-main">
-            <div class="fin-content">
+    <div class="dashboard-layout">
+        <div class="main-wrapper">
+            <main class="fin-main">
+                <div class="fin-content">
 
-                <!-- Cabeçalho -->
-                <div class="fin-page-header">
-                    <div>
-                        <h1 class="fin-page-title">Financeiro</h1>
-                        <p class="fin-page-subtitle">Acompanhe seus boletos, pagamentos e situação financeira.</p>
+                    <!-- Cabeçalho -->
+                    <div class="fin-page-header">
+                        <div>
+                            <h1 class="fin-page-title">Financeiro</h1>
+                            <p class="fin-page-subtitle">Acompanhe seus boletos, pagamentos e situação financeira.</p>
+                        </div>
+                        <button class="btn-segunda-via" id="btn-segunda-via">
+                            <span class="material-symbols-outlined">receipt_long</span>
+                            2ª Via do Boleto
+                        </button>
                     </div>
-                    <button class="btn-segunda-via" id="btn-segunda-via">
+
+                    <!-- Cards de resumo -->
+                    <div class="fin-summary-grid">
+
+                        <div class="fin-summary-card accent">
+                            <div class="fin-summary-icon">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings:'FILL' 1;">verified</span>
+                            </div>
+                            <div class="fin-summary-body">
+                                <p class="fin-summary-label">Situação</p>
+                                <p class="fin-summary-value">Em dia</p>
+                            </div>
+                        </div>
+
+                        <div class="fin-summary-card">
+                            <div class="fin-summary-icon muted">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings:'FILL' 1;">payments</span>
+                            </div>
+                            <div class="fin-summary-body">
+                                <p class="fin-summary-label">Total pago em 2024</p>
+                                <p class="fin-summary-value">R$ 700,00</p>
+                            </div>
+                        </div>
+
+                        <div class="fin-summary-card">
+                            <div class="fin-summary-icon warning">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings:'FILL' 1;">calendar_month</span>
+                            </div>
+                            <div class="fin-summary-body">
+                                <p class="fin-summary-label">Próximo vencimento</p>
+                                <p class="fin-summary-value">10/07 — R$ 350,00</p>
+                            </div>
+                        </div>
+
+                        <div class="fin-summary-card">
+                            <div class="fin-summary-icon muted">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings:'FILL' 1;">school</span>
+                            </div>
+                            <div class="fin-summary-body">
+                                <p class="fin-summary-label">Mensalidade</p>
+                                <p class="fin-summary-value">R$ 350,00 / mês</p>
+                            </div>
+                        </div>
+
+                    </div><!-- /fin-summary-grid -->
+
+                    <!-- Tabs -->
+                    <div class="fin-tabs" role="tablist">
+                        <button class="fin-tab active" role="tab" aria-selected="true" data-filter="aberto"
+                            id="tab-aberto">Em aberto</button>
+                        <button class="fin-tab" role="tab" aria-selected="false" data-filter="historico"
+                            id="tab-historico">Histórico</button>
+                    </div>
+
+                    <!-- Tabela de boletos -->
+                    <div class="fin-table-card">
+                        <div class="fin-table-scroll">
+                            <table class="fin-table" id="fin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Referência</th>
+                                        <th>Vencimento</th>
+                                        <th class="right">Valor</th>
+                                        <th class="center">Status</th>
+                                        <th class="center">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fin-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Estado vazio -->
+                    <div class="fin-empty" id="fin-empty" style="display:none;">
                         <span class="material-symbols-outlined">receipt_long</span>
-                        2ª Via do Boleto
-                    </button>
-                </div>
-
-                <!-- Cards de resumo -->
-                <div class="fin-summary-grid">
-
-                    <div class="fin-summary-card accent">
-                        <div class="fin-summary-icon">
-                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">verified</span>
-                        </div>
-                        <div class="fin-summary-body">
-                            <p class="fin-summary-label">Situação</p>
-                            <p class="fin-summary-value">Em dia</p>
-                        </div>
+                        <p class="fin-empty-title">Nenhum registro encontrado</p>
+                        <p class="fin-empty-sub">Não há boletos nessa categoria.</p>
                     </div>
 
-                    <div class="fin-summary-card">
-                        <div class="fin-summary-icon muted">
-                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">payments</span>
-                        </div>
-                        <div class="fin-summary-body">
-                            <p class="fin-summary-label">Total pago em 2024</p>
-                            <p class="fin-summary-value">R$ 700,00</p>
-                        </div>
-                    </div>
+                </div><!-- /fin-content -->
+            </main>
+        </div><!-- /main-wrapper -->
+    </div><!-- /dashboard-layout -->
 
-                    <div class="fin-summary-card">
-                        <div class="fin-summary-icon warning">
-                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">calendar_month</span>
-                        </div>
-                        <div class="fin-summary-body">
-                            <p class="fin-summary-label">Próximo vencimento</p>
-                            <p class="fin-summary-value">10/07 — R$ 350,00</p>
-                        </div>
-                    </div>
-
-                    <div class="fin-summary-card">
-                        <div class="fin-summary-icon muted">
-                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">school</span>
-                        </div>
-                        <div class="fin-summary-body">
-                            <p class="fin-summary-label">Mensalidade</p>
-                            <p class="fin-summary-value">R$ 350,00 / mês</p>
-                        </div>
-                    </div>
-
-                </div><!-- /fin-summary-grid -->
-
-                <!-- Tabs -->
-                <div class="fin-tabs" role="tablist">
-                    <button class="fin-tab active" role="tab" aria-selected="true"  data-filter="aberto"   id="tab-aberto">Em aberto</button>
-                    <button class="fin-tab"        role="tab" aria-selected="false" data-filter="historico" id="tab-historico">Histórico</button>
-                </div>
-
-                <!-- Tabela de boletos -->
-                <div class="fin-table-card">
-                    <div class="fin-table-scroll">
-                        <table class="fin-table" id="fin-table">
-                            <thead>
-                                <tr>
-                                    <th>Referência</th>
-                                    <th>Vencimento</th>
-                                    <th class="right">Valor</th>
-                                    <th class="center">Status</th>
-                                    <th class="center">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="fin-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Estado vazio -->
-                <div class="fin-empty" id="fin-empty" style="display:none;">
-                    <span class="material-symbols-outlined">receipt_long</span>
-                    <p class="fin-empty-title">Nenhum registro encontrado</p>
-                    <p class="fin-empty-sub">Não há boletos nessa categoria.</p>
-                </div>
-
-            </div><!-- /fin-content -->
-        </main>
-    </div><!-- /main-wrapper -->
-</div><!-- /dashboard-layout -->
-
-<!-- Modal: 2ª via -->
-<div class="fin-modal-overlay" id="fin-modal" role="dialog" aria-modal="true" aria-labelledby="fin-modal-title">
-    <div class="fin-modal-box">
-        <div class="fin-modal-header">
-            <h2 class="fin-modal-title" id="fin-modal-title">Solicitação de 2ª Via</h2>
-            <button class="fin-modal-close" id="fin-modal-close" aria-label="Fechar">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="fin-modal-body">
-            <p>Selecione o mês de referência para gerar a 2ª via do boleto:</p>
-            <select class="fin-modal-select" id="fin-modal-ref">
-                <option value="" disabled selected>Selecione o mês...</option>
-                <option value="07/2024">Julho / 2024</option>
-                <option value="05/2024">Maio / 2024</option>
-                <option value="06/2024">Junho / 2024</option>
-            </select>
-        </div>
-        <div class="fin-modal-footer">
-            <button class="btn-modal-cancel" id="fin-modal-cancel">Cancelar</button>
-            <button class="btn-modal-submit" id="fin-modal-gerar">
-                <span class="material-symbols-outlined" style="font-size:16px;">download</span>
-                Gerar Boleto
-            </button>
+    <!-- Modal: 2ª via -->
+    <div class="fin-modal-overlay" id="fin-modal" role="dialog" aria-modal="true" aria-labelledby="fin-modal-title">
+        <div class="fin-modal-box">
+            <div class="fin-modal-header">
+                <h2 class="fin-modal-title" id="fin-modal-title">Solicitação de 2ª Via</h2>
+                <button class="fin-modal-close" id="fin-modal-close" aria-label="Fechar">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="fin-modal-body">
+                <p>Selecione o mês de referência para gerar a 2ª via do boleto:</p>
+                <select class="fin-modal-select" id="fin-modal-ref">
+                    <option value="" disabled selected>Selecione o mês...</option>
+                    <option value="07/2024">Julho / 2024</option>
+                    <option value="05/2024">Maio / 2024</option>
+                    <option value="06/2024">Junho / 2024</option>
+                </select>
+            </div>
+            <div class="fin-modal-footer">
+                <button class="btn-modal-cancel" id="fin-modal-cancel">Cancelar</button>
+                <button class="btn-modal-submit" id="fin-modal-gerar">
+                    <span class="material-symbols-outlined" style="font-size:16px;">download</span>
+                    Gerar Boleto
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="../services/notifications.js"></script>
-<script src="../components/nav.js"></script>
-<script>
-// ── Dados de pagamento ────────────────────────────────────────────────────────
-const PAGAMENTOS = [
-    { ref: 'Maio / 2024',    venc: '10/05/2024', valor: 350.00, status: 'pago'     },
-    { ref: 'Junho / 2024',   venc: '10/06/2024', valor: 350.00, status: 'pago'     },
-    { ref: 'Julho / 2024',   venc: '10/07/2024', valor: 350.00, status: 'pendente' },
-    { ref: 'Agosto / 2024',  venc: '10/08/2024', valor: 350.00, status: 'futuro'   },
-    { ref: 'Setembro / 2024',venc: '10/09/2024', valor: 350.00, status: 'futuro'   },
-];
+    <script src="../services/notifications.js"></script>
+    <script src="../components/nav.js"></script>
+    <script>
+        // ── Dados de pagamento ────────────────────────────────────────────────────────
+        const PAGAMENTOS = [
+            { ref: 'Maio / 2024', venc: '10/05/2024', valor: 350.00, status: 'pago' },
+            { ref: 'Junho / 2024', venc: '10/06/2024', valor: 350.00, status: 'pago' },
+            { ref: 'Julho / 2024', venc: '10/07/2024', valor: 350.00, status: 'pendente' },
+            { ref: 'Agosto / 2024', venc: '10/08/2024', valor: 350.00, status: 'futuro' },
+            { ref: 'Setembro / 2024', venc: '10/09/2024', valor: 350.00, status: 'futuro' },
+        ];
 
-const STATUS_CONFIG = {
-    pago:     { label: 'Pago',     cls: 'badge-pago'     },
-    pendente: { label: 'Pendente', cls: 'badge-pendente' },
-    futuro:   { label: 'Futuro',   cls: 'badge-futuro'   },
-    vencido:  { label: 'Vencido',  cls: 'badge-vencido'  },
-};
+        const STATUS_CONFIG = {
+            pago: { label: 'Pago', cls: 'badge-pago' },
+            pendente: { label: 'Pendente', cls: 'badge-pendente' },
+            futuro: { label: 'Futuro', cls: 'badge-futuro' },
+            vencido: { label: 'Vencido', cls: 'badge-vencido' },
+        };
 
-function formatCurrency(v) {
-    return 'R$ ' + v.toFixed(2).replace('.', ',');
-}
+        function formatCurrency(v) {
+            return 'R$ ' + v.toFixed(2).replace('.', ',');
+        }
 
-// ── Renderização da tabela ────────────────────────────────────────────────────
-function renderTabela(filter) {
-    const tbody = document.getElementById('fin-tbody');
-    const empty = document.getElementById('fin-empty');
-    const tableCard = document.querySelector('.fin-table-card');
+        // ── Renderização da tabela ────────────────────────────────────────────────────
+        function renderTabela(filter) {
+            const tbody = document.getElementById('fin-tbody');
+            const empty = document.getElementById('fin-empty');
+            const tableCard = document.querySelector('.fin-table-card');
 
-    const items = filter === 'historico'
-        ? PAGAMENTOS.filter(p => p.status === 'pago')
-        : PAGAMENTOS.filter(p => p.status !== 'pago');
+            const items = filter === 'historico'
+                ? PAGAMENTOS.filter(p => p.status === 'pago')
+                : PAGAMENTOS.filter(p => p.status !== 'pago');
 
-    if (items.length === 0) {
-        tableCard.style.display = 'none';
-        empty.style.display = 'flex';
-        return;
-    }
+            if (items.length === 0) {
+                tableCard.style.display = 'none';
+                empty.style.display = 'flex';
+                return;
+            }
 
-    tableCard.style.display = '';
-    empty.style.display = 'none';
-    tbody.innerHTML = '';
+            tableCard.style.display = '';
+            empty.style.display = 'none';
+            tbody.innerHTML = '';
 
-    items.forEach(p => {
-        const cfg = STATUS_CONFIG[p.status];
-        const isPendente = p.status === 'pendente';
-        const isFuturo   = p.status === 'futuro';
+            items.forEach(p => {
+                const cfg = STATUS_CONFIG[p.status];
+                const isPendente = p.status === 'pendente';
+                const isFuturo = p.status === 'futuro';
 
-        const actionBtn = p.status === 'pago'
-            ? `<button class="fin-action-btn secondary" title="Ver comprovante">
+                const actionBtn = p.status === 'pago'
+                    ? `<button class="fin-action-btn secondary" title="Ver comprovante">
                     <span class="material-symbols-outlined">receipt</span> Comprovante
                </button>`
-            : isPendente
-                ? `<button class="fin-action-btn primary" onclick="openModal('${p.ref}')" title="Pagar boleto">
+                    : isPendente
+                        ? `<button class="fin-action-btn primary" onclick="openModal('${p.ref}')" title="Pagar boleto">
                     <span class="material-symbols-outlined">payments</span> Pagar
                    </button>`
-                : `<button class="fin-action-btn ghost" disabled title="Ainda não disponível">
+                        : `<button class="fin-action-btn ghost" disabled title="Ainda não disponível">
                     <span class="material-symbols-outlined">schedule</span> Aguardar
                    </button>`;
 
-        const tr = document.createElement('tr');
-        tr.className = p.status === 'pendente' ? 'row-destaque' : '';
-        tr.innerHTML = `
+                const tr = document.createElement('tr');
+                tr.className = p.status === 'pendente' ? 'row-destaque' : '';
+                tr.innerHTML = `
             <td class="fin-td-ref">
                 ${isPendente ? '<span class="row-alert-dot" aria-label="Atenção"></span>' : ''}
                 ${p.ref}
@@ -212,55 +224,57 @@ function renderTabela(filter) {
             <td class="fin-td-valor right">${formatCurrency(p.valor)}</td>
             <td class="center"><span class="fin-badge ${cfg.cls}">${cfg.label}</span></td>
             <td class="center fin-td-action">${actionBtn}</td>`;
-        tbody.appendChild(tr);
-    });
-}
+                tbody.appendChild(tr);
+            });
+        }
 
-// ── Tabs ──────────────────────────────────────────────────────────────────────
-let currentFilter = 'aberto';
+        // ── Tabs ──────────────────────────────────────────────────────────────────────
+        let currentFilter = 'aberto';
 
-document.querySelectorAll('.fin-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.fin-tab').forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
+        document.querySelectorAll('.fin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.fin-tab').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                currentFilter = tab.dataset.filter;
+                renderTabela(currentFilter);
+            });
         });
-        tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
-        currentFilter = tab.dataset.filter;
+
+        // ── Modal ─────────────────────────────────────────────────────────────────────
+        function openModal(ref) {
+            if (ref) document.getElementById('fin-modal-ref').value = ref;
+            document.getElementById('fin-modal').classList.add('open');
+        }
+        function closeModal() {
+            document.getElementById('fin-modal').classList.remove('open');
+        }
+
+        document.getElementById('btn-segunda-via').addEventListener('click', () => openModal(''));
+        document.getElementById('fin-modal-close').addEventListener('click', closeModal);
+        document.getElementById('fin-modal-cancel').addEventListener('click', closeModal);
+        document.getElementById('fin-modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('fin-modal')) closeModal();
+        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        document.getElementById('fin-modal-gerar').addEventListener('click', () => {
+            const ref = document.getElementById('fin-modal-ref').value;
+            if (!ref) {
+                document.getElementById('fin-modal-ref').style.borderColor = '#ba1a1a';
+                return;
+            }
+            closeModal();
+            alert(`Boleto ${ref} gerado! Em produção, o PDF seria aberto aqui.`);
+        });
+
+        // ── Init ──────────────────────────────────────────────────────────────────────
         renderTabela(currentFilter);
-    });
-});
-
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function openModal(ref) {
-    if (ref) document.getElementById('fin-modal-ref').value = ref;
-    document.getElementById('fin-modal').classList.add('open');
-}
-function closeModal() {
-    document.getElementById('fin-modal').classList.remove('open');
-}
-
-document.getElementById('btn-segunda-via').addEventListener('click', () => openModal(''));
-document.getElementById('fin-modal-close').addEventListener('click', closeModal);
-document.getElementById('fin-modal-cancel').addEventListener('click', closeModal);
-document.getElementById('fin-modal').addEventListener('click', e => {
-    if (e.target === document.getElementById('fin-modal')) closeModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-document.getElementById('fin-modal-gerar').addEventListener('click', () => {
-    const ref = document.getElementById('fin-modal-ref').value;
-    if (!ref) {
-        document.getElementById('fin-modal-ref').style.borderColor = '#ba1a1a';
-        return;
-    }
-    closeModal();
-    alert(`Boleto ${ref} gerado! Em produção, o PDF seria aberto aqui.`);
-});
-
-// ── Init ──────────────────────────────────────────────────────────────────────
-renderTabela(currentFilter);
-</script>
+    </script>
 </body>
+<script src="../services/auth-guard.js"></script>
+
 </html>

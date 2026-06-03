@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,91 +8,95 @@
     <title>Notificações – CEBE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="../assets/style.css" />
     <link rel="stylesheet" href="../assets/dashboard.css" />
     <link rel="stylesheet" href="../assets/notificacoes.css" />
 </head>
+
 <body class="dashboard-body">
 
-<div class="dashboard-layout">
-    <!-- sidebar + topbar injetados por nav.js -->
-    <div class="main-wrapper">
-        <main class="notif-main">
-            <div class="notif-content">
+    <div class="dashboard-layout">
+        <!-- sidebar + topbar injetados por nav.js -->
+        <div class="main-wrapper">
+            <main class="notif-main">
+                <div class="notif-content">
 
-                <!-- Cabeçalho -->
-                <div class="notif-header">
-                    <h1 class="notif-page-title">Notificações</h1>
-                    <button class="btn-mark-all-read" id="btn-mark-all">
-                        <span class="material-symbols-outlined">done_all</span>
-                        Marcar todas como lidas
-                    </button>
+                    <!-- Cabeçalho -->
+                    <div class="notif-header">
+                        <h1 class="notif-page-title">Notificações</h1>
+                        <button class="btn-mark-all-read" id="btn-mark-all">
+                            <span class="material-symbols-outlined">done_all</span>
+                            Marcar todas como lidas
+                        </button>
+                    </div>
+
+                    <!-- Tabs de filtro -->
+                    <div class="notif-tabs" role="tablist">
+                        <button class="notif-tab active" role="tab" aria-selected="true" data-filter="all" id="tab-all">
+                            Todas <span class="notif-tab-count" id="count-all">0</span>
+                        </button>
+                        <button class="notif-tab" role="tab" aria-selected="false" data-filter="unread" id="tab-unread">
+                            Não lidas <span class="notif-tab-count" id="count-unread">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Lista de notificações -->
+                    <div class="notif-list" id="notif-list" role="list" aria-live="polite"></div>
+
                 </div>
+            </main>
+        </div>
+    </div>
 
-                <!-- Tabs de filtro -->
-                <div class="notif-tabs" role="tablist">
-                    <button class="notif-tab active" role="tab" aria-selected="true" data-filter="all" id="tab-all">
-                        Todas <span class="notif-tab-count" id="count-all">0</span>
-                    </button>
-                    <button class="notif-tab" role="tab" aria-selected="false" data-filter="unread" id="tab-unread">
-                        Não lidas <span class="notif-tab-count" id="count-unread">0</span>
-                    </button>
-                </div>
+    <script src="../services/auth-guard.js"></script>
+    <script src="../services/notifications.js"></script>
+    <script src="../components/nav.js"></script>
+    <script>
+        const NS = window.NotificationService;
 
-                <!-- Lista de notificações -->
-                <div class="notif-list" id="notif-list" role="list" aria-live="polite"></div>
+        let currentFilter = 'all';
 
-            </div><!-- /notif-content -->
-        </main>
-    </div><!-- /main-wrapper -->
-</div><!-- /dashboard-layout -->
-<!-- bottom-nav injetado por nav.js -->
-
-<script src="../services/notifications.js"></script>
-<script src="../components/nav.js"></script>
-<script>
-    const NS = window.NotificationService;
-
-    let currentFilter = 'all';
-
-    // ── Renderização ───────────────────────────────────────────────────────────
-    function iconEl(type, icon) {
-        return `<div class="notif-icon ${type}" aria-hidden="true">
+        // ── Renderização ───────────────────────────────────────────────────────────
+        function iconEl(type, icon) {
+            return `<div class="notif-icon ${type}" aria-hidden="true">
             <span class="material-symbols-outlined">${icon}</span>
         </div>`;
-    }
+        }
 
-    function renderList() {
-        const all    = NS.getAll();
-        const unread = NS.getUnread();
-        const items  = currentFilter === 'unread' ? unread : all;
+        function renderList() {
+            const all = NS.getAll();
+            const unread = NS.getUnread();
+            const items = currentFilter === 'unread' ? unread : all;
 
-        // Atualiza contagens das tabs
-        document.getElementById('count-all').textContent    = all.length;
-        document.getElementById('count-unread').textContent = unread.length;
+            // Atualiza contagens das tabs
+            document.getElementById('count-all').textContent = all.length;
+            document.getElementById('count-unread').textContent = unread.length;
 
-        const list = document.getElementById('notif-list');
-        list.innerHTML = '';
+            const list = document.getElementById('notif-list');
+            list.innerHTML = '';
 
-        if (items.length === 0) {
-            list.innerHTML = `
+            if (items.length === 0) {
+                list.innerHTML = `
                 <div class="notif-empty" aria-live="polite">
                     <span class="material-symbols-outlined">notifications_off</span>
                     <p class="notif-empty-title">Tudo em dia!</p>
                     <p class="notif-empty-sub">${currentFilter === 'unread'
                         ? 'Nenhuma notificação não lida.' : 'Você não tem notificações.'}</p>
                 </div>`;
-            return;
-        }
+                return;
+            }
 
-        items.forEach(n => {
-            const li = document.createElement('div');
-            li.className = `notif-item${n.read ? '' : ' unread'}`;
-            li.setAttribute('role', 'listitem');
-            li.setAttribute('data-id', n.id);
-            li.innerHTML = `
+            items.forEach(n => {
+                const li = document.createElement('div');
+                li.className = `notif-item${n.read ? '' : ' unread'}`;
+                li.setAttribute('role', 'listitem');
+                li.setAttribute('data-id', n.id);
+                li.innerHTML = `
                 <div class="notif-stripe ${n.type}" aria-hidden="true"></div>
                 ${iconEl(n.type, n.icon || NS.iconByType[n.type] || 'info')}
                 <div class="notif-body">
@@ -108,55 +113,56 @@
                     </button>
                 </div>`;
 
-            // Clicar no item → marcar como lido
-            li.addEventListener('click', e => {
-                if (e.target.closest('.notif-action-btn')) return;
-                if (!n.read) NS.markAsRead(n.id);
-            });
+                // Clicar no item → marcar como lido
+                li.addEventListener('click', e => {
+                    if (e.target.closest('.notif-action-btn')) return;
+                    if (!n.read) NS.markAsRead(n.id);
+                });
 
-            // Botão "Marcar como lida"
-            li.querySelector('[data-action="read"]')?.addEventListener('click', e => {
-                e.stopPropagation();
-                NS.markAsRead(n.id);
-            });
+                // Botão "Marcar como lida"
+                li.querySelector('[data-action="read"]')?.addEventListener('click', e => {
+                    e.stopPropagation();
+                    NS.markAsRead(n.id);
+                });
 
-            // Botão "Remover"
-            li.querySelector('[data-action="delete"]').addEventListener('click', e => {
-                e.stopPropagation();
-                li.style.transition = 'opacity 0.2s, transform 0.2s';
-                li.style.opacity = '0';
-                li.style.transform = 'translateX(24px)';
-                setTimeout(() => NS.remove(n.id), 200);
-            });
+                // Botão "Remover"
+                li.querySelector('[data-action="delete"]').addEventListener('click', e => {
+                    e.stopPropagation();
+                    li.style.transition = 'opacity 0.2s, transform 0.2s';
+                    li.style.opacity = '0';
+                    li.style.transform = 'translateX(24px)';
+                    setTimeout(() => NS.remove(n.id), 200);
+                });
 
-            list.appendChild(li);
+                list.appendChild(li);
+            });
+        }
+
+        // ── Tabs ───────────────────────────────────────────────────────────────────
+        document.querySelectorAll('.notif-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.notif-tab').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                currentFilter = tab.dataset.filter;
+                renderList();
+            });
         });
-    }
 
-    // ── Tabs ───────────────────────────────────────────────────────────────────
-    document.querySelectorAll('.notif-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.notif-tab').forEach(t => {
-                t.classList.remove('active');
-                t.setAttribute('aria-selected', 'false');
-            });
-            tab.classList.add('active');
-            tab.setAttribute('aria-selected', 'true');
-            currentFilter = tab.dataset.filter;
-            renderList();
+        // ── Marcar todas como lidas ───────────────────────────────────────────────
+        document.getElementById('btn-mark-all').addEventListener('click', () => {
+            NS.markAllAsRead();
         });
-    });
 
-    // ── Marcar todas como lidas ───────────────────────────────────────────────
-    document.getElementById('btn-mark-all').addEventListener('click', () => {
-        NS.markAllAsRead();
-    });
+        // ── Reatividade ───────────────────────────────────────────────────────────
+        document.addEventListener('notifications-updated', renderList);
 
-    // ── Reatividade ───────────────────────────────────────────────────────────
-    document.addEventListener('notifications-updated', renderList);
-
-    // Inicialização
-    renderList();
-</script>
+        // Inicialização
+        renderList();
+    </script>
 </body>
+
 </html>

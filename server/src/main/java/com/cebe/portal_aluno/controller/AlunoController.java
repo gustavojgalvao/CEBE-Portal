@@ -2,10 +2,12 @@ package com.cebe.portal_aluno.controller;
 
 import com.cebe.portal_aluno.dto.request.AlunoRequestDTO;
 import com.cebe.portal_aluno.dto.response.AlunoResponseDTO;
+import com.cebe.portal_aluno.entity.Aluno;
 import com.cebe.portal_aluno.service.AlunoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,5 +55,13 @@ public class AlunoController {
         service.deletar(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    // Quando o aluno chama GET /alunos/me com o token dele,
+    // este método retorna os dados do próprio aluno pra identificar no front-end.
+    @GetMapping("/me")
+    public ResponseEntity<AlunoResponseDTO> meuPerfil(
+            @AuthenticationPrincipal Aluno aluno) {
+        return ResponseEntity.ok(service.buscarPorId(aluno.getId()));
     }
 }

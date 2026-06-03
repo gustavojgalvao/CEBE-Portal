@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,358 +8,367 @@
     <title>Atendimento – CEBE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="../assets/style.css" />
     <link rel="stylesheet" href="../assets/dashboard.css" />
     <link rel="stylesheet" href="../assets/atendimento.css" />
 </head>
+
 <body class="dashboard-body">
 
-<div class="dashboard-layout">
-    <!-- sidebar + topbar injetados por nav.js -->
-    <div class="main-wrapper">
+    <div class="dashboard-layout">
+        <!-- sidebar + topbar injetados por nav.js -->
+        <div class="main-wrapper">
 
-        <!-- Layout do atendimento (lista + chat) -->
-        <div class="atendimento-layout" id="atendimento-layout">
+            <!-- Layout do atendimento (lista + chat) -->
+            <div class="atendimento-layout" id="atendimento-layout">
 
-            <!-- ── Painel esquerdo: lista de conversas ─────────────────── -->
-            <div class="conversations-panel" id="conversations-panel">
+                <!-- ── Painel esquerdo: lista de conversas ─────────────────── -->
+                <div class="conversations-panel" id="conversations-panel">
 
-                <div class="conversations-header">
-                    <div class="conversations-header-top">
-                        <h1 class="conversations-title">Atendimento</h1>
-                        <button class="btn-new-conversation" id="btn-new-conv" aria-label="Novo chamado">
-                            <span class="material-symbols-outlined" style="font-size:20px;">edit_square</span>
+                    <div class="conversations-header">
+                        <div class="conversations-header-top">
+                            <h1 class="conversations-title">Atendimento</h1>
+                            <button class="btn-new-conversation" id="btn-new-conv" aria-label="Novo chamado">
+                                <span class="material-symbols-outlined" style="font-size:20px;">edit_square</span>
+                            </button>
+                        </div>
+                        <div class="search-bar">
+                            <span class="material-symbols-outlined search-icon">search</span>
+                            <input type="search" class="search-input" id="search-conversations"
+                                placeholder="Buscar chamados..." aria-label="Buscar conversas" />
+                        </div>
+                    </div>
+
+                    <div class="conversations-list" id="conversations-list" role="list">
+
+                        <div class="conv-group-label">Abertos</div>
+
+                        <div class="conversation-item active" role="listitem" data-conv="1" tabindex="0">
+                            <div class="conv-avatar green">
+                                SE <span class="online-dot" aria-label="Online"></span>
+                            </div>
+                            <div class="conv-body">
+                                <div class="conv-top">
+                                    <span class="conv-name">Secretaria</span>
+                                    <span class="conv-time">14:32</span>
+                                </div>
+                                <div class="conv-preview-row">
+                                    <span class="conv-preview">Ok, a sala foi confirmada para amanhã!</span>
+                                    <span class="conv-status aberto">Aberto</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conversation-item" role="listitem" data-conv="2" tabindex="0">
+                            <div class="conv-avatar blue">FI</div>
+                            <div class="conv-body">
+                                <div class="conv-top">
+                                    <span class="conv-name">Financeiro</span>
+                                    <span class="conv-time">11:15</span>
+                                </div>
+                                <div class="conv-preview-row">
+                                    <span class="conv-preview">Seu boleto de maio vence dia 10.</span>
+                                    <span class="conv-unread-badge" aria-label="2 mensagens não lidas">2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conv-group-label">Aguardando resposta</div>
+
+                        <div class="conversation-item" role="listitem" data-conv="3" tabindex="0">
+                            <div class="conv-avatar purple">CO</div>
+                            <div class="conv-body">
+                                <div class="conv-top">
+                                    <span class="conv-name">Coordenação</span>
+                                    <span class="conv-time">Seg</span>
+                                </div>
+                                <div class="conv-preview-row">
+                                    <span class="conv-preview">Você: Gostaria de saber sobre as faltas.</span>
+                                    <span class="conv-status aguardando">Aguardando</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conv-group-label">Encerrados</div>
+
+                        <div class="conversation-item" role="listitem" data-conv="4" tabindex="0">
+                            <div class="conv-avatar orange">SE</div>
+                            <div class="conv-body">
+                                <div class="conv-top">
+                                    <span class="conv-name">Secretaria</span>
+                                    <span class="conv-time">20/05</span>
+                                </div>
+                                <div class="conv-preview-row">
+                                    <span class="conv-preview">Declaração enviada para seu e-mail.</span>
+                                    <span class="conv-status fechado">Encerrado</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /conversations-list -->
+                </div><!-- /conversations-panel -->
+
+                <!-- ── Painel direito: janela de chat ──────────────────────── -->
+                <div class="chat-panel" id="chat-panel">
+
+                    <!-- Estado vazio -->
+                    <div class="chat-empty-state" id="chat-empty">
+                        <div class="chat-empty-icon">
+                            <span class="material-symbols-outlined">chat</span>
+                        </div>
+                        <p class="chat-empty-title">Selecione um chamado</p>
+                        <p class="chat-empty-sub">Escolha uma conversa ou abra um novo chamado.</p>
+                        <button class="btn-new-ticket" id="btn-empty-new"
+                            style="width:auto;padding:12px 24px;border-radius:12px;">
+                            <span class="material-symbols-outlined">add</span>
+                            Novo Chamado
                         </button>
                     </div>
-                    <div class="search-bar">
-                        <span class="material-symbols-outlined search-icon">search</span>
-                        <input type="search" class="search-input" id="search-conversations"
-                            placeholder="Buscar chamados..." aria-label="Buscar conversas" />
-                    </div>
-                </div>
 
-                <div class="conversations-list" id="conversations-list" role="list">
+                    <!-- Janela de chat -->
+                    <div id="chat-window" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
 
-                    <div class="conv-group-label">Abertos</div>
-
-                    <div class="conversation-item active" role="listitem" data-conv="1" tabindex="0">
-                        <div class="conv-avatar green">
-                            SE <span class="online-dot" aria-label="Online"></span>
-                        </div>
-                        <div class="conv-body">
-                            <div class="conv-top">
-                                <span class="conv-name">Secretaria</span>
-                                <span class="conv-time">14:32</span>
-                            </div>
-                            <div class="conv-preview-row">
-                                <span class="conv-preview">Ok, a sala foi confirmada para amanhã!</span>
-                                <span class="conv-status aberto">Aberto</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="conversation-item" role="listitem" data-conv="2" tabindex="0">
-                        <div class="conv-avatar blue">FI</div>
-                        <div class="conv-body">
-                            <div class="conv-top">
-                                <span class="conv-name">Financeiro</span>
-                                <span class="conv-time">11:15</span>
-                            </div>
-                            <div class="conv-preview-row">
-                                <span class="conv-preview">Seu boleto de maio vence dia 10.</span>
-                                <span class="conv-unread-badge" aria-label="2 mensagens não lidas">2</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="conv-group-label">Aguardando resposta</div>
-
-                    <div class="conversation-item" role="listitem" data-conv="3" tabindex="0">
-                        <div class="conv-avatar purple">CO</div>
-                        <div class="conv-body">
-                            <div class="conv-top">
-                                <span class="conv-name">Coordenação</span>
-                                <span class="conv-time">Seg</span>
-                            </div>
-                            <div class="conv-preview-row">
-                                <span class="conv-preview">Você: Gostaria de saber sobre as faltas.</span>
-                                <span class="conv-status aguardando">Aguardando</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="conv-group-label">Encerrados</div>
-
-                    <div class="conversation-item" role="listitem" data-conv="4" tabindex="0">
-                        <div class="conv-avatar orange">SE</div>
-                        <div class="conv-body">
-                            <div class="conv-top">
-                                <span class="conv-name">Secretaria</span>
-                                <span class="conv-time">20/05</span>
-                            </div>
-                            <div class="conv-preview-row">
-                                <span class="conv-preview">Declaração enviada para seu e-mail.</span>
-                                <span class="conv-status fechado">Encerrado</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- /conversations-list -->
-            </div><!-- /conversations-panel -->
-
-            <!-- ── Painel direito: janela de chat ──────────────────────── -->
-            <div class="chat-panel" id="chat-panel">
-
-                <!-- Estado vazio -->
-                <div class="chat-empty-state" id="chat-empty">
-                    <div class="chat-empty-icon">
-                        <span class="material-symbols-outlined">chat</span>
-                    </div>
-                    <p class="chat-empty-title">Selecione um chamado</p>
-                    <p class="chat-empty-sub">Escolha uma conversa ou abra um novo chamado.</p>
-                    <button class="btn-new-ticket" id="btn-empty-new" style="width:auto;padding:12px 24px;border-radius:12px;">
-                        <span class="material-symbols-outlined">add</span>
-                        Novo Chamado
-                    </button>
-                </div>
-
-                <!-- Janela de chat -->
-                <div id="chat-window" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
-
-                    <div class="chat-header">
-                        <button class="chat-header-back" id="chat-back-btn" aria-label="Voltar">
-                            <span class="material-symbols-outlined">arrow_back</span>
-                        </button>
-                        <div class="chat-header-avatar" aria-hidden="true">SE</div>
-                        <div class="chat-header-info">
-                            <div class="chat-header-name">Secretaria</div>
-                            <div class="chat-header-status">Online agora</div>
-                        </div>
-                        <span class="ticket-status-tag">Aberto</span>
-                        <div class="chat-header-actions">
-                            <button class="chat-action-btn" aria-label="Informações">
-                                <span class="material-symbols-outlined">info</span>
+                        <div class="chat-header">
+                            <button class="chat-header-back" id="chat-back-btn" aria-label="Voltar">
+                                <span class="material-symbols-outlined">arrow_back</span>
                             </button>
-                            <button class="chat-action-btn" aria-label="Mais opções">
-                                <span class="material-symbols-outlined">more_vert</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
-
-                        <div class="date-divider">
-                            <span class="date-divider-text">Hoje, 29 de maio</span>
-                        </div>
-
-                        <div class="system-message">Chamado #1042 aberto – Confirmação de sala de aula</div>
-
-                        <div class="message-row incoming">
-                            <div class="message-avatar" aria-hidden="true">SE</div>
-                            <div class="message-bubble-wrapper">
-                                <span class="message-sender-name">Secretaria</span>
-                                <div class="message-bubble">Olá, João! Tudo bem? Em que posso ajudar? 😊</div>
-                                <div class="message-meta"><span>13:55</span></div>
+                            <div class="chat-header-avatar" aria-hidden="true">SE</div>
+                            <div class="chat-header-info">
+                                <div class="chat-header-name">Secretaria</div>
+                                <div class="chat-header-status">Online agora</div>
                             </div>
-                        </div>
-
-                        <div class="message-row outgoing">
-                            <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
-                            <div class="message-bubble-wrapper">
-                                <div class="message-bubble">Oi! Queria confirmar a sala da aula de Confeitaria de amanhã, por favor.</div>
-                                <div class="message-meta">
-                                    <span>14:01</span>
-                                    <span class="material-symbols-outlined message-status-icon read">done_all</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="message-row incoming">
-                            <div class="message-avatar" aria-hidden="true">SE</div>
-                            <div class="message-bubble-wrapper">
-                                <div class="message-bubble">Claro! Deixa eu verificar aqui rapidinho...</div>
-                                <div class="message-meta"><span>14:05</span></div>
-                            </div>
-                        </div>
-
-                        <div class="message-row incoming">
-                            <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
-                            <div class="message-bubble-wrapper">
-                                <div class="message-bubble">
-                                    Confirmado! A aula de amanhã, <strong>quinta-feira 29/05</strong>, será na
-                                    <strong>Sala 05</strong>. Horário: <strong>19h às 22h</strong>.
-                                </div>
-                                <div class="message-meta"><span>14:06</span></div>
-                            </div>
-                        </div>
-
-                        <div class="message-row outgoing">
-                            <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
-                            <div class="message-bubble-wrapper">
-                                <div class="message-bubble">Perfeito, obrigado! 👍</div>
-                                <div class="message-meta">
-                                    <span>14:18</span>
-                                    <span class="material-symbols-outlined message-status-icon read">done_all</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="message-row incoming">
-                            <div class="message-avatar" aria-hidden="true">SE</div>
-                            <div class="message-bubble-wrapper">
-                                <div class="message-bubble">Ok, a sala foi confirmada para amanhã! Qualquer dúvida estamos à disposição. 😊</div>
-                                <div class="message-meta"><span>14:32</span></div>
-                            </div>
-                        </div>
-
-                        <!-- Indicador "digitando..." -->
-                        <div class="typing-indicator" id="typing-indicator" style="display:none;" aria-label="Digitando">
-                            <div class="message-avatar" aria-hidden="true">SE</div>
-                            <div class="typing-dots">
-                                <span class="typing-dot"></span>
-                                <span class="typing-dot"></span>
-                                <span class="typing-dot"></span>
-                            </div>
-                        </div>
-
-                    </div><!-- /chat-messages -->
-
-                    <div class="chat-input-bar">
-                        <div class="chat-input-inner">
-                            <button class="chat-input-attach" aria-label="Anexar arquivo">
-                                <span class="material-symbols-outlined">attach_file</span>
-                            </button>
-                            <textarea class="chat-textarea" id="chat-input" rows="1"
-                                placeholder="Digite sua mensagem..." aria-label="Campo de mensagem" maxlength="2000"></textarea>
-                            <div class="chat-input-actions">
-                                <button class="chat-input-emoji" aria-label="Emoji">
-                                    <span class="material-symbols-outlined">mood</span>
+                            <span class="ticket-status-tag">Aberto</span>
+                            <div class="chat-header-actions">
+                                <button class="chat-action-btn" aria-label="Informações">
+                                    <span class="material-symbols-outlined">info</span>
                                 </button>
-                                <button class="chat-send-btn" id="chat-send-btn" aria-label="Enviar">
-                                    <span class="material-symbols-outlined">send</span>
+                                <button class="chat-action-btn" aria-label="Mais opções">
+                                    <span class="material-symbols-outlined">more_vert</span>
                                 </button>
                             </div>
                         </div>
-                        <p class="chat-input-note">Respondemos em horário comercial (seg–sex, 8h–18h).</p>
-                    </div>
 
-                </div><!-- /chat-window -->
-            </div><!-- /chat-panel -->
-        </div><!-- /atendimento-layout -->
+                        <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
 
-    </div><!-- /main-wrapper -->
-</div><!-- /dashboard-layout -->
-<!-- bottom-nav injetado por nav.js -->
+                            <div class="date-divider">
+                                <span class="date-divider-text">Hoje, 29 de maio</span>
+                            </div>
 
-<!-- Modal: Novo Chamado -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h2 class="modal-title" id="modal-title">Novo Chamado</h2>
-            <button class="modal-close" id="modal-close" aria-label="Fechar">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="modal-form">
-            <div>
-                <label class="modal-label" for="modal-setor">Setor / Departamento</label>
-                <select class="modal-select" id="modal-setor">
-                    <option value="" disabled selected>Selecione o setor...</option>
-                    <option value="secretaria">Secretaria</option>
-                    <option value="financeiro">Financeiro</option>
-                    <option value="coordenacao">Coordenação</option>
-                    <option value="suporte">Suporte Técnico</option>
-                </select>
+                            <div class="system-message">Chamado #1042 aberto – Confirmação de sala de aula</div>
+
+                            <div class="message-row incoming">
+                                <div class="message-avatar" aria-hidden="true">SE</div>
+                                <div class="message-bubble-wrapper">
+                                    <span class="message-sender-name">Secretaria</span>
+                                    <div class="message-bubble">Olá, João! Tudo bem? Em que posso ajudar? 😊</div>
+                                    <div class="message-meta"><span>13:55</span></div>
+                                </div>
+                            </div>
+
+                            <div class="message-row outgoing">
+                                <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
+                                <div class="message-bubble-wrapper">
+                                    <div class="message-bubble">Oi! Queria confirmar a sala da aula de Confeitaria de
+                                        amanhã, por favor.</div>
+                                    <div class="message-meta">
+                                        <span>14:01</span>
+                                        <span class="material-symbols-outlined message-status-icon read">done_all</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="message-row incoming">
+                                <div class="message-avatar" aria-hidden="true">SE</div>
+                                <div class="message-bubble-wrapper">
+                                    <div class="message-bubble">Claro! Deixa eu verificar aqui rapidinho...</div>
+                                    <div class="message-meta"><span>14:05</span></div>
+                                </div>
+                            </div>
+
+                            <div class="message-row incoming">
+                                <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
+                                <div class="message-bubble-wrapper">
+                                    <div class="message-bubble">
+                                        Confirmado! A aula de amanhã, <strong>quinta-feira 29/05</strong>, será na
+                                        <strong>Sala 05</strong>. Horário: <strong>19h às 22h</strong>.
+                                    </div>
+                                    <div class="message-meta"><span>14:06</span></div>
+                                </div>
+                            </div>
+
+                            <div class="message-row outgoing">
+                                <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
+                                <div class="message-bubble-wrapper">
+                                    <div class="message-bubble">Perfeito, obrigado! 👍</div>
+                                    <div class="message-meta">
+                                        <span>14:18</span>
+                                        <span class="material-symbols-outlined message-status-icon read">done_all</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="message-row incoming">
+                                <div class="message-avatar" aria-hidden="true">SE</div>
+                                <div class="message-bubble-wrapper">
+                                    <div class="message-bubble">Ok, a sala foi confirmada para amanhã! Qualquer dúvida
+                                        estamos à disposição. 😊</div>
+                                    <div class="message-meta"><span>14:32</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Indicador "digitando..." -->
+                            <div class="typing-indicator" id="typing-indicator" style="display:none;"
+                                aria-label="Digitando">
+                                <div class="message-avatar" aria-hidden="true">SE</div>
+                                <div class="typing-dots">
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                </div>
+                            </div>
+
+                        </div><!-- /chat-messages -->
+
+                        <div class="chat-input-bar">
+                            <div class="chat-input-inner">
+                                <button class="chat-input-attach" aria-label="Anexar arquivo">
+                                    <span class="material-symbols-outlined">attach_file</span>
+                                </button>
+                                <textarea class="chat-textarea" id="chat-input" rows="1"
+                                    placeholder="Digite sua mensagem..." aria-label="Campo de mensagem"
+                                    maxlength="2000"></textarea>
+                                <div class="chat-input-actions">
+                                    <button class="chat-input-emoji" aria-label="Emoji">
+                                        <span class="material-symbols-outlined">mood</span>
+                                    </button>
+                                    <button class="chat-send-btn" id="chat-send-btn" aria-label="Enviar">
+                                        <span class="material-symbols-outlined">send</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="chat-input-note">Respondemos em horário comercial (seg–sex, 8h–18h).</p>
+                        </div>
+
+                    </div><!-- /chat-window -->
+                </div><!-- /chat-panel -->
+            </div><!-- /atendimento-layout -->
+
+        </div><!-- /main-wrapper -->
+    </div><!-- /dashboard-layout -->
+    <!-- bottom-nav injetado por nav.js -->
+
+    <!-- Modal: Novo Chamado -->
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Novo Chamado</h2>
+                <button class="modal-close" id="modal-close" aria-label="Fechar">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
             </div>
-            <div>
-                <label class="modal-label" for="modal-assunto">Assunto</label>
-                <input type="text" class="modal-input" id="modal-assunto"
-                    placeholder="Ex: Dúvida sobre falta, declaração..." maxlength="100" />
+            <div class="modal-form">
+                <div>
+                    <label class="modal-label" for="modal-setor">Setor / Departamento</label>
+                    <select class="modal-select" id="modal-setor">
+                        <option value="" disabled selected>Selecione o setor...</option>
+                        <option value="secretaria">Secretaria</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="coordenacao">Coordenação</option>
+                        <option value="suporte">Suporte Técnico</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="modal-label" for="modal-assunto">Assunto</label>
+                    <input type="text" class="modal-input" id="modal-assunto"
+                        placeholder="Ex: Dúvida sobre falta, declaração..." maxlength="100" />
+                </div>
+                <div>
+                    <label class="modal-label" for="modal-descricao">Descrição</label>
+                    <textarea class="modal-textarea" id="modal-descricao" placeholder="Descreva sua solicitação..."
+                        maxlength="1000"></textarea>
+                </div>
             </div>
-            <div>
-                <label class="modal-label" for="modal-descricao">Descrição</label>
-                <textarea class="modal-textarea" id="modal-descricao"
-                    placeholder="Descreva sua solicitação..." maxlength="1000"></textarea>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" id="btn-modal-cancel">Cancelar</button>
+                <button class="btn-modal-submit" id="btn-modal-submit">
+                    <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">send</span>
+                    Abrir Chamado
+                </button>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal-cancel" id="btn-modal-cancel">Cancelar</button>
-            <button class="btn-modal-submit" id="btn-modal-submit">
-                <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">send</span>
-                Abrir Chamado
-            </button>
         </div>
     </div>
-</div>
 
-<script src="../components/nav.js"></script>
-<script>
-    // ── Referências ────────────────────────────────────────────────────────
-    const convItems      = document.querySelectorAll('.conversation-item');
-    const convPanel      = document.getElementById('conversations-panel');
-    const chatEmpty      = document.getElementById('chat-empty');
-    const chatWindow     = document.getElementById('chat-window');
-    const chatMessages   = document.getElementById('chat-messages');
-    const typingIndicator = document.getElementById('typing-indicator');
-    const chatInput      = document.getElementById('chat-input');
-    const modalOverlay   = document.getElementById('modal-overlay');
+    <script src="../components/nav.js"></script>
+    <script>
+        // ── Referências ────────────────────────────────────────────────────────
+        const convItems = document.querySelectorAll('.conversation-item');
+        const convPanel = document.getElementById('conversations-panel');
+        const chatEmpty = document.getElementById('chat-empty');
+        const chatWindow = document.getElementById('chat-window');
+        const chatMessages = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const chatInput = document.getElementById('chat-input');
+        const modalOverlay = document.getElementById('modal-overlay');
 
-    const isMobile = () => window.innerWidth < 768;
-    const scrollToBottom = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
+        const isMobile = () => window.innerWidth < 768;
+        const scrollToBottom = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
 
-    // ── Seleção de conversa ────────────────────────────────────────────────
-    function selectConversation(item) {
-        convItems.forEach(c => c.classList.remove('active'));
-        item.classList.add('active');
-        chatEmpty.style.display  = 'none';
-        chatWindow.style.display = 'flex';
-        if (isMobile()) convPanel.classList.add('mobile-hidden');
-        scrollToBottom();
-    }
+        // ── Seleção de conversa ────────────────────────────────────────────────
+        function selectConversation(item) {
+            convItems.forEach(c => c.classList.remove('active'));
+            item.classList.add('active');
+            chatEmpty.style.display = 'none';
+            chatWindow.style.display = 'flex';
+            if (isMobile()) convPanel.classList.add('mobile-hidden');
+            scrollToBottom();
+        }
 
-    convItems.forEach(item => {
-        item.addEventListener('click', () => selectConversation(item));
-        item.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectConversation(item); }
+        convItems.forEach(item => {
+            item.addEventListener('click', () => selectConversation(item));
+            item.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectConversation(item); }
+            });
         });
-    });
 
-    document.getElementById('chat-back-btn').addEventListener('click', () => {
-        convPanel.classList.remove('mobile-hidden');
-        chatEmpty.style.display  = 'flex';
-        chatWindow.style.display = 'none';
-        convItems.forEach(c => c.classList.remove('active'));
-    });
+        document.getElementById('chat-back-btn').addEventListener('click', () => {
+            convPanel.classList.remove('mobile-hidden');
+            chatEmpty.style.display = 'flex';
+            chatWindow.style.display = 'none';
+            convItems.forEach(c => c.classList.remove('active'));
+        });
 
-    // Inicialização
-    if (!isMobile()) {
-        selectConversation(convItems[0]);
-    } else {
-        chatEmpty.style.display  = 'flex';
-        chatWindow.style.display = 'none';
-    }
+        // Inicialização
+        if (!isMobile()) {
+            selectConversation(convItems[0]);
+        } else {
+            chatEmpty.style.display = 'flex';
+            chatWindow.style.display = 'none';
+        }
 
-    // ── Envio de mensagem ──────────────────────────────────────────────────
-    const RESPOSTAS = [
-        'Entendido! Vou verificar e retorno em breve.',
-        'Obrigada pelo contato, João! Estamos analisando.',
-        'Certo! Assim que tivermos a resposta, avisamos aqui.',
-        'Recebido! Nosso time está verificando para você.',
-    ];
+        // ── Envio de mensagem ──────────────────────────────────────────────────
+        const RESPOSTAS = [
+            'Entendido! Vou verificar e retorno em breve.',
+            'Obrigada pelo contato, João! Estamos analisando.',
+            'Certo! Assim que tivermos a resposta, avisamos aqui.',
+            'Recebido! Nosso time está verificando para você.',
+        ];
 
-    function now() {
-        const d = new Date();
-        return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
-    }
+        function now() {
+            const d = new Date();
+            return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+        }
 
-    function addMessage(text, type) {
-        const row = document.createElement('div');
-        row.className = `message-row ${type}`;
+        function addMessage(text, type) {
+            const row = document.createElement('div');
+            row.className = `message-row ${type}`;
 
-        const isIncoming = type === 'incoming';
-        row.innerHTML = `
+            const isIncoming = type === 'incoming';
+            row.innerHTML = `
             <div class="message-avatar${isIncoming ? ' green' : ' hidden-avatar'}" aria-hidden="true">
                 ${isIncoming ? 'SE' : ''}
             </div>
@@ -370,89 +380,91 @@
                 </div>
             </div>`;
 
-        chatMessages.insertBefore(row, typingIndicator);
-        scrollToBottom();
-        return row;
-    }
-
-    function sendMessage() {
-        const text = chatInput.value.trim();
-        if (!text) return;
-
-        addMessage(text, 'outgoing');
-        chatInput.value = '';
-        chatInput.style.height = 'auto';
-
-        setTimeout(() => {
-            typingIndicator.style.display = 'flex';
+            chatMessages.insertBefore(row, typingIndicator);
             scrollToBottom();
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-                addMessage(RESPOSTAS[Math.floor(Math.random() * RESPOSTAS.length)], 'incoming');
-            }, 2500);
-        }, 800);
-    }
-
-    document.getElementById('chat-send-btn').addEventListener('click', sendMessage);
-    chatInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-    });
-    chatInput.addEventListener('input', () => {
-        chatInput.style.height = 'auto';
-        chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-    });
-
-    // ── Modal ──────────────────────────────────────────────────────────────
-    function openModal() { modalOverlay.classList.add('open'); }
-    function closeModal() { modalOverlay.classList.remove('open'); }
-
-    // O botão btn-novo-chamado é injetado pelo nav.js; aqui sobrescrevemos
-    document.getElementById('btn-novo-chamado')?.addEventListener('click', openModal);
-    document.getElementById('btn-new-conv').addEventListener('click', openModal);
-    document.getElementById('btn-empty-new').addEventListener('click', openModal);
-    document.getElementById('modal-close').addEventListener('click', closeModal);
-    document.getElementById('btn-modal-cancel').addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-    document.getElementById('btn-modal-submit').addEventListener('click', () => {
-        const setor    = document.getElementById('modal-setor').value;
-        const assunto  = document.getElementById('modal-assunto').value.trim();
-        const descricao = document.getElementById('modal-descricao').value.trim();
-
-        if (!setor || !assunto || !descricao) {
-            [document.getElementById('modal-setor'),
-             document.getElementById('modal-assunto'),
-             document.getElementById('modal-descricao')].forEach(el => {
-                if (!el.value.trim()) {
-                    el.style.borderColor = '#ba1a1a';
-                    el.addEventListener('input', () => el.style.borderColor = '', { once: true });
-                }
-            });
-            return;
+            return row;
         }
 
-        closeModal();
-        const sysMsg = document.createElement('div');
-        sysMsg.className = 'system-message';
-        sysMsg.textContent = `Novo chamado aberto: "${assunto}"`;
-        chatMessages.insertBefore(sysMsg, typingIndicator);
-        scrollToBottom();
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
 
-        document.getElementById('modal-setor').value = '';
-        document.getElementById('modal-assunto').value = '';
-        document.getElementById('modal-descricao').value = '';
-    });
+            addMessage(text, 'outgoing');
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
 
-    // ── Busca de conversas ─────────────────────────────────────────────────
-    document.getElementById('search-conversations').addEventListener('input', e => {
-        const q = e.target.value.toLowerCase();
-        convItems.forEach(item => {
-            const text = item.querySelector('.conv-name').textContent.toLowerCase()
-                       + item.querySelector('.conv-preview').textContent.toLowerCase();
-            item.style.display = text.includes(q) ? 'flex' : 'none';
+            setTimeout(() => {
+                typingIndicator.style.display = 'flex';
+                scrollToBottom();
+                setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                    addMessage(RESPOSTAS[Math.floor(Math.random() * RESPOSTAS.length)], 'incoming');
+                }, 2500);
+            }, 800);
+        }
+
+        document.getElementById('chat-send-btn').addEventListener('click', sendMessage);
+        chatInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         });
-    });
-</script>
+        chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+        });
+
+        // ── Modal ──────────────────────────────────────────────────────────────
+        function openModal() { modalOverlay.classList.add('open'); }
+        function closeModal() { modalOverlay.classList.remove('open'); }
+
+        // O botão btn-novo-chamado é injetado pelo nav.js; aqui sobrescrevemos
+        document.getElementById('btn-novo-chamado')?.addEventListener('click', openModal);
+        document.getElementById('btn-new-conv').addEventListener('click', openModal);
+        document.getElementById('btn-empty-new').addEventListener('click', openModal);
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('btn-modal-cancel').addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        document.getElementById('btn-modal-submit').addEventListener('click', () => {
+            const setor = document.getElementById('modal-setor').value;
+            const assunto = document.getElementById('modal-assunto').value.trim();
+            const descricao = document.getElementById('modal-descricao').value.trim();
+
+            if (!setor || !assunto || !descricao) {
+                [document.getElementById('modal-setor'),
+                document.getElementById('modal-assunto'),
+                document.getElementById('modal-descricao')].forEach(el => {
+                    if (!el.value.trim()) {
+                        el.style.borderColor = '#ba1a1a';
+                        el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+                    }
+                });
+                return;
+            }
+
+            closeModal();
+            const sysMsg = document.createElement('div');
+            sysMsg.className = 'system-message';
+            sysMsg.textContent = `Novo chamado aberto: "${assunto}"`;
+            chatMessages.insertBefore(sysMsg, typingIndicator);
+            scrollToBottom();
+
+            document.getElementById('modal-setor').value = '';
+            document.getElementById('modal-assunto').value = '';
+            document.getElementById('modal-descricao').value = '';
+        });
+
+        // ── Busca de conversas ─────────────────────────────────────────────────
+        document.getElementById('search-conversations').addEventListener('input', e => {
+            const q = e.target.value.toLowerCase();
+            convItems.forEach(item => {
+                const text = item.querySelector('.conv-name').textContent.toLowerCase()
+                    + item.querySelector('.conv-preview').textContent.toLowerCase();
+                item.style.display = text.includes(q) ? 'flex' : 'none';
+            });
+        });
+    </script>
 </body>
+<script src="../services/auth-guard.js"></script>
+
 </html>

@@ -38,8 +38,8 @@
                     </div>
                     <div class="input-wrapper">
                         <span class="material-symbols-outlined input-icon">cake</span>
-                        <input class="form-input" id="data-nascimento" name="data-nascimento"
-                            placeholder="DD/MM/AAAA" required="" type="date" />
+                        <input class="form-input" id="data-nascimento" name="data-nascimento" placeholder="DD/MM/AAAA"
+                            required="" type="date" />
                     </div>
                 </div>
                 <div class="form-actions">
@@ -49,7 +49,8 @@
                     </button>
                 </div>
                 <!-- Mensagem de erro exibida quando o login falha -->
-                <p class="form-error" id="msg-erro" style="display:none; color:#e53e3e; font-size:0.875rem; margin-top:0.5rem;"></p>
+                <p class="form-error" id="msg-erro"
+                    style="display:none; color:#e53e3e; font-size:0.875rem; margin-top:0.5rem;"></p>
             </form>
         </div>
         <div class="login-footer">
@@ -60,9 +61,6 @@
         </div>
     </main>
 
-    <!-- Scripts: ordem importa! api.js primeiro, depois auth.js, depois o evento do form -->
-    <script src="../services/api.js"></script>
-    <script src="../services/auth.js"></script>
     <script>
         document.getElementById('form-login').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -89,5 +87,8 @@
         });
     </script>
 </body>
+<script src="../services/auth-guard.js"></script>
+<script src="../services/api.js"></script>
+<script src="../services/auth.js"></script>
 
 </html>

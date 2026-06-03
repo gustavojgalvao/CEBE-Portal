@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,195 +8,203 @@
     <title>Meus Cursos – CEBE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="../assets/style.css" />
     <link rel="stylesheet" href="../assets/dashboard.css" />
     <link rel="stylesheet" href="../assets/cursos.css" />
 </head>
+
 <body class="dashboard-body">
 
-<div class="dashboard-layout">
-    <div class="main-wrapper">
-        <main class="cursos-main">
-            <div class="cursos-content">
+    <div class="dashboard-layout">
+        <div class="main-wrapper">
+            <main class="cursos-main">
+                <div class="cursos-content">
 
-                <!-- Cabeçalho -->
-                <div class="page-header">
-                    <div>
-                        <h1 class="page-title">Meus Cursos</h1>
-                        <p class="page-subtitle">Acompanhe seu progresso e acesse o material didático das suas formações.</p>
-                    </div>
-                    <div class="tab-switcher" role="tablist" aria-label="Filtro de cursos">
-                        <button class="tab-btn active" role="tab" aria-selected="true"  id="tab-andamento">Em andamento</button>
-                        <button class="tab-btn"        role="tab" aria-selected="false" id="tab-concluidos">Concluídos</button>
-                    </div>
-                </div>
-
-                <!-- Grade principal -->
-                <div class="cursos-grid">
-
-                    <!-- ── Coluna esquerda: lista de cursos ─────────── -->
-                    <div class="cursos-left-col">
-                        <h2 class="cursos-section-title">Cursos Ativos</h2>
-
-                        <!-- Card: Confeitaria -->
-                        <article class="course-card-inactive" id="card-confeitaria" tabindex="0"
-                            aria-label="Confeitaria Básica e Avançada" role="button">
-                            <div class="course-card-inner">
-                                <div class="course-card-top">
-                                    <span class="course-category-tag primary-tag">Profissionalizante</span>
-                                    <span class="material-symbols-outlined course-star-icon"
-                                        style="font-variation-settings:'FILL' 1;" aria-label="Favorito">star</span>
-                                </div>
-                                <h3 class="course-card-name secondary-color">Confeitaria Básica e Avançada</h3>
-                                <div class="course-info-grid">
-                                    <div class="course-info-item">
-                                        <span class="material-symbols-outlined">person</span> Prof. Mariana Silva
-                                    </div>
-                                    <div class="course-info-item">
-                                        <span class="material-symbols-outlined">meeting_room</span> Sala 104 – Lab 2
-                                    </div>
-                                    <div class="course-info-item full-width">
-                                        <span class="material-symbols-outlined">schedule</span> Seg e Qua, 14h – 18h
-                                    </div>
-                                </div>
-                                <div class="course-progress-section">
-                                    <div class="course-progress-label-row">
-                                        <span>Progresso</span>
-                                        <span class="course-progress-value">45%</span>
-                                    </div>
-                                    <div class="progress-bar-track">
-                                        <div class="progress-bar-fill" style="width:45%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- Card: Auxiliar de Escritório -->
-                        <article class="course-card-inactive" id="card-escritorio" tabindex="0"
-                            aria-label="Auxiliar de Escritório" role="button">
-                            <div class="course-card-inner">
-                                <div class="course-card-top">
-                                    <span class="course-category-tag secondary-tag">Apoio Administrativo</span>
-                                </div>
-                                <h3 class="course-card-name secondary-color">Auxiliar de Escritório</h3>
-                                <div class="course-info-grid">
-                                    <div class="course-info-item">
-                                        <span class="material-symbols-outlined">person</span> Prof. Carlos Mendes
-                                    </div>
-                                    <div class="course-info-item">
-                                        <span class="material-symbols-outlined">meeting_room</span> Sala 201
-                                    </div>
-                                    <div class="course-info-item full-width">
-                                        <span class="material-symbols-outlined">schedule</span> Ter e Qui, 08h – 12h
-                                    </div>
-                                </div>
-                                <div class="course-progress-section">
-                                    <div class="course-progress-label-row">
-                                        <span>Progresso</span>
-                                        <span class="course-progress-value muted">10%</span>
-                                    </div>
-                                    <div class="progress-bar-track">
-                                        <div class="progress-bar-fill dim" style="width:10%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    </div><!-- /cursos-left-col -->
-
-                    <!-- ── Coluna direita: estado vazio ou detalhes ─── -->
-                    <div class="cursos-right-col" id="course-details-col">
-
-                        <!-- Estado vazio (padrão) -->
-                        <div class="course-empty-state" id="course-empty-state">
-                            <div class="course-empty-icon">
-                                <span class="material-symbols-outlined">school</span>
-                            </div>
-                            <p class="course-empty-title">Selecione um curso</p>
-                            <p class="course-empty-sub">Clique em um dos seus cursos ao lado para ver notas, faltas e detalhes.</p>
+                    <!-- Cabeçalho -->
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Meus Cursos</h1>
+                            <p class="page-subtitle">Acompanhe seu progresso e acesse o material didático das suas
+                                formações.</p>
                         </div>
+                        <div class="tab-switcher" role="tablist" aria-label="Filtro de cursos">
+                            <button class="tab-btn active" role="tab" aria-selected="true" id="tab-andamento">Em
+                                andamento</button>
+                            <button class="tab-btn" role="tab" aria-selected="false"
+                                id="tab-concluidos">Concluídos</button>
+                        </div>
+                    </div>
 
-                        <!-- Detalhes (injetados por JS) -->
-                        <div id="course-detail-panel" style="display:none;"></div>
+                    <!-- Grade principal -->
+                    <div class="cursos-grid">
 
-                    </div><!-- /cursos-right-col -->
-                </div><!-- /cursos-grid -->
-            </div><!-- /cursos-content -->
-        </main>
-    </div><!-- /main-wrapper -->
-</div><!-- /dashboard-layout -->
+                        <!-- ── Coluna esquerda: lista de cursos ─────────── -->
+                        <div class="cursos-left-col">
+                            <h2 class="cursos-section-title">Cursos Ativos</h2>
 
-<script src="../services/notifications.js"></script>
-<script src="../components/nav.js"></script>
-<script>
-// ── Dados dos cursos ──────────────────────────────────────────────────────────
-const CURSOS = {
-    'card-confeitaria': {
-        nome:      'Confeitaria Básica e Avançada',
-        categoria: 'Profissionalizante',
-        turma:     'Turma 2024.1 • Turno Tarde',
-        professor: 'Prof. Mariana Silva',
-        sala:      'Sala 104 – Lab 2',
-        horario:   'Seg e Qua, 14h – 18h',
-        progresso: 45,
-        banner:    'https://lh3.googleusercontent.com/aida-public/AB6AXuAlJppfKMUdoCARtzZ0EeG63HRMRojLkxO50zw3NJEAQDgOwdxLw4M0giIBB1vFR9sA_mzDyPSCLo4e6o-2Lt-PPRQhhNJVOrHyF4-718QQt6DN_C2-FGC0HK-jMOug3FrqRY6mdqThz4uZHXn06SO9_hLGieKus9mNodK_lJcQqoDLYvjHCqDNfQWgN6JLPfldeizdVhv580rrzh7KO_MdvCyMQ5W_V3bfBXozcuD6UC3cw7SxAHk9BJpN-OxX_V0JKrrfdk5X4Jw',
-        avaliacoes: [
-            { nome: 'Avaliação Teórica',  data: '15/09', nota: 9.5 },
-            { nome: 'Avaliação Prática',  data: '22/09', nota: 8.0 },
-        ],
-        materias: [
-            { nome: 'Teoria: Higiene e Segurança',  nota: 9.5, freq: 100 },
-            { nome: 'Prática: Massas Base',         nota: 8.0, freq: 90  },
-            { nome: 'Teoria: Empreendedorismo',     nota: null, freq: 100 },
-        ]
-    },
-    'card-escritorio': {
-        nome:      'Auxiliar de Escritório',
-        categoria: 'Apoio Administrativo',
-        turma:     'Turma 2024.1 • Turno Manhã',
-        professor: 'Prof. Carlos Mendes',
-        sala:      'Sala 201',
-        horario:   'Ter e Qui, 08h – 12h',
-        progresso: 10,
-        banner:    null,
-        avaliacoes: [
-            { nome: 'Avaliação Introdutória', data: '10/09', nota: 7.5 },
-        ],
-        materias: [
-            { nome: 'Introdução ao Escritório', nota: 7.5, freq: 80  },
-            { nome: 'Informática Básica',       nota: null, freq: 90  },
-            { nome: 'Comunicação Empresarial',  nota: null, freq: 100 },
-        ]
-    }
-};
+                            <!-- Card: Confeitaria -->
+                            <article class="course-card-inactive" id="card-confeitaria" tabindex="0"
+                                aria-label="Confeitaria Básica e Avançada" role="button">
+                                <div class="course-card-inner">
+                                    <div class="course-card-top">
+                                        <span class="course-category-tag primary-tag">Profissionalizante</span>
+                                        <span class="material-symbols-outlined course-star-icon"
+                                            style="font-variation-settings:'FILL' 1;" aria-label="Favorito">star</span>
+                                    </div>
+                                    <h3 class="course-card-name secondary-color">Confeitaria Básica e Avançada</h3>
+                                    <div class="course-info-grid">
+                                        <div class="course-info-item">
+                                            <span class="material-symbols-outlined">person</span> Prof. Mariana Silva
+                                        </div>
+                                        <div class="course-info-item">
+                                            <span class="material-symbols-outlined">meeting_room</span> Sala 104 – Lab 2
+                                        </div>
+                                        <div class="course-info-item full-width">
+                                            <span class="material-symbols-outlined">schedule</span> Seg e Qua, 14h – 18h
+                                        </div>
+                                    </div>
+                                    <div class="course-progress-section">
+                                        <div class="course-progress-label-row">
+                                            <span>Progresso</span>
+                                            <span class="course-progress-value">45%</span>
+                                        </div>
+                                        <div class="progress-bar-track">
+                                            <div class="progress-bar-fill" style="width:45%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function notaClass(nota) {
-    if (nota === null) return 'nota-cell pendente';
-    if (nota >= 7) return 'nota-cell aprovado';
-    return 'nota-cell reprovado';
-}
+                            <!-- Card: Auxiliar de Escritório -->
+                            <article class="course-card-inactive" id="card-escritorio" tabindex="0"
+                                aria-label="Auxiliar de Escritório" role="button">
+                                <div class="course-card-inner">
+                                    <div class="course-card-top">
+                                        <span class="course-category-tag secondary-tag">Apoio Administrativo</span>
+                                    </div>
+                                    <h3 class="course-card-name secondary-color">Auxiliar de Escritório</h3>
+                                    <div class="course-info-grid">
+                                        <div class="course-info-item">
+                                            <span class="material-symbols-outlined">person</span> Prof. Carlos Mendes
+                                        </div>
+                                        <div class="course-info-item">
+                                            <span class="material-symbols-outlined">meeting_room</span> Sala 201
+                                        </div>
+                                        <div class="course-info-item full-width">
+                                            <span class="material-symbols-outlined">schedule</span> Ter e Qui, 08h – 12h
+                                        </div>
+                                    </div>
+                                    <div class="course-progress-section">
+                                        <div class="course-progress-label-row">
+                                            <span>Progresso</span>
+                                            <span class="course-progress-value muted">10%</span>
+                                        </div>
+                                        <div class="progress-bar-track">
+                                            <div class="progress-bar-fill dim" style="width:10%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div><!-- /cursos-left-col -->
 
-function notaText(nota) {
-    return nota !== null ? nota.toFixed(1) : 'Pendente';
-}
+                        <!-- ── Coluna direita: estado vazio ou detalhes ─── -->
+                        <div class="cursos-right-col" id="course-details-col">
 
-function freqClass(freq) {
-    if (freq >= 75) return 'freq-cell ok';
-    return 'freq-cell baixa';
-}
+                            <!-- Estado vazio (padrão) -->
+                            <div class="course-empty-state" id="course-empty-state">
+                                <div class="course-empty-icon">
+                                    <span class="material-symbols-outlined">school</span>
+                                </div>
+                                <p class="course-empty-title">Selecione um curso</p>
+                                <p class="course-empty-sub">Clique em um dos seus cursos ao lado para ver notas, faltas
+                                    e detalhes.</p>
+                            </div>
 
-// ── Renderização do painel de detalhes ────────────────────────────────────────
-function renderCurso(id) {
-    const c = CURSOS[id];
-    if (!c) return;
+                            <!-- Detalhes (injetados por JS) -->
+                            <div id="course-detail-panel" style="display:none;"></div>
 
-    const bannerHTML = c.banner
-        ? `<img src="${c.banner}" alt="Banner – ${c.nome}" class="course-banner-img" />`
-        : `<div class="course-banner-placeholder"><span class="material-symbols-outlined">school</span></div>`;
+                        </div><!-- /cursos-right-col -->
+                    </div><!-- /cursos-grid -->
+                </div><!-- /cursos-content -->
+            </main>
+        </div><!-- /main-wrapper -->
+    </div><!-- /dashboard-layout -->
 
-    const avaliacoesHTML = c.avaliacoes.map(a => `
+    <script src="../services/notifications.js"></script>
+    <script src="../components/nav.js"></script>
+    <script>
+        // ── Dados dos cursos ──────────────────────────────────────────────────────────
+        const CURSOS = {
+            'card-confeitaria': {
+                nome: 'Confeitaria Básica e Avançada',
+                categoria: 'Profissionalizante',
+                turma: 'Turma 2024.1 • Turno Tarde',
+                professor: 'Prof. Mariana Silva',
+                sala: 'Sala 104 – Lab 2',
+                horario: 'Seg e Qua, 14h – 18h',
+                progresso: 45,
+                banner: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlJppfKMUdoCARtzZ0EeG63HRMRojLkxO50zw3NJEAQDgOwdxLw4M0giIBB1vFR9sA_mzDyPSCLo4e6o-2Lt-PPRQhhNJVOrHyF4-718QQt6DN_C2-FGC0HK-jMOug3FrqRY6mdqThz4uZHXn06SO9_hLGieKus9mNodK_lJcQqoDLYvjHCqDNfQWgN6JLPfldeizdVhv580rrzh7KO_MdvCyMQ5W_V3bfBXozcuD6UC3cw7SxAHk9BJpN-OxX_V0JKrrfdk5X4Jw',
+                avaliacoes: [
+                    { nome: 'Avaliação Teórica', data: '15/09', nota: 9.5 },
+                    { nome: 'Avaliação Prática', data: '22/09', nota: 8.0 },
+                ],
+                materias: [
+                    { nome: 'Teoria: Higiene e Segurança', nota: 9.5, freq: 100 },
+                    { nome: 'Prática: Massas Base', nota: 8.0, freq: 90 },
+                    { nome: 'Teoria: Empreendedorismo', nota: null, freq: 100 },
+                ]
+            },
+            'card-escritorio': {
+                nome: 'Auxiliar de Escritório',
+                categoria: 'Apoio Administrativo',
+                turma: 'Turma 2024.1 • Turno Manhã',
+                professor: 'Prof. Carlos Mendes',
+                sala: 'Sala 201',
+                horario: 'Ter e Qui, 08h – 12h',
+                progresso: 10,
+                banner: null,
+                avaliacoes: [
+                    { nome: 'Avaliação Introdutória', data: '10/09', nota: 7.5 },
+                ],
+                materias: [
+                    { nome: 'Introdução ao Escritório', nota: 7.5, freq: 80 },
+                    { nome: 'Informática Básica', nota: null, freq: 90 },
+                    { nome: 'Comunicação Empresarial', nota: null, freq: 100 },
+                ]
+            }
+        };
+
+        // ── Helpers ───────────────────────────────────────────────────────────────────
+        function notaClass(nota) {
+            if (nota === null) return 'nota-cell pendente';
+            if (nota >= 7) return 'nota-cell aprovado';
+            return 'nota-cell reprovado';
+        }
+
+        function notaText(nota) {
+            return nota !== null ? nota.toFixed(1) : 'Pendente';
+        }
+
+        function freqClass(freq) {
+            if (freq >= 75) return 'freq-cell ok';
+            return 'freq-cell baixa';
+        }
+
+        // ── Renderização do painel de detalhes ────────────────────────────────────────
+        function renderCurso(id) {
+            const c = CURSOS[id];
+            if (!c) return;
+
+            const bannerHTML = c.banner
+                ? `<img src="${c.banner}" alt="Banner – ${c.nome}" class="course-banner-img" />`
+                : `<div class="course-banner-placeholder"><span class="material-symbols-outlined">school</span></div>`;
+
+            const avaliacoesHTML = c.avaliacoes.map(a => `
         <div class="assessment-item">
             <div class="assessment-left">
                 <span class="material-symbols-outlined">description</span>
@@ -210,14 +219,14 @@ function renderCurso(id) {
             </div>
         </div>`).join('');
 
-    const materiasHTML = c.materias.map(m => `
+            const materiasHTML = c.materias.map(m => `
         <tr>
             <td>${m.nome}</td>
             <td class="${notaClass(m.nota)}">${notaText(m.nota)}</td>
             <td class="${freqClass(m.freq)}">${m.freq}%</td>
         </tr>`).join('');
 
-    document.getElementById('course-detail-panel').innerHTML = `
+            document.getElementById('course-detail-panel').innerHTML = `
         <div class="course-detail-animated">
 
             <!-- Banner -->
@@ -273,56 +282,58 @@ function renderCurso(id) {
 
             </div><!-- /details-grid -->
         </div><!-- /course-detail-animated -->`;
-}
+        }
 
-// ── Seleção de card ───────────────────────────────────────────────────────────
-const emptyState   = document.getElementById('course-empty-state');
-const detailPanel  = document.getElementById('course-detail-panel');
-let   selectedCard = null;
+        // ── Seleção de card ───────────────────────────────────────────────────────────
+        const emptyState = document.getElementById('course-empty-state');
+        const detailPanel = document.getElementById('course-detail-panel');
+        let selectedCard = null;
 
-function selectCard(card) {
-    // Reset visual
-    document.querySelectorAll('.course-card-selected, .course-card-inactive').forEach(c => {
-        c.className = 'course-card-inactive';
-        c.querySelector('.course-card-name')?.classList.add('secondary-color');
-    });
+        function selectCard(card) {
+            // Reset visual
+            document.querySelectorAll('.course-card-selected, .course-card-inactive').forEach(c => {
+                c.className = 'course-card-inactive';
+                c.querySelector('.course-card-name')?.classList.add('secondary-color');
+            });
 
-    // Ativa o card clicado
-    card.className = 'course-card-selected';
-    card.querySelector('.course-card-name')?.classList.remove('secondary-color');
+            // Ativa o card clicado
+            card.className = 'course-card-selected';
+            card.querySelector('.course-card-name')?.classList.remove('secondary-color');
 
-    // Remove a decoração verde nos selecionados
-    if (!card.querySelector('.course-card-selected-bg')) {
-        const bg = document.createElement('div');
-        bg.className = 'course-card-selected-bg';
-        card.insertBefore(bg, card.firstChild);
-    }
+            // Remove a decoração verde nos selecionados
+            if (!card.querySelector('.course-card-selected-bg')) {
+                const bg = document.createElement('div');
+                bg.className = 'course-card-selected-bg';
+                card.insertBefore(bg, card.firstChild);
+            }
 
-    // Renderiza detalhes
-    renderCurso(card.id);
-    emptyState.style.display  = 'none';
-    detailPanel.style.display = 'block';
-    selectedCard = card.id;
-}
+            // Renderiza detalhes
+            renderCurso(card.id);
+            emptyState.style.display = 'none';
+            detailPanel.style.display = 'block';
+            selectedCard = card.id;
+        }
 
-document.querySelectorAll('.course-card-inactive, .course-card-selected').forEach(card => {
-    card.addEventListener('click', () => selectCard(card));
-    card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCard(card); }
-    });
-});
-
-// ── Tab switcher ──────────────────────────────────────────────────────────────
-document.querySelectorAll('.tab-btn').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
+        document.querySelectorAll('.course-card-inactive, .course-card-selected').forEach(card => {
+            card.addEventListener('click', () => selectCard(card));
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCard(card); }
+            });
         });
-        tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
-    });
-});
-</script>
+
+        // ── Tab switcher ──────────────────────────────────────────────────────────────
+        document.querySelectorAll('.tab-btn').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+            });
+        });
+    </script>
 </body>
+<script src="../services/auth-guard.js"></script>
+
 </html>
