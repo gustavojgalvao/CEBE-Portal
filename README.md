@@ -1,4 +1,4 @@
-# CEBE Portal — Monorepo Fullstack
+# CEBE Portal — Fullstack
 
 Portal do Aluno do CEBE (Centro de Educação e Bem Estar), desenvolvido como monorepo com separação clara entre front-end e back-end.
 
