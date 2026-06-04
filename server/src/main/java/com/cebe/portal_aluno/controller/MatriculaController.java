@@ -1,7 +1,9 @@
 package com.cebe.portal_aluno.controller;
 
+import com.cebe.portal_aluno.dto.request.MatriculaRequestDTO;
 import com.cebe.portal_aluno.entity.Matricula;
 import com.cebe.portal_aluno.service.MatriculaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,31 +21,33 @@ public class MatriculaController {
     }
 
     @GetMapping
-    public List<Matricula> listarTodos() {
-        return matriculaService.listarTodos();
+    public ResponseEntity<List<Matricula>> listarTodos() {
+        return ResponseEntity.ok(matriculaService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public Optional<Matricula> buscarPorId(@PathVariable Integer id) {
-        return matriculaService.buscarPorId(id);
+    public ResponseEntity<Optional<Matricula>> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(matriculaService.buscarPorId(id));
     }
 
+    // Recebe { idAluno, idTurma } e cria a matrícula
     @PostMapping
-    public Matricula salvar(@RequestBody Matricula matricula) {
-        return matriculaService.salvar(matricula);
+    public ResponseEntity<Matricula> salvar(@RequestBody MatriculaRequestDTO dto) {
+        return ResponseEntity.ok(matriculaService.criarMatricula(dto));
     }
 
     @PutMapping("/{id}")
-    public Matricula atualizar(
+    public ResponseEntity<Matricula> atualizar(
             @PathVariable Integer id,
-            @RequestBody Matricula matricula
-    ) {
+            @RequestBody Matricula matricula) {
         matricula.setId(id);
-        return matriculaService.salvar(matricula);
+        return ResponseEntity.ok(matriculaService.salvar(matricula));
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         matriculaService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
+

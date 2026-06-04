@@ -288,14 +288,6 @@
             secaoDestino.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        function concluirMatricula() {
-            // Mostra o overlay de sucesso
-            const overlay = document.querySelector('.overlay-sucesso');
-            overlay.classList.remove('escondido');
-
-            // Aqui enviaria os dados ao servidor no mundo real
-        }
-
         // Máscara para Data de Nascimento
         const dataInput = document.getElementById('birthdate');
         dataInput.addEventListener('input', function (e) {
@@ -341,46 +333,70 @@
             e.target.value = valor;
         });
 
-        // Quando a página abrir, ir buscar os cursos no servidor
+        // Carrega as turmas disponíveis no select (cada turma tem o curso associado)
         async function carregarCursos() {
             const select = document.getElementById('course');
-
             try {
-                const cursos = await listarCursos();
+                const turmas = await listarTurmas();
                 select.innerHTML = '<option value="">Selecione o curso</option>';
-                cursos.forEach(curso => {
+                turmas.forEach(turma => {
                     const option = document.createElement('option');
-                    option.value = curso.id;
-                    option.textContent = curso.nome;
+                    option.value = turma.id; // ID da turma (necessário para matrícula)
+                    option.textContent = turma.cursos ? turma.cursos.nome : `Turma ${turma.id}`;
                     select.appendChild(option);
                 });
-            }
-            catch (erro) {
+            } catch (erro) {
                 select.innerHTML = '<option disabled selected>Erro ao carregar cursos</option>';
             }
         }
         carregarCursos();
 
         async function concluirMatricula() {
-            const nome = document.getElementById('fullName').value;
-            const cpf = document.getElementById('cpf').value;
-            const email = document.getElementById('email').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            const curso = document.getElementById('course').value;
+            const nome = document.getElementById('fullName').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const idTurma = document.getElementById('course').value;
             const dataNascimento = document.getElementById('birthdate').value.replace(/\D/g, ''); // "DDMMYYYY"
 
+            // Validação básica
+            if (!nome || !cpf || !email || !whatsapp || !dataNascimento) {
+                alert('Por favor, preencha todos os campos antes de finalizar.');
+                return;
+            }
+            if (dataNascimento.length !== 8) {
+                alert('Data de nascimento inválida. Use o formato DD/MM/AAAA.');
+                return;
+            }
+
             try {
-                // Exemplo chamando a função cadastrar do auth.js
-                await cadastrar(nome, whatsapp, cpf, email, dataNascimento);
+                // Passo 1: cria o aluno (dataNascimento vira senha)
+                const aluno = await cadastrar(nome, whatsapp, cpf, email, dataNascimento);
+
+                // Passo 2: cria a matrícula se uma turma foi selecionada
+                if (idTurma && aluno && aluno.id) {
+                    await realizarMatricula({ idAluno: aluno.id, idTurma: parseInt(idTurma) });
+                }
 
                 // Exibe o feedback visual de sucesso
                 const overlay = document.querySelector('.overlay-sucesso');
                 overlay.classList.remove('escondido');
             } catch (erro) {
-                alert('Erro ao realizar matrícula: ' + (erro.message || 'Verifique seus dados.'));
+                // Trata erros comuns do back-end
+                const msg = erro && erro.message ? erro.message.toLowerCase() : '';
+                if (msg.includes('cpf') || msg.includes('duplicate') || msg.includes('unique')) {
+                    alert('CPF já cadastrado. Acesse o portal com seu CPF e data de nascimento.');
+                } else {
+                    alert('Erro ao realizar matrícula. Verifique seus dados e tente novamente.');
+                }
             }
         }
+
+        // Botão "Acessar Portal" redireciona para o login
+        document.querySelector('.botao-acessar').addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
     </script>
 </body>
 
-</html>
+</html>

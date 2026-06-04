@@ -303,6 +303,9 @@
         </div>
     </div>
 
+    <script src="../services/api.js"></script>
+    <script src="../services/auth-guard.js"></script>
+    <script src="../services/atendimento.js"></script>
     <script src="../components/nav.js"></script>
     <script>
         // ── Referências ────────────────────────────────────────────────────────
@@ -425,7 +428,7 @@
         modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-        document.getElementById('btn-modal-submit').addEventListener('click', () => {
+        document.getElementById('btn-modal-submit').addEventListener('click', async () => {
             const setor = document.getElementById('modal-setor').value;
             const assunto = document.getElementById('modal-assunto').value.trim();
             const descricao = document.getElementById('modal-descricao').value.trim();
@@ -440,6 +443,25 @@
                     }
                 });
                 return;
+            }
+
+            const btnSubmit = document.getElementById('btn-modal-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Enviando...';
+
+            try {
+                await criarAtendimento({
+                    setor,
+                    assunto,
+                    mensagem: descricao,
+                    statusAtendimento: 'Pendente'
+                });
+            } catch (e) {
+                // Se der erro na API (ex: servidor desligado), registra no console mas continua
+                console.warn('Chamado registrado apenas localmente:', e);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">send</span> Abrir Chamado';
             }
 
             closeModal();
@@ -465,6 +487,4 @@
         });
     </script>
 </body>
-<script src="../services/auth-guard.js"></script>
-
 </html>
