@@ -46,70 +46,7 @@
                         <!-- ── Coluna esquerda: lista de cursos ─────────── -->
                         <div class="cursos-left-col">
                             <h2 class="cursos-section-title">Cursos Ativos</h2>
-
-                            <!-- Card: Confeitaria -->
-                            <article class="course-card-inactive" id="card-confeitaria" tabindex="0"
-                                aria-label="Confeitaria Básica e Avançada" role="button">
-                                <div class="course-card-inner">
-                                    <div class="course-card-top">
-                                        <span class="course-category-tag primary-tag">Profissionalizante</span>
-                                        <span class="material-symbols-outlined course-star-icon"
-                                            style="font-variation-settings:'FILL' 1;" aria-label="Favorito">star</span>
-                                    </div>
-                                    <h3 class="course-card-name secondary-color">Confeitaria Básica e Avançada</h3>
-                                    <div class="course-info-grid">
-                                        <div class="course-info-item">
-                                            <span class="material-symbols-outlined">person</span> Prof. Mariana Silva
-                                        </div>
-                                        <div class="course-info-item">
-                                            <span class="material-symbols-outlined">meeting_room</span> Sala 104 – Lab 2
-                                        </div>
-                                        <div class="course-info-item full-width">
-                                            <span class="material-symbols-outlined">schedule</span> Seg e Qua, 14h – 18h
-                                        </div>
-                                    </div>
-                                    <div class="course-progress-section">
-                                        <div class="course-progress-label-row">
-                                            <span>Progresso</span>
-                                            <span class="course-progress-value">45%</span>
-                                        </div>
-                                        <div class="progress-bar-track">
-                                            <div class="progress-bar-fill" style="width:45%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <!-- Card: Auxiliar de Escritório -->
-                            <article class="course-card-inactive" id="card-escritorio" tabindex="0"
-                                aria-label="Auxiliar de Escritório" role="button">
-                                <div class="course-card-inner">
-                                    <div class="course-card-top">
-                                        <span class="course-category-tag secondary-tag">Apoio Administrativo</span>
-                                    </div>
-                                    <h3 class="course-card-name secondary-color">Auxiliar de Escritório</h3>
-                                    <div class="course-info-grid">
-                                        <div class="course-info-item">
-                                            <span class="material-symbols-outlined">person</span> Prof. Carlos Mendes
-                                        </div>
-                                        <div class="course-info-item">
-                                            <span class="material-symbols-outlined">meeting_room</span> Sala 201
-                                        </div>
-                                        <div class="course-info-item full-width">
-                                            <span class="material-symbols-outlined">schedule</span> Ter e Qui, 08h – 12h
-                                        </div>
-                                    </div>
-                                    <div class="course-progress-section">
-                                        <div class="course-progress-label-row">
-                                            <span>Progresso</span>
-                                            <span class="course-progress-value muted">10%</span>
-                                        </div>
-                                        <div class="progress-bar-track">
-                                            <div class="progress-bar-fill dim" style="width:10%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
+                            <p style="color:var(--on-surface-variant); padding: 20px;">Carregando cursos...</p>
                         </div><!-- /cursos-left-col -->
 
                         <!-- ── Coluna direita: estado vazio ou detalhes ─── -->
@@ -140,46 +77,9 @@
     <script src="../services/notifications.js"></script>
     <script src="../components/nav.js"></script>
     <script>
-        // ── Dados dos cursos ──────────────────────────────────────────────────────────
-        const CURSOS = {
-            'card-confeitaria': {
-                nome: 'Confeitaria Básica e Avançada',
-                categoria: 'Profissionalizante',
-                turma: 'Turma 2024.1 • Turno Tarde',
-                professor: 'Prof. Mariana Silva',
-                sala: 'Sala 104 – Lab 2',
-                horario: 'Seg e Qua, 14h – 18h',
-                progresso: 45,
-                banner: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlJppfKMUdoCARtzZ0EeG63HRMRojLkxO50zw3NJEAQDgOwdxLw4M0giIBB1vFR9sA_mzDyPSCLo4e6o-2Lt-PPRQhhNJVOrHyF4-718QQt6DN_C2-FGC0HK-jMOug3FrqRY6mdqThz4uZHXn06SO9_hLGieKus9mNodK_lJcQqoDLYvjHCqDNfQWgN6JLPfldeizdVhv580rrzh7KO_MdvCyMQ5W_V3bfBXozcuD6UC3cw7SxAHk9BJpN-OxX_V0JKrrfdk5X4Jw',
-                avaliacoes: [
-                    { nome: 'Avaliação Teórica', data: '15/09', nota: 9.5 },
-                    { nome: 'Avaliação Prática', data: '22/09', nota: 8.0 },
-                ],
-                materias: [
-                    { nome: 'Teoria: Higiene e Segurança', nota: 9.5, freq: 100 },
-                    { nome: 'Prática: Massas Base', nota: 8.0, freq: 90 },
-                    { nome: 'Teoria: Empreendedorismo', nota: null, freq: 100 },
-                ]
-            },
-            'card-escritorio': {
-                nome: 'Auxiliar de Escritório',
-                categoria: 'Apoio Administrativo',
-                turma: 'Turma 2024.1 • Turno Manhã',
-                professor: 'Prof. Carlos Mendes',
-                sala: 'Sala 201',
-                horario: 'Ter e Qui, 08h – 12h',
-                progresso: 10,
-                banner: null,
-                avaliacoes: [
-                    { nome: 'Avaliação Introdutória', data: '10/09', nota: 7.5 },
-                ],
-                materias: [
-                    { nome: 'Introdução ao Escritório', nota: 7.5, freq: 80 },
-                    { nome: 'Informática Básica', nota: null, freq: 90 },
-                    { nome: 'Comunicação Empresarial', nota: null, freq: 100 },
-                ]
-            }
-        };
+        // ── Dados dos cursos globais (preenchido pela API) ─────────────────────────
+        let CURSOS = {};
+        let TODAS_MATRICULAS = []; // para filtro de tabs sem nova chamada API
 
         // ── Helpers ───────────────────────────────────────────────────────────────────
         function notaClass(nota) {
@@ -206,7 +106,8 @@
                 ? `<img src="${c.banner}" alt="Banner – ${c.nome}" class="course-banner-img" />`
                 : `<div class="course-banner-placeholder"><span class="material-symbols-outlined">school</span></div>`;
 
-            const avaliacoesHTML = c.avaliacoes.map(a => `
+            const avaliacoesHTML = c.avaliacoes.length > 0
+                ? c.avaliacoes.map(a => `
         <div class="assessment-item">
             <div class="assessment-left">
                 <span class="material-symbols-outlined">description</span>
@@ -219,14 +120,24 @@
                 <span class="assessment-nota-label">Nota</span>
                 <span class="assessment-nota-value">${a.nota.toFixed(1)}</span>
             </div>
-        </div>`).join('');
+        </div>`).join('')
+                : `<div style="padding:24px; text-align:center; color:var(--on-surface-variant);">
+                    <span class="material-symbols-outlined" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.5;">construction</span>
+                    <p style="font-size:14px;">Avaliações em breve</p>
+                    <p style="font-size:12px;margin-top:4px;opacity:0.7;">Seu histórico de provas aparecerá aqui assim que for lançado.</p>
+                   </div>`;
 
-            const materiasHTML = c.materias.map(m => `
+            const materiasHTML = c.materias.length > 0
+                ? c.materias.map(m => `
         <tr>
             <td>${m.nome}</td>
             <td class="${notaClass(m.nota)}">${notaText(m.nota)}</td>
             <td class="${freqClass(m.freq)}">${m.freq}%</td>
-        </tr>`).join('');
+        </tr>`).join('')
+                : `<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--on-surface-variant); font-size:13px;">
+                    <span class="material-symbols-outlined" style="font-size:20px;vertical-align:middle;opacity:0.5;">pending_actions</span>
+                    Notas e frequência serão exibidas em breve
+                   </td></tr>`;
 
             document.getElementById('course-detail-panel').innerHTML = `
         <div class="course-detail-animated">
@@ -316,12 +227,94 @@
             selectedCard = card.id;
         }
 
-        document.querySelectorAll('.course-card-inactive, .course-card-selected').forEach(card => {
-            card.addEventListener('click', () => selectCard(card));
-            card.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCard(card); }
-            });
-        });
+        async function inicializarCursos() {
+            try {
+                const matriculas = await apiFetch('/matriculas/me');
+                const container = document.querySelector('.cursos-left-col');
+                
+                container.innerHTML = '<h2 class="cursos-section-title">Cursos Ativos</h2>';
+                
+                if (matriculas.length === 0) {
+                    container.innerHTML += '<p style="color:var(--on-surface-variant); padding: 20px;">Você ainda não possui cursos matriculados.</p>';
+                    return;
+                }
+                
+                matriculas.forEach(mat => {
+                    const cursoNome = mat.turma?.cursos?.nome || \`Turma \${mat.turma?.id}\`;
+                    const turno = mat.turma?.turno || 'N/A';
+                    const prof = mat.turma?.professor?.nome || 'Prof. Não Definido';
+                    const idCard = 'card-' + mat.id;
+                    
+                    let horario = "08:00 – 11:00";
+                    let dias = "Seg, Qua, Sex";
+                    if(turno === "Vespertino") { horario = "14:00 – 17:00"; dias = "Ter, Qui"; }
+                    
+                    // Preenche o objeto CURSOS global com dados reais, sem notas mockadas
+                    CURSOS[idCard] = {
+                        nome: cursoNome,
+                        categoria: 'Capacitação Profissional',
+                        turma: `Turma ${mat.turma?.id || ''} • Turno ${turno}`,
+                        professor: prof,
+                        sala: 'Sala 04',
+                        horario: `${dias}, ${horario}`,
+                        progresso: 50,
+                        banner: null,
+                        statusPagamento: mat.statusPagamento, // para filtro de tabs
+                        // Sem dados mockados: avaliações e matérias serão exibidas como "em breve"
+                        avaliacoes: [],
+                        materias: []
+                    };
+                    
+                    const article = document.createElement('article');
+                    article.className = 'course-card-inactive';
+                    article.id = idCard;
+                    article.tabIndex = 0;
+                    article.setAttribute('role', 'button');
+                    
+                    article.innerHTML = \`
+                        <div class="course-card-inner">
+                            <div class="course-card-top">
+                                <span class="course-category-tag primary-tag">Capacitação</span>
+                            </div>
+                            <h3 class="course-card-name secondary-color">\${cursoNome}</h3>
+                            <div class="course-info-grid">
+                                <div class="course-info-item">
+                                    <span class="material-symbols-outlined">person</span> \${prof}
+                                </div>
+                                <div class="course-info-item">
+                                    <span class="material-symbols-outlined">meeting_room</span> Sala 04
+                                </div>
+                                <div class="course-info-item full-width">
+                                    <span class="material-symbols-outlined">schedule</span> \${dias}, \${horario}
+                                </div>
+                            </div>
+                            <div class="course-progress-section">
+                                <div class="course-progress-label-row">
+                                    <span>Progresso</span>
+                                    <span class="course-progress-value">50%</span>
+                                </div>
+                                <div class="progress-bar-track">
+                                    <div class="progress-bar-fill" style="width:50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    \`;
+                    
+                    article.addEventListener('click', () => selectCard(article));
+                    article.addEventListener('keydown', e => {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCard(article); }
+                    });
+                    
+                    container.appendChild(article);
+                });
+                
+                TODAS_MATRICULAS = matriculas;
+            } catch (erro) {
+                console.error('Sessão inválida ou erro na API:', erro);
+                window.location.href = 'login.html';
+            }
+        }
+        inicializarCursos();
 
         // ── Tab switcher ──────────────────────────────────────────────────────────────
         document.querySelectorAll('.tab-btn').forEach(tab => {
@@ -332,6 +325,27 @@
                 });
                 tab.classList.add('active');
                 tab.setAttribute('aria-selected', 'true');
+
+                const filtro = tab.id === 'tab-concluidos' ? 'pago' : 'andamento';
+
+                // Filtra os cards visiveis
+                document.querySelectorAll('[id^="card-"]').forEach(card => {
+                    const curso = CURSOS[card.id];
+                    if (!curso) return;
+                    if (filtro === 'pago') {
+                        card.style.display = curso.statusPagamento === 'pago' ? '' : 'none';
+                    } else {
+                        card.style.display = curso.statusPagamento !== 'pago' ? '' : 'none';
+                    }
+                });
+
+                // Atualiza título da coluna e reseta detalhe
+                const titulo = document.querySelector('.cursos-section-title');
+                if (titulo) titulo.textContent = filtro === 'pago' ? 'Cursos Concluídos' : 'Cursos Ativos';
+
+                emptyState.style.display = 'flex';
+                detailPanel.style.display = 'none';
+                selectedCard = null;
             });
         });
     </script>

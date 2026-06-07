@@ -43,21 +43,21 @@
                                 <div class="next-class-inner">
                                     <div>
                                         <span class="next-class-badge">Próxima Aula</span>
-                                        <h2 class="next-class-title">Curso de Confeitaria</h2>
+                                        <h2 class="next-class-title" id="proxima-aula-nome">Carregando...</h2>
                                         <p class="next-class-location">
                                             <span class="material-symbols-outlined"
                                                 style="font-size:18px;">meeting_room</span>
-                                            Sala 04, Prédio Principal
+                                            <span id="proxima-aula-turno">Buscando informações...</span>
                                         </p>
                                     </div>
                                     <div class="next-class-timer" aria-label="Tempo restante">
                                         <div class="timer-block">
-                                            <span class="timer-value">02</span>
+                                            <span class="timer-value" id="timer-h">--</span>
                                             <span class="timer-label">Horas</span>
                                         </div>
                                         <span class="timer-separator">:</span>
                                         <div class="timer-block">
-                                            <span class="timer-value">45</span>
+                                            <span class="timer-value" id="timer-m">--</span>
                                             <span class="timer-label">Min</span>
                                         </div>
                                     </div>
@@ -76,75 +76,9 @@
 
                             <div class="courses-grid">
 
-                                <article class="course-card" tabindex="0" aria-label="Curso de Confeitaria">
-                                    <div class="course-card-bg"></div>
-                                    <div class="course-card-header">
-                                        <div class="course-icon">
-                                            <span class="material-symbols-outlined"
-                                                style="font-variation-settings:'FILL' 1;">cake</span>
-                                        </div>
-                                        <span class="course-badge">Presencial</span>
-                                    </div>
-                                    <h3 class="course-name">Curso de Confeitaria</h3>
-                                    <div class="course-details">
-                                        <div class="course-detail-row">
-                                            <span class="material-symbols-outlined">calendar_today</span>
-                                            <span>Seg, Qua, Sex</span>
-                                        </div>
-                                        <div class="course-detail-row">
-                                            <span class="material-symbols-outlined">schedule</span>
-                                            <span>19:00 – 22:00</span>
-                                        </div>
-                                        <div class="course-detail-row">
-                                            <span class="material-symbols-outlined">meeting_room</span>
-                                            <span>Sala: 04</span>
-                                        </div>
-                                    </div>
-                                    <div class="course-progress">
-                                        <div class="course-progress-header">
-                                            <span class="progress-label">Progresso</span>
-                                            <span class="progress-value">65% concluído</span>
-                                        </div>
-                                        <div class="progress-track">
-                                            <div class="progress-fill" style="width:65%"></div>
-                                        </div>
-                                    </div>
-                                </article>
-
-                                <article class="course-card" tabindex="0" aria-label="Curso Auxiliar">
-                                    <div class="course-card-bg"></div>
-                                    <div class="course-card-header">
-                                        <div class="course-icon">
-                                            <span class="material-symbols-outlined"
-                                                style="font-variation-settings:'FILL' 1;">computer</span>
-                                        </div>
-                                        <span class="course-badge">Híbrido</span>
-                                    </div>
-                                    <h3 class="course-name">Auxiliar</h3>
-                                    <div class="course-details">
-                                        <div class="course-detail-row">
-                                            <span class="material-symbols-outlined">calendar_today</span>
-                                            <span>Ter, Qui</span>
-                                        </div>
-                                        <div class="course-detail-row">
-                                            <span class="material-symbols-outlined">schedule</span>
-                                            <span>08:00 – 11:00</span>
-                                        </div>
-                                        <div class="course-detail-row">
-                                            <span class="material-symbols-outlined">meeting_room</span>
-                                            <span>Sala: 02</span>
-                                        </div>
-                                    </div>
-                                    <div class="course-progress">
-                                        <div class="course-progress-header">
-                                            <span class="progress-label">Progresso</span>
-                                            <span class="progress-value">30% concluído</span>
-                                        </div>
-                                        <div class="progress-track">
-                                            <div class="progress-fill" style="width:30%"></div>
-                                        </div>
-                                    </div>
-                                </article>
+                                <div id="courses-container" style="display:flex; gap: 16px; flex-wrap: wrap;">
+                                    <p style="color:var(--on-surface-variant); padding: 20px;">Carregando cursos...</p>
+                                </div>
 
                             </div><!-- /courses-grid -->
                         </div><!-- /left-column -->
@@ -274,13 +208,119 @@
         }
 
         document.addEventListener('notifications-updated', renderDashNotifs);
-        renderDashNotifs();
+
+        // ── Inicialização: sincroniza notificações com a API e renderiza ────────────
+        async function initNotifs() {
+            await NS.sync();
+            renderDashNotifs();
+        }
+        initNotifs();
 
         // Quando a página carregar, buscar os dados do aluno logado
         async function inicializarDashboard() {
             try {
+                // 1. Pega os dados do aluno e atualiza o nome
                 const aluno = await apiFetch('/alunos/me');
-                document.getElementById('greeting-nome').textContent = `Olá, ${aluno.nome}!`;
+                if (aluno && aluno.nome) {
+                    // Pega o primeiro nome
+                    const primeiroNome = aluno.nome.split(' ')[0];
+                    document.getElementById('greeting-nome').textContent = `Olá, ${primeiroNome}!`;
+                }
+
+                // 2. Busca os cursos reais (matrículas) e atualiza a tela
+                const matriculas = await apiFetch('/matriculas/me');
+                const container = document.getElementById('courses-container');
+                container.innerHTML = ''; // Limpa o "Carregando..."
+
+                if (matriculas.length === 0) {
+                    container.innerHTML = '<p style="color:var(--on-surface-variant); padding: 20px;">Você ainda não possui cursos matriculados.</p>';
+                    // Atualiza card Próxima Aula
+                    document.getElementById('proxima-aula-nome').textContent = 'Nenhum curso ativo';
+                    document.getElementById('proxima-aula-turno').textContent = 'Matricule-se para ver sua próxima aula';
+                    document.getElementById('timer-h').textContent = '--';
+                    document.getElementById('timer-m').textContent = '--';
+                } else {
+                    // Preenche card Próxima Aula com o primeiro curso
+                    const primeiraMat = matriculas[0];
+                    const primeiroNomeCurso = primeiraMat.turma?.cursos?.nome || 'Seu Curso';
+                    const primeiroTurno = primeiraMat.turma?.turno || '';
+                    document.getElementById('proxima-aula-nome').textContent = primeiroNomeCurso;
+
+                    // Horário baseado no turno
+                    let horarioTexto = 'Turno Matutino — 08:00 às 11:00';
+                    let proximaHora = 8, proximoMin = 0;
+                    if (primeiroTurno === 'Vespertino') {
+                        horarioTexto = 'Turno Vespertino — 14:00 às 17:00';
+                        proximaHora = 14;
+                    }
+                    document.getElementById('proxima-aula-turno').textContent = horarioTexto;
+
+                    // Calcula o tempo até a próxima aula (hoje ou amanhã)
+                    const agora = new Date();
+                    const aula = new Date();
+                    aula.setHours(proximaHora, proximoMin, 0, 0);
+                    if (agora >= aula) aula.setDate(aula.getDate() + 1); // próximo dia
+                    const diffMs = aula - agora;
+                    const horas = Math.floor(diffMs / 3600000);
+                    const mins = Math.floor((diffMs % 3600000) / 60000);
+                    document.getElementById('timer-h').textContent = String(horas).padStart(2, '0');
+                    document.getElementById('timer-m').textContent = String(mins).padStart(2, '0');
+
+                    matriculas.forEach(mat => {
+                        const cursoNome = mat.turma?.cursos?.nome || `Turma ${mat.turma?.id || 'Desconhecida'}`;
+                        const turno = mat.turma?.turno || 'N/A';
+                        
+                            // Define as informações extras baseado no turno para simular
+                            let horario = "08:00 – 11:00";
+                            let dias = "Seg, Qua, Sex";
+                            let icone = "menu_book";
+                            
+                            if(turno === "Vespertino") {
+                                horario = "14:00 – 17:00";
+                                dias = "Ter, Qui";
+                            }
+                            
+                            if(cursoNome.toLowerCase().includes("confeitaria")) icone = "cake";
+                            if(cursoNome.toLowerCase().includes("auxiliar") || cursoNome.toLowerCase().includes("info")) icone = "computer";
+                            
+                            container.innerHTML += `
+                                <article class="course-card" tabindex="0" onclick="window.location.href='cursos.html'">
+                                    <div class="course-card-bg"></div>
+                                    <div class="course-card-header">
+                                        <div class="course-icon">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">${icone}</span>
+                                        </div>
+                                        <span class="course-badge">${turno}</span>
+                                    </div>
+                                    <h3 class="course-name">${cursoNome}</h3>
+                                    <div class="course-details">
+                                        <div class="course-detail-row">
+                                            <span class="material-symbols-outlined">calendar_today</span>
+                                            <span>${dias}</span>
+                                        </div>
+                                        <div class="course-detail-row">
+                                            <span class="material-symbols-outlined">schedule</span>
+                                            <span>${horario}</span>
+                                        </div>
+                                        <div class="course-detail-row">
+                                            <span class="material-symbols-outlined">info</span>
+                                            <span>Status Pgto: ${mat.statusPagamento}</span>
+                                        </div>
+                                    </div>
+                                    <div class="course-progress">
+                                        <div class="course-progress-header">
+                                            <span class="progress-label">Progresso</span>
+                                            <span class="progress-value">Aulas em andamento</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-fill" style="width:50%"></div>
+                                        </div>
+                                    </div>
+                                </article>
+                        `;
+                    });
+                }
+
             } catch (erro) {
                 console.error('Sessão inválida:', erro);
                 window.location.href = 'login.html';

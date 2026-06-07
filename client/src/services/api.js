@@ -12,6 +12,15 @@ async function apiFetch(rota, opcoes = {}) {
         }
     });
 
+    // Token expirado ou sem permissão: redireciona para login
+    if (resposta.status === 401 || resposta.status === 403) {
+        localStorage.removeItem('cebe_token');
+        if (!window.location.pathname.includes('login.html')) {
+            window.location.href = 'login.html';
+        }
+        throw { status: resposta.status, message: 'Sessão expirada. Faça login novamente.' };
+    }
+
     if (!resposta.ok) {
         const erro = await resposta.json().catch(() => ({}));
         console.error('Erro da API:', erro);
@@ -21,4 +30,3 @@ async function apiFetch(rota, opcoes = {}) {
     const texto = await resposta.text();
     return texto ? JSON.parse(texto) : null;
 }
-

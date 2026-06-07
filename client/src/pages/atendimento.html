@@ -45,71 +45,7 @@
                     </div>
 
                     <div class="conversations-list" id="conversations-list" role="list">
-
-                        <div class="conv-group-label">Abertos</div>
-
-                        <div class="conversation-item active" role="listitem" data-conv="1" tabindex="0">
-                            <div class="conv-avatar green">
-                                SE <span class="online-dot" aria-label="Online"></span>
-                            </div>
-                            <div class="conv-body">
-                                <div class="conv-top">
-                                    <span class="conv-name">Secretaria</span>
-                                    <span class="conv-time">14:32</span>
-                                </div>
-                                <div class="conv-preview-row">
-                                    <span class="conv-preview">Ok, a sala foi confirmada para amanhã!</span>
-                                    <span class="conv-status aberto">Aberto</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="conversation-item" role="listitem" data-conv="2" tabindex="0">
-                            <div class="conv-avatar blue">FI</div>
-                            <div class="conv-body">
-                                <div class="conv-top">
-                                    <span class="conv-name">Financeiro</span>
-                                    <span class="conv-time">11:15</span>
-                                </div>
-                                <div class="conv-preview-row">
-                                    <span class="conv-preview">Seu boleto de maio vence dia 10.</span>
-                                    <span class="conv-unread-badge" aria-label="2 mensagens não lidas">2</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="conv-group-label">Aguardando resposta</div>
-
-                        <div class="conversation-item" role="listitem" data-conv="3" tabindex="0">
-                            <div class="conv-avatar purple">CO</div>
-                            <div class="conv-body">
-                                <div class="conv-top">
-                                    <span class="conv-name">Coordenação</span>
-                                    <span class="conv-time">Seg</span>
-                                </div>
-                                <div class="conv-preview-row">
-                                    <span class="conv-preview">Você: Gostaria de saber sobre as faltas.</span>
-                                    <span class="conv-status aguardando">Aguardando</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="conv-group-label">Encerrados</div>
-
-                        <div class="conversation-item" role="listitem" data-conv="4" tabindex="0">
-                            <div class="conv-avatar orange">SE</div>
-                            <div class="conv-body">
-                                <div class="conv-top">
-                                    <span class="conv-name">Secretaria</span>
-                                    <span class="conv-time">20/05</span>
-                                </div>
-                                <div class="conv-preview-row">
-                                    <span class="conv-preview">Declaração enviada para seu e-mail.</span>
-                                    <span class="conv-status fechado">Encerrado</span>
-                                </div>
-                            </div>
-                        </div>
-
+                        <div style="padding:20px; color:var(--on-surface-variant);">Carregando chamados...</div>
                     </div><!-- /conversations-list -->
                 </div><!-- /conversations-panel -->
 
@@ -154,70 +90,14 @@
                         </div>
 
                         <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+                            <div class="system-message" id="chat-system-message">Selecione um chamado</div>
 
-                            <div class="date-divider">
-                                <span class="date-divider-text">Hoje, 29 de maio</span>
-                            </div>
-
-                            <div class="system-message">Chamado #1042 aberto – Confirmação de sala de aula</div>
-
-                            <div class="message-row incoming">
+                            <div class="message-row incoming" id="chat-first-message">
                                 <div class="message-avatar" aria-hidden="true">SE</div>
                                 <div class="message-bubble-wrapper">
                                     <span class="message-sender-name">Secretaria</span>
-                                    <div class="message-bubble">Olá, João! Tudo bem? Em que posso ajudar? 😊</div>
+                                    <div class="message-bubble" id="chat-message-text">...</div>
                                     <div class="message-meta"><span>13:55</span></div>
-                                </div>
-                            </div>
-
-                            <div class="message-row outgoing">
-                                <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
-                                <div class="message-bubble-wrapper">
-                                    <div class="message-bubble">Oi! Queria confirmar a sala da aula de Confeitaria de
-                                        amanhã, por favor.</div>
-                                    <div class="message-meta">
-                                        <span>14:01</span>
-                                        <span class="material-symbols-outlined message-status-icon read">done_all</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="message-row incoming">
-                                <div class="message-avatar" aria-hidden="true">SE</div>
-                                <div class="message-bubble-wrapper">
-                                    <div class="message-bubble">Claro! Deixa eu verificar aqui rapidinho...</div>
-                                    <div class="message-meta"><span>14:05</span></div>
-                                </div>
-                            </div>
-
-                            <div class="message-row incoming">
-                                <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
-                                <div class="message-bubble-wrapper">
-                                    <div class="message-bubble">
-                                        Confirmado! A aula de amanhã, <strong>quinta-feira 29/05</strong>, será na
-                                        <strong>Sala 05</strong>. Horário: <strong>19h às 22h</strong>.
-                                    </div>
-                                    <div class="message-meta"><span>14:06</span></div>
-                                </div>
-                            </div>
-
-                            <div class="message-row outgoing">
-                                <div class="message-avatar hidden-avatar" aria-hidden="true"></div>
-                                <div class="message-bubble-wrapper">
-                                    <div class="message-bubble">Perfeito, obrigado! 👍</div>
-                                    <div class="message-meta">
-                                        <span>14:18</span>
-                                        <span class="material-symbols-outlined message-status-icon read">done_all</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="message-row incoming">
-                                <div class="message-avatar" aria-hidden="true">SE</div>
-                                <div class="message-bubble-wrapper">
-                                    <div class="message-bubble">Ok, a sala foi confirmada para amanhã! Qualquer dúvida
-                                        estamos à disposição. 😊</div>
-                                    <div class="message-meta"><span>14:32</span></div>
                                 </div>
                             </div>
 
@@ -231,7 +111,6 @@
                                     <span class="typing-dot"></span>
                                 </div>
                             </div>
-
                         </div><!-- /chat-messages -->
 
                         <div class="chat-input-bar">
@@ -321,34 +200,99 @@
         const isMobile = () => window.innerWidth < 768;
         const scrollToBottom = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
 
-        // ── Seleção de conversa ────────────────────────────────────────────────
-        function selectConversation(item) {
-            convItems.forEach(c => c.classList.remove('active'));
-            item.classList.add('active');
+        // ── Busca de chamados dinamicamente ──────────────────────────────────
+        let chamadosGlobais = [];
+
+        async function carregarAtendimentos() {
+            try {
+                const chamados = await apiFetch('/atendimentos/me');
+                chamadosGlobais = chamados;
+                renderizarChamados();
+            } catch (e) {
+                console.error('Erro ao carregar atendimentos:', e);
+            }
+        }
+
+        function renderizarChamados() {
+            const listContainer = document.getElementById('conversations-list');
+            listContainer.innerHTML = '';
+            
+            if (chamadosGlobais.length === 0) {
+                listContainer.innerHTML = '<div style="padding:20px; color:var(--on-surface-variant);">Nenhum chamado aberto.</div>';
+                return;
+            }
+
+            // Agrupa ou apenas lista (simplificado)
+            listContainer.innerHTML = '<div class="conv-group-label">Meus Chamados</div>';
+
+            chamadosGlobais.forEach((chamado, index) => {
+                const data = new Date(chamado.dataHora);
+                const timeStr = data.getHours().toString().padStart(2, '0') + ':' + data.getMinutes().toString().padStart(2, '0');
+                
+                const cssStatus = chamado.statusAtendimento === 'Finalizado' ? 'fechado' :
+                                  chamado.statusAtendimento === 'Em_andamento' ? 'aberto' : 'aguardando';
+
+                const div = document.createElement('div');
+                div.className = 'conversation-item';
+                div.setAttribute('role', 'listitem');
+                div.tabIndex = 0;
+                
+                div.innerHTML = \`
+                    <div class="conv-avatar \${cssStatus === 'fechado' ? 'orange' : 'green'}">
+                        \${cssStatus !== 'fechado' ? '<span class="online-dot" aria-label="Online"></span>' : ''}
+                    </div>
+                    <div class="conv-body">
+                        <div class="conv-top">
+                            <span class="conv-name">Chamado #\${chamado.id}</span>
+                            <span class="conv-time">\${timeStr}</span>
+                        </div>
+                        <div class="conv-preview-row">
+                            <span class="conv-preview">\${chamado.mensagem}</span>
+                            <span class="conv-status \${cssStatus}">\${chamado.statusAtendimento.replace('_', ' ')}</span>
+                        </div>
+                    </div>
+                \`;
+
+                div.addEventListener('click', () => selectConversation(div, chamado));
+                div.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectConversation(div, chamado); }
+                });
+
+                listContainer.appendChild(div);
+
+                if(index === 0 && !isMobile()) {
+                    selectConversation(div, chamado);
+                }
+            });
+        }
+
+        function selectConversation(item, chamado) {
+            document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
+            if(item) item.classList.add('active');
+            
             chatEmpty.style.display = 'none';
             chatWindow.style.display = 'flex';
             if (isMobile()) convPanel.classList.add('mobile-hidden');
+            
+            if(chamado) {
+                document.getElementById('chat-system-message').textContent = 'Chamado #' + chamado.id + ' criado em ' + new Date(chamado.dataHora).toLocaleString();
+                document.getElementById('chat-message-text').textContent = chamado.mensagem;
+            }
+
             scrollToBottom();
         }
-
-        convItems.forEach(item => {
-            item.addEventListener('click', () => selectConversation(item));
-            item.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectConversation(item); }
-            });
-        });
 
         document.getElementById('chat-back-btn').addEventListener('click', () => {
             convPanel.classList.remove('mobile-hidden');
             chatEmpty.style.display = 'flex';
             chatWindow.style.display = 'none';
-            convItems.forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
         });
 
         // Inicialização
-        if (!isMobile()) {
-            selectConversation(convItems[0]);
-        } else {
+        carregarAtendimentos();
+        
+        if (isMobile()) {
             chatEmpty.style.display = 'flex';
             chatWindow.style.display = 'none';
         }
@@ -450,36 +394,40 @@
             btnSubmit.textContent = 'Enviando...';
 
             try {
-                await criarAtendimento({
-                    setor,
-                    assunto,
-                    mensagem: descricao,
-                    statusAtendimento: 'Pendente'
+                const novoChamado = await apiFetch('/atendimentos', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        setor,
+                        mensagem: assunto + " - " + descricao,
+                        statusAtendimento: 'Pendente'
+                    })
                 });
+
+                closeModal();
+                document.getElementById('modal-setor').value = '';
+                document.getElementById('modal-assunto').value = '';
+                document.getElementById('modal-descricao').value = '';
+
+                // Recarrega lista e seleciona o novo chamado (primeiro da lista)
+                await carregarAtendimentos();
+                const primeiroItem = document.querySelector('.conversation-item');
+                if (primeiroItem && !isMobile()) {
+                    primeiroItem.click();
+                }
+
             } catch (e) {
-                // Se der erro na API (ex: servidor desligado), registra no console mas continua
-                console.warn('Chamado registrado apenas localmente:', e);
+                console.warn('Erro ao criar atendimento:', e);
+                closeModal();
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">send</span> Abrir Chamado';
             }
-
-            closeModal();
-            const sysMsg = document.createElement('div');
-            sysMsg.className = 'system-message';
-            sysMsg.textContent = `Novo chamado aberto: "${assunto}"`;
-            chatMessages.insertBefore(sysMsg, typingIndicator);
-            scrollToBottom();
-
-            document.getElementById('modal-setor').value = '';
-            document.getElementById('modal-assunto').value = '';
-            document.getElementById('modal-descricao').value = '';
         });
 
         // ── Busca de conversas ─────────────────────────────────────────────────
         document.getElementById('search-conversations').addEventListener('input', e => {
             const q = e.target.value.toLowerCase();
-            convItems.forEach(item => {
+            document.querySelectorAll('.conversation-item').forEach(item => {
                 const text = item.querySelector('.conv-name').textContent.toLowerCase()
                     + item.querySelector('.conv-preview').textContent.toLowerCase();
                 item.style.display = text.includes(q) ? 'flex' : 'none';

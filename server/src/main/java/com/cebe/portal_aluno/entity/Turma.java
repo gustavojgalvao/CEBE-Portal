@@ -18,11 +18,11 @@ public class Turma {
     @Column(name = "ID")
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_CURSOS", nullable = false)
     private Cursos cursos;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_PROFESSOR", nullable = false)
     private Professor professor;
 

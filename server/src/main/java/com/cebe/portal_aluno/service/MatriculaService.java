@@ -59,6 +59,10 @@ public class MatriculaService {
         return matriculaRepository.save(matricula);
     }
 
+    public List<Matricula> buscarPorAluno(Aluno aluno) {
+        return matriculaRepository.findByAlunoId(aluno.getId());
+    }
+
     public void deletar(Integer id) {
         matriculaRepository.deleteById(id);
     }

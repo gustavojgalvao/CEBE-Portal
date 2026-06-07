@@ -115,23 +115,36 @@
                 </div>`;
 
                 // Clicar no item → marcar como lido
-                li.addEventListener('click', e => {
+                li.addEventListener('click', async e => {
                     if (e.target.closest('.notif-action-btn')) return;
-                    if (!n.read) NS.markAsRead(n.id);
+                    if (!n.read) {
+                        try {
+                            await apiFetch('/notificacoes/' + n.id + '/ler', { method: 'PUT' });
+                            NS.markAsRead(n.id);
+                        } catch(err) {}
+                    }
                 });
 
                 // Botão "Marcar como lida"
-                li.querySelector('[data-action="read"]')?.addEventListener('click', e => {
+                li.querySelector('[data-action="read"]')?.addEventListener('click', async e => {
                     e.stopPropagation();
-                    NS.markAsRead(n.id);
+                    try {
+                        await apiFetch('/notificacoes/' + n.id + '/ler', { method: 'PUT' });
+                        NS.markAsRead(n.id);
+                    } catch(err) {}
                 });
 
                 // Botão "Remover"
-                li.querySelector('[data-action="delete"]').addEventListener('click', e => {
+                li.querySelector('[data-action="delete"]').addEventListener('click', async e => {
                     e.stopPropagation();
                     li.style.transition = 'opacity 0.2s, transform 0.2s';
                     li.style.opacity = '0';
                     li.style.transform = 'translateX(24px)';
+                    try {
+                        await apiFetch('/notificacoes/' + n.id, { method: 'DELETE' });
+                    } catch (err) {
+                        console.warn('Não foi possível deletar notificação na API:', err);
+                    }
                     setTimeout(() => NS.remove(n.id), 200);
                 });
 
@@ -154,15 +167,22 @@
         });
 
         // ── Marcar todas como lidas ───────────────────────────────────────────────
-        document.getElementById('btn-mark-all').addEventListener('click', () => {
-            NS.markAllAsRead();
+        document.getElementById('btn-mark-all').addEventListener('click', async () => {
+            try {
+                await apiFetch('/notificacoes/ler-todas', { method: 'PUT' });
+                NS.markAllAsRead();
+            } catch (err) {}
         });
 
-        // ── Reatividade ───────────────────────────────────────────────────────────
+        // ── Atualização Automática ────────────────────────────────────────────────
         document.addEventListener('notifications-updated', renderList);
 
-        // Inicialização
-        renderList();
+        // ── Init ──────────────────────────────────────────────────────────────────
+        async function init() {
+            await NS.sync();
+            renderList();
+        }
+        init();
     </script>
 </body>
 

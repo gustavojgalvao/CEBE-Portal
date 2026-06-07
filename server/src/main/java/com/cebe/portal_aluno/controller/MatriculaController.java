@@ -1,9 +1,11 @@
 package com.cebe.portal_aluno.controller;
 
 import com.cebe.portal_aluno.dto.request.MatriculaRequestDTO;
+import com.cebe.portal_aluno.entity.Aluno;
 import com.cebe.portal_aluno.entity.Matricula;
 import com.cebe.portal_aluno.service.MatriculaService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,11 @@ public class MatriculaController {
     @GetMapping
     public ResponseEntity<List<Matricula>> listarTodos() {
         return ResponseEntity.ok(matriculaService.listarTodos());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<Matricula>> minhasMatriculas(@AuthenticationPrincipal Aluno aluno) {
+        return ResponseEntity.ok(matriculaService.buscarPorAluno(aluno));
     }
 
     @GetMapping("/{id}")

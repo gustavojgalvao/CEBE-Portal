@@ -145,6 +145,25 @@ window.NotificationService = (function () {
             warning: 'warning',
             error:   'error',
             info:    'info'
+        },
+
+        async sync() {
+            if (typeof apiFetch !== 'undefined') {
+                try {
+                    const notifs = await apiFetch('/notificacoes/me');
+                    const mapped = notifs.map(n => ({
+                        id: n.id,
+                        type: n.tipo ? n.tipo.toLowerCase() : 'info',
+                        icon: 'info',
+                        text: n.mensagem,
+                        read: n.lida,
+                        date: n.dataHora
+                    }));
+                    persist(mapped);
+                } catch (e) {
+                    console.error('Erro ao sincronizar notificações', e);
+                }
+            }
         }
     };
 })();

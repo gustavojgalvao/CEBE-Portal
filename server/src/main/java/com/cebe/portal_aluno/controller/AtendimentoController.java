@@ -27,6 +27,11 @@ public class AtendimentoController {
         return ResponseEntity.ok(atendimentoService.listarTodos());
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<List<Atendimento>> buscarPorAluno(@AuthenticationPrincipal Aluno aluno) {
+        return ResponseEntity.ok(atendimentoService.buscarPorAluno(aluno));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Atendimento>> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(atendimentoService.buscarPorId(id));

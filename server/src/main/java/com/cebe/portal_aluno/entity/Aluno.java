@@ -23,7 +23,7 @@ public class Aluno implements UserDetails {
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "NOME", nullable = false, length = 20)
+    @Column(name = "NOME", nullable = false, length = 150)
     private String nome;
 
     @Column(name = "TELEFONE", nullable = false, unique = true, length = 15)

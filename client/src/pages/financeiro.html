@@ -41,14 +41,14 @@
                     <!-- Cards de resumo -->
                     <div class="fin-summary-grid">
 
-                        <div class="fin-summary-card accent">
+                        <div class="fin-summary-card accent" id="card-situacao">
                             <div class="fin-summary-icon">
                                 <span class="material-symbols-outlined"
-                                    style="font-variation-settings:'FILL' 1;">verified</span>
+                                    style="font-variation-settings:'FILL' 1;" id="icon-situacao">verified</span>
                             </div>
                             <div class="fin-summary-body">
                                 <p class="fin-summary-label">Situação</p>
-                                <p class="fin-summary-value">Em dia</p>
+                                <p class="fin-summary-value" id="valor-situacao">Carregando...</p>
                             </div>
                         </div>
 
@@ -58,8 +58,8 @@
                                     style="font-variation-settings:'FILL' 1;">payments</span>
                             </div>
                             <div class="fin-summary-body">
-                                <p class="fin-summary-label">Total pago em 2024</p>
-                                <p class="fin-summary-value">R$ 700,00</p>
+                                <p class="fin-summary-label">Total pago este ano</p>
+                                <p class="fin-summary-value" id="valor-total-pago">Calculando...</p>
                             </div>
                         </div>
 
@@ -70,7 +70,7 @@
                             </div>
                             <div class="fin-summary-body">
                                 <p class="fin-summary-label">Próximo vencimento</p>
-                                <p class="fin-summary-value">10/07 — R$ 350,00</p>
+                                <p class="fin-summary-value" id="valor-proximo-venc">Calculando...</p>
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
                             </div>
                             <div class="fin-summary-body">
                                 <p class="fin-summary-label">Mensalidade</p>
-                                <p class="fin-summary-value">R$ 350,00 / mês</p>
+                                <p class="fin-summary-value" id="valor-mensalidade">R$ --</p>
                             </div>
                         </div>
 
@@ -138,9 +138,6 @@
                 <p>Selecione o mês de referência para gerar a 2ª via do boleto:</p>
                 <select class="fin-modal-select" id="fin-modal-ref">
                     <option value="" disabled selected>Selecione o mês...</option>
-                    <option value="07/2024">Julho / 2024</option>
-                    <option value="05/2024">Maio / 2024</option>
-                    <option value="06/2024">Junho / 2024</option>
                 </select>
             </div>
             <div class="fin-modal-footer">
@@ -153,19 +150,113 @@
         </div>
     </div>
 
+    <!-- Toast de confirmação (substitui alert) -->
+    <div id="fin-toast" style="
+        position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(80px);
+        background:var(--surface-container-high,#2a2a2a); color:var(--on-surface,#fff);
+        padding:14px 24px; border-radius:12px; font-size:14px; font-family:inherit;
+        display:flex; align-items:center; gap:10px; z-index:9999;
+        box-shadow:0 8px 24px rgba(0,0,0,0.3); transition:transform 0.3s ease, opacity 0.3s ease;
+        opacity:0; pointer-events:none;" aria-live="polite">
+        <span class="material-symbols-outlined" style="color:#4caf50;font-variation-settings:'FILL' 1;">check_circle</span>
+        <span id="fin-toast-msg"></span>
+    </div>
+
     <script src="../services/api.js"></script>
     <script src="../services/auth-guard.js"></script>
     <script src="../services/notifications.js"></script>
     <script src="../components/nav.js"></script>
     <script>
-        // ── Dados de pagamento ────────────────────────────────────────────────────────
-        const PAGAMENTOS = [
-            { ref: 'Maio / 2024', venc: '10/05/2024', valor: 350.00, status: 'pago' },
-            { ref: 'Junho / 2024', venc: '10/06/2024', valor: 350.00, status: 'pago' },
-            { ref: 'Julho / 2024', venc: '10/07/2024', valor: 350.00, status: 'pendente' },
-            { ref: 'Agosto / 2024', venc: '10/08/2024', valor: 350.00, status: 'futuro' },
-            { ref: 'Setembro / 2024', venc: '10/09/2024', valor: 350.00, status: 'futuro' },
-        ];
+        let PAGAMENTOS = [];
+
+        async function carregarFinanceiro() {
+            try {
+                const matriculas = await apiFetch('/matriculas/me');
+
+                // Calcula o día 10 do próximo mês como vencimento padrão
+                const hoje = new Date();
+                const proxMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 10);
+                const vencFormatado = proxMes.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                const VALOR_MENSALIDADE = 350.00;
+                const CURSOS_COUNT = matriculas.length;
+
+                // Determina situação geral
+                const temVencido = matriculas.some(m => m.statusPagamento === 'Vencido');
+                const temPendente = matriculas.some(m => m.statusPagamento === 'Pendente');
+                if (temVencido) {
+                    document.getElementById('card-situacao').classList.replace('accent', 'danger-card');
+                    document.getElementById('icon-situacao').textContent = 'error';
+                    document.getElementById('valor-situacao').textContent = 'Irregular';
+                } else if (temPendente) {
+                    document.getElementById('icon-situacao').textContent = 'pending';
+                    document.getElementById('valor-situacao').textContent = 'Pendente';
+                } else {
+                    document.getElementById('valor-situacao').textContent = matriculas.length > 0 ? 'Em dia' : 'Sem matrículas';
+                }
+
+                // Mensalidade = valor por curso
+                const mensalidadeTotal = CURSOS_COUNT * VALOR_MENSALIDADE;
+                document.getElementById('valor-mensalidade').textContent =
+                    `R$ ${mensalidadeTotal.toFixed(2).replace('.', ',')} / mês`;
+
+                // Próximo vencimento
+                document.getElementById('valor-proximo-venc').textContent =
+                    matriculas.length > 0
+                        ? `${vencFormatado} — R$ ${mensalidadeTotal.toFixed(2).replace('.', ',')}`
+                        : 'N/A';
+
+                // Constroi opções do select do modal de 2ª via
+                const modalSelect = document.getElementById('fin-modal-ref');
+                modalSelect.innerHTML = '<option value="" disabled selected>Selecione o mês...</option>';
+                for (let i = 0; i < 3; i++) {
+                    const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+                    const label = d.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                    const val = d.toLocaleDateString('pt-BR', { month: '2-digit', year: 'numeric' });
+                    const opt = document.createElement('option');
+                    opt.value = val;
+                    opt.textContent = label.charAt(0).toUpperCase() + label.slice(1);
+                    modalSelect.appendChild(opt);
+                }
+
+                PAGAMENTOS = matriculas.map(mat => {
+                    const cursoNome = mat.turma?.cursos?.nome || `Matrícula #${mat.id}`;
+                    let statusFront = 'pendente';
+                    if (mat.statusPagamento === 'pago') statusFront = 'pago';
+                    if (mat.statusPagamento === 'Vencido') statusFront = 'vencido';
+
+                    return {
+                        ref: cursoNome + ' (Mês Atual)',
+                        venc: vencFormatado,
+                        valor: VALOR_MENSALIDADE,
+                        status: statusFront
+                    };
+                });
+
+                // Adiciona histórico simulado se tiver matrícula
+                if (matriculas.length > 0) {
+                    const cursoNome = matriculas[0].turma?.cursos?.nome || 'Matrícula';
+                    const mesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 10);
+                    PAGAMENTOS.push({
+                        ref: cursoNome + ' (Mês Anterior)',
+                        venc: mesAnterior.toLocaleDateString('pt-BR'),
+                        valor: VALOR_MENSALIDADE,
+                        status: 'pago'
+                    });
+
+                    // Total pago no ano (mêses anteriores pagos)
+                    const totalPago = PAGAMENTOS.filter(p => p.status === 'pago').length * VALOR_MENSALIDADE;
+                    document.getElementById('valor-total-pago').textContent =
+                        `R$ ${totalPago.toFixed(2).replace('.', ',')}`;
+                } else {
+                    document.getElementById('valor-total-pago').textContent = 'R$ 0,00';
+                }
+
+                renderTabela(currentFilter);
+            } catch (e) {
+                console.error("Erro ao carregar financeiro", e);
+            }
+        }
 
         const STATUS_CONFIG = {
             pago: { label: 'Pago', cls: 'badge-pago' },
@@ -263,6 +354,20 @@
         });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+        // ── Toast helper ─────────────────────────────────────────────────
+        function showToast(msg) {
+            const toast = document.getElementById('fin-toast');
+            document.getElementById('fin-toast-msg').textContent = msg;
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            toast.style.opacity = '1';
+            toast.style.pointerEvents = 'auto';
+            setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(80px)';
+                toast.style.opacity = '0';
+                toast.style.pointerEvents = 'none';
+            }, 4000);
+        }
+
         document.getElementById('fin-modal-gerar').addEventListener('click', () => {
             const ref = document.getElementById('fin-modal-ref').value;
             if (!ref) {
@@ -270,11 +375,11 @@
                 return;
             }
             closeModal();
-            alert(`Boleto ${ref} gerado! Em produção, o PDF seria aberto aqui.`);
+            showToast(`Solicitámos o boleto de ${ref}. Em produção, o PDF seria enviado por e-mail.`);
         });
 
-        // ── Init ──────────────────────────────────────────────────────────────────────
-        renderTabela(currentFilter);
+        // ── Init ─────────────────────────────────────────────────────────────────
+        carregarFinanceiro();
     </script>
 </body>
 </html>

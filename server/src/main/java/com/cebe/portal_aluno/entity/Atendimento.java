@@ -1,6 +1,7 @@
 package com.cebe.portal_aluno.entity;
 
 import com.cebe.portal_aluno.entity.enums.StatusAtendimento;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,8 @@ public class Atendimento {
     @Column(name = "ID")
     private Integer id;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_ALUNO", nullable = false)
     private Aluno aluno;
 

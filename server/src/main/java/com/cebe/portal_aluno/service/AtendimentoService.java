@@ -27,6 +27,10 @@ public class AtendimentoService {
         return atendimentoRepository.findById(id);
     }
 
+    public List<Atendimento> buscarPorAluno(Aluno aluno) {
+        return atendimentoRepository.findByAlunoId(aluno.getId());
+    }
+
     public Atendimento salvar(Atendimento atendimento) {
         return atendimentoRepository.save(atendimento);
     }
