@@ -171,6 +171,52 @@ body.dashboard-body {
     background-color: #003d21;
 }
 
+/* --- Sidebar Collapsed State --- */
+.sidebar {
+    transition: width 0.3s ease;
+}
+.sidebar.collapsed {
+    width: 88px;
+    align-items: center;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.sidebar.collapsed .sidebar-logo-wrapper {
+    width: 40px;
+    justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    object-position: 0 50%;
+    object-fit: cover;
+}
+
+.sidebar.collapsed .nav-link {
+    justify-content: center;
+    padding: 12px;
+}
+.sidebar.collapsed .nav-link:hover {
+    padding-left: 12px;
+}
+
+.sidebar.collapsed .nav-link span:nth-child(2),
+.sidebar.collapsed .nav-badge,
+.sidebar.collapsed .btn-new-ticket-text {
+    display: none;
+}
+
+.sidebar.collapsed .btn-new-ticket {
+    padding: 12px;
+    width: auto;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+}
+
+
 /* ===================================================
    MAIN CONTENT WRAPPER
    =================================================== */

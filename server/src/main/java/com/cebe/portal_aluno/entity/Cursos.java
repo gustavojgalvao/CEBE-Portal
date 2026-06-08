@@ -17,9 +17,12 @@ public class Cursos {
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "NOME", nullable = false, length = 20)
+    @Column(name = "NOME", nullable = false, length = 100)
     private String nome;
 
     @Column(name = "CARGA_HORARIA", nullable = false)
     private Integer cargaHoraria;
+
+    @Column(name = "BANNER_URL", length = 255)
+    private String bannerUrl;
 }

@@ -77,7 +77,7 @@
       <div class="sidebar-bottom">
         <button class="btn-new-ticket" id="btn-novo-chamado">
           <span class="material-symbols-outlined">add</span>
-          Novo Chamado
+          <span class="btn-new-ticket-text">Novo Chamado</span>
         </button>
       </div>
     </aside>`;
@@ -92,7 +92,7 @@
         </a>
         <div class="top-bar-right">
           <div class="top-bar-user-info">
-            <span class="top-bar-username">Olá, João Silva!</span>
+            <span class="top-bar-username" id="top-bar-username">Olá, Aluno!</span>
             <span class="top-bar-role">Aluno</span>
           </div>
           <div class="top-bar-actions">
@@ -177,4 +177,31 @@
   document.getElementById('btn-novo-chamado')?.addEventListener('click', () => {
     if (page !== 'atendimento.html') window.location.href = 'atendimento.html';
   });
+
+  // Sidebar toggle behavior
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggleBtn = document.querySelector('.sidebar-toggle-btn');
+  if (sidebar && sidebarToggleBtn) {
+    sidebarToggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+    });
+  }
+
+  // Fetch user data for top bar
+  async function loadUserInfo() {
+    if (typeof window.apiFetch !== 'function') return;
+    try {
+      const aluno = await window.apiFetch('/alunos/me');
+      if (aluno && aluno.nome) {
+        const parts = aluno.nome.trim().split(' ');
+        const primeiroNome = parts[0];
+        const nomeCurto = parts.length > 1 ? `${primeiroNome} ${parts[parts.length - 1]}` : primeiroNome;
+        const span = document.getElementById('top-bar-username');
+        if (span) span.textContent = `Olá, ${nomeCurto}!`;
+      }
+    } catch (e) {
+      console.error('Erro ao carregar usuário da topbar', e);
+    }
+  }
+  loadUserInfo();
 })();

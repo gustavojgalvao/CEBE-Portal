@@ -240,7 +240,7 @@
                 }
                 
                 matriculas.forEach(mat => {
-                    const cursoNome = mat.turma?.cursos?.nome || \`Turma \${mat.turma?.id}\`;
+                    const cursoNome = mat.turma?.cursos?.nome || `Turma ${mat.turma?.id}`;
                     const turno = mat.turma?.turno || 'N/A';
                     const prof = mat.turma?.professor?.nome || 'Prof. Não Definido';
                     const idCard = 'card-' + mat.id;
@@ -258,7 +258,7 @@
                         sala: 'Sala 04',
                         horario: `${dias}, ${horario}`,
                         progresso: 50,
-                        banner: null,
+                        banner: mat.turma?.cursos?.bannerUrl || null,
                         statusPagamento: mat.statusPagamento, // para filtro de tabs
                         // Sem dados mockados: avaliações e matérias serão exibidas como "em breve"
                         avaliacoes: [],
@@ -271,21 +271,21 @@
                     article.tabIndex = 0;
                     article.setAttribute('role', 'button');
                     
-                    article.innerHTML = \`
+                    article.innerHTML = `
                         <div class="course-card-inner">
                             <div class="course-card-top">
                                 <span class="course-category-tag primary-tag">Capacitação</span>
                             </div>
-                            <h3 class="course-card-name secondary-color">\${cursoNome}</h3>
+                            <h3 class="course-card-name secondary-color">${cursoNome}</h3>
                             <div class="course-info-grid">
                                 <div class="course-info-item">
-                                    <span class="material-symbols-outlined">person</span> \${prof}
+                                    <span class="material-symbols-outlined">person</span> ${prof}
                                 </div>
                                 <div class="course-info-item">
                                     <span class="material-symbols-outlined">meeting_room</span> Sala 04
                                 </div>
                                 <div class="course-info-item full-width">
-                                    <span class="material-symbols-outlined">schedule</span> \${dias}, \${horario}
+                                    <span class="material-symbols-outlined">schedule</span> ${dias}, ${horario}
                                 </div>
                             </div>
                             <div class="course-progress-section">
@@ -298,7 +298,7 @@
                                 </div>
                             </div>
                         </div>
-                    \`;
+                    `;
                     
                     article.addEventListener('click', () => selectCard(article));
                     article.addEventListener('keydown', e => {
