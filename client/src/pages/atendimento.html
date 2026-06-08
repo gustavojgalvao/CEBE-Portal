@@ -433,6 +433,23 @@
                 item.style.display = text.includes(q) ? 'flex' : 'none';
             });
         });
+
+        // ── Autopreenchimento via URL (Agendar Visita) ─────────────────────────
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('action') === 'agendar') {
+            openModal();
+            const setorEl = document.getElementById('modal-setor');
+            if (setorEl) setorEl.value = 'secretaria';
+            
+            const assuntoEl = document.getElementById('modal-assunto');
+            if (assuntoEl) assuntoEl.value = 'Agendamento de Visita Presencial';
+            
+            const descEl = document.getElementById('modal-descricao');
+            if (descEl) descEl.value = 'Olá! Gostaria de agendar uma visita presencial na unidade para o dia [___] às [___].';
+            
+            // Limpa a URL para evitar reabrir o modal se a página for recarregada
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     </script>
 </body>
 </html>

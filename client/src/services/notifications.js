@@ -164,6 +164,23 @@ window.NotificationService = (function () {
                     console.error('Erro ao sincronizar notificações', e);
                 }
             }
+        },
+
+        /**
+         * Inicia a verificação automática de novas notificações
+         * @param {number} intervalMs - Tempo em milissegundos (padrão: 30s)
+         */
+        startPolling(intervalMs = 30000) {
+            if (this._interval) clearInterval(this._interval);
+            // Sincroniza imediatamente na primeira vez
+            this.sync();
+            // Configura o timer para rodar a cada X milissegundos
+            this._interval = setInterval(() => {
+                this.sync();
+            }, intervalMs);
         }
     };
 })();
+
+// Inicia automaticamente o "tempo real" (polling) para todas as páginas que incluírem este script
+window.NotificationService.startPolling();
