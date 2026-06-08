@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="CEBE – Centro Educacional Boa Esperança. Acesse o portal acadêmico, acompanhe notas, financeiro, chamados e muito mais." />
+    <title>CEBE – Portal Acadêmico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/client/src/assets/landing.css" />
+</head>
+
+<body class="landing-body">
+
+    <!-- ── Navbar ─────────────────────────────────────────────── -->
+    <nav class="landing-nav" id="main-nav" role="navigation" aria-label="Navegação principal">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-badge" aria-hidden="true">
+                <img src="/client/public/logo.png" alt="CEBE">
+            </div>
+        </a>
+        <div class="nav-actions">
+            <a href="src/pages/matricula.html" class="btn-nav-ghost" id="nav-btn-matricula">
+                <span class="material-symbols-outlined" style="font-size:17px;">school</span>
+                Matrícula
+            </a>
+            <a href="src/pages/login.html" class="btn-nav-solid" id="nav-btn-login">
+                <span class="material-symbols-outlined" style="font-size:17px;">login</span>
+                Entrar
+            </a>
+        </div>
+    </nav>
+
+    <!-- ── Hero ───────────────────────────────────────────────── -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+        <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+        <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge" role="status">
+                <span class="hero-badge-dot" aria-hidden="true"></span>
+                Portal online e disponível agora
+            </div>
+
+            <h1 class="hero-title" id="hero-title">
+                O portal que conecta<br />
+                você à sua <span class="hero-title-highlight">jornada acadêmica</span>
+            </h1>
+
+            <p class="hero-sub">
+                Acesse notas, financeiro, chamados de atendimento, calendário de cursos
+                e muito mais, tudo em um só lugar, de qualquer dispositivo.
+            </p>
+
+            <div class="hero-cta-group">
+                <a href="src/pages/login.html" class="btn-hero-primary" id="hero-btn-login">
+                    <span class="material-symbols-outlined" style="font-size:20px;">login</span>
+                    Acessar o Portal
+                </a>
+                <a href="src/pages/matricula.html" class="btn-hero-secondary" id="hero-btn-matricula">
+                    <span class="material-symbols-outlined" style="font-size:20px;">school</span>
+                    Fazer Matrícula
+                </a>
+            </div>
+
+            <div class="hero-stats" aria-label="Números do CEBE">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">+1.200</div>
+                    <div class="hero-stat-label">Alunos ativos</div>
+                </div>
+                <div class="hero-divider" aria-hidden="true"></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">30+</div>
+                    <div class="hero-stat-label">Anos de história</div>
+                </div>
+                <div class="hero-divider" aria-hidden="true"></div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">100%</div>
+                    <div class="hero-stat-label">Online e seguro</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ── Acesso Rápido ───────────────────────────────────────── -->
+    <section class="section access-section" id="acesso" aria-labelledby="acesso-title">
+        <div class="section-inner">
+            <div style="text-align:center;">
+                <p class="section-eyebrow">
+                    <span class="material-symbols-outlined"
+                        style="font-size:15px;font-variation-settings:'FILL' 1;">bolt</span>
+                    Acesso ao portal
+                </p>
+                <h2 class="section-title" id="acesso-title">Como deseja entrar?</h2>
+                <p class="section-sub" style="margin:14px auto 0;">
+                    Já é aluno ou responsável? Faça login. Ainda não está matriculado?
+                    Inicie sua jornada agora mesmo.
+                </p>
+            </div>
+
+            <div class="access-grid">
+
+                <!-- Card Login -->
+                <a href="src/pages/login.html" class="access-card access-card-login reveal" id="card-login"
+                    aria-label="Acessar o portal com login">
+                    <div class="access-card-pattern" aria-hidden="true"></div>
+                    <div class="access-card-body">
+                        <div class="access-card-icon">
+                            <span class="material-symbols-outlined">lock_open</span>
+                        </div>
+                        <span class="access-card-tag">Já sou aluno</span>
+                        <h3 class="access-card-title">Entrar no Portal</h3>
+                        <p class="access-card-desc">
+                            Acesse seu painel acadêmico completo: notas, faltas, financeiro,
+                            calendário e atendimento da secretaria.
+                        </p>
+                        <span class="access-card-btn">
+                            <span class="material-symbols-outlined" style="font-size:18px;">login</span>
+                            Fazer login
+                            <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Card Matrícula -->
+                <a href="src/pages/matricula.html"
+                    class="access-card access-card-matricula reveal reveal-delay-2" id="card-matricula"
+                    aria-label="Realizar matrícula no CEBE">
+                    <div class="access-card-pattern" aria-hidden="true"></div>
+                    <div class="access-card-body">
+                        <div class="access-card-icon">
+                            <span class="material-symbols-outlined">school</span>
+                        </div>
+                        <span class="access-card-tag">Novo por aqui</span>
+                        <h3 class="access-card-title">Fazer Matrícula</h3>
+                        <p class="access-card-desc">
+                            Realize sua matrícula de forma rápida e totalmente online.
+                            Preencha os dados e nossa equipe entrará em contato.
+                        </p>
+                        <span class="access-card-btn">
+                            <span class="material-symbols-outlined" style="font-size:18px;">edit_document</span>
+                            Matricular-se
+                            <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+                        </span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Features ───────────────────────────────────────────── -->
+    <section class="section features-section" id="recursos" aria-labelledby="features-title">
+        <div class="section-inner">
+            <div class="features-header">
+                <p class="section-eyebrow">
+                    <span class="material-symbols-outlined"
+                        style="font-size:15px;font-variation-settings:'FILL' 1;">star</span>
+                    Tudo que você precisa
+                </p>
+                <h2 class="section-title" id="features-title">Um portal completo para alunos e responsáveis</h2>
+                <p class="section-sub">
+                    Desenvolvido pensando na sua rotina — simples, rápido e acessível de qualquer dispositivo.
+                </p>
+            </div>
+
+            <div class="features-grid">
+
+                <div class="feature-card reveal" id="feature-dashboard">
+                    <div class="feature-icon-wrap">
+                        <span class="material-symbols-outlined">dashboard</span>
+                    </div>
+                    <h3 class="feature-title">Painel Acadêmico</h3>
+                    <p class="feature-text">
+                        Visão geral de notas, faltas, próximas aulas e comunicados em um só painel personalizado.
+                    </p>
+                </div>
+
+                <div class="feature-card reveal reveal-delay-1" id="feature-financeiro">
+                    <div class="feature-icon-wrap">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <h3 class="feature-title">Financeiro Online</h3>
+                    <p class="feature-text">
+                        Consulte mensalidades, histórico de pagamentos e situação financeira de forma transparente.
+                    </p>
+                </div>
+
+                <div class="feature-card reveal reveal-delay-2" id="feature-atendimento">
+                    <div class="feature-icon-wrap">
+                        <span class="material-symbols-outlined">chat</span>
+                    </div>
+                    <h3 class="feature-title">Atendimento Direto</h3>
+                    <p class="feature-text">
+                        Abra chamados e converse diretamente com a secretaria sem precisar ir até a escola.
+                    </p>
+                </div>
+
+                <div class="feature-card reveal" id="feature-cursos">
+                    <div class="feature-icon-wrap">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <h3 class="feature-title">Cursos e Turmas</h3>
+                    <p class="feature-text">
+                        Acompanhe o calendário de cursos, turmas disponíveis e conteúdo programático atualizado.
+                    </p>
+                </div>
+
+                <div class="feature-card reveal reveal-delay-1" id="feature-notificacoes">
+                    <div class="feature-icon-wrap">
+                        <span class="material-symbols-outlined">notifications_active</span>
+                    </div>
+                    <h3 class="feature-title">Notificações em Tempo Real</h3>
+                    <p class="feature-text">
+                        Receba alertas sobre eventos, comunicados e respostas da secretaria instantaneamente.
+                    </p>
+                </div>
+
+                <div class="feature-card reveal reveal-delay-2" id="feature-seguranca">
+                    <div class="feature-icon-wrap">
+                        <span class="material-symbols-outlined">verified_user</span>
+                    </div>
+                    <h3 class="feature-title">Acesso Seguro</h3>
+                    <p class="feature-text">
+                        Login com CPF e data de nascimento. Seus dados são protegidos com criptografia de ponta.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Info Strip ─────────────────────────────────────────── -->
+    <div class="info-strip" id="info-strip" aria-label="Informações institucionais">
+        <div class="info-strip-inner">
+            <div class="info-strip-item reveal">
+                <div class="info-strip-icon">
+                    <span class="material-symbols-outlined">schedule</span>
+                </div>
+                <div class="info-strip-title">Atendimento</div>
+                <div class="info-strip-text">Segunda a sexta<br />8h às 18h</div>
+            </div>
+            <div class="info-strip-item reveal reveal-delay-1">
+                <div class="info-strip-icon">
+                    <span class="material-symbols-outlined">location_on</span>
+                </div>
+                <div class="info-strip-title">Localização</div>
+                <div class="info-strip-text">Centro Educacional<br />Boa Esperança</div>
+            </div>
+            <div class="info-strip-item reveal reveal-delay-2">
+                <div class="info-strip-icon">
+                    <span class="material-symbols-outlined">support_agent</span>
+                </div>
+                <div class="info-strip-title">Suporte</div>
+                <div class="info-strip-text">Secretaria disponível<br />pelo portal e presencial</div>
+            </div>
+            <div class="info-strip-item reveal reveal-delay-3">
+                <div class="info-strip-icon">
+                    <span class="material-symbols-outlined">devices</span>
+                </div>
+                <div class="info-strip-title">Multiplataforma</div>
+                <div class="info-strip-text">Acesse pelo celular,<br />tablet ou computador</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────── -->
+    <footer class="landing-footer" id="footer">
+        <div class="landing-footer-inner">
+            <div class="footer-brand">
+                <img src="/client/public/logo.png" alt="Logo CEBE" class="footer-brand-logo" />
+                <span class="footer-brand-name">Centro Educacional Boa Esperança</span>
+            </div>
+            <div class="footer-links" role="list">
+                <a href="src/pages/login.html" class="footer-link" role="listitem">Login</a>
+                <a href="src/pages/matricula.html" class="footer-link" role="listitem">Matrícula</a>
+            </div>
+            <p class="footer-copy">© 2025 CEBE. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ── Scroll reveal ────────────────────────────────────────
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ── Navbar background on scroll ──────────────────────────
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 60) {
+                nav.style.background = 'rgba(1, 26, 14, 0.97)';
+            } else {
+                nav.style.background = 'rgba(1, 26, 14, 0.82)';
+            }
+        }, { passive: true });
+
+        // ── Counter animation for hero stats ────────────────────
+        function animateValue(el, start, end, suffix, duration) {
+            const range = end - start;
+            const startTime = performance.now();
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = (suffix.startsWith('+') ? '+' : '') +
+                    Math.round(start + range * eased).toLocaleString('pt-BR') +
+                    (suffix.startsWith('+') ? '' : suffix);
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Trigger counter when hero enters viewport
+        const heroObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                const nums = document.querySelectorAll('.hero-stat-number');
+                animateValue(nums[0], 0, 1200, '+', 1800);
+                animateValue(nums[1], 0, 30, '+', 1500);
+                nums[2].textContent = '100%';
+                heroObserver.disconnect();
+            }
+        }, { threshold: 0.5 });
+
+        heroObserver.observe(document.getElementById('hero'));
+    </script>
+
+</body>
+
+</html>

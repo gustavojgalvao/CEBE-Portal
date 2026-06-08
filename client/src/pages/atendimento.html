@@ -237,21 +237,21 @@
                 div.setAttribute('role', 'listitem');
                 div.tabIndex = 0;
                 
-                div.innerHTML = \`
-                    <div class="conv-avatar \${cssStatus === 'fechado' ? 'orange' : 'green'}">
-                        \${cssStatus !== 'fechado' ? '<span class="online-dot" aria-label="Online"></span>' : ''}
+                div.innerHTML = `
+                    <div class="conv-avatar ${cssStatus === 'fechado' ? 'orange' : 'green'}">
+                        ${cssStatus !== 'fechado' ? '<span class="online-dot" aria-label="Online"></span>' : ''}
                     </div>
                     <div class="conv-body">
                         <div class="conv-top">
-                            <span class="conv-name">Chamado #\${chamado.id}</span>
-                            <span class="conv-time">\${timeStr}</span>
+                            <span class="conv-name">Chamado #${chamado.id}</span>
+                            <span class="conv-time">${timeStr}</span>
                         </div>
                         <div class="conv-preview-row">
-                            <span class="conv-preview">\${chamado.mensagem}</span>
-                            <span class="conv-status \${cssStatus}">\${chamado.statusAtendimento.replace('_', ' ')}</span>
+                            <span class="conv-preview">${chamado.mensagem}</span>
+                            <span class="conv-status ${cssStatus}">${chamado.statusAtendimento.replace('_', ' ')}</span>
                         </div>
                     </div>
-                \`;
+                `;
 
                 div.addEventListener('click', () => selectConversation(div, chamado));
                 div.addEventListener('keydown', e => {
