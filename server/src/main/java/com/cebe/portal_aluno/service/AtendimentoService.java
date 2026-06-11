@@ -14,9 +14,12 @@ import java.util.Optional;
 public class AtendimentoService {
 
     private final AtendimentoRepository atendimentoRepository;
+    private final NotificacaoService notificacaoService;
 
-    public AtendimentoService(AtendimentoRepository atendimentoRepository) {
+    public AtendimentoService(AtendimentoRepository atendimentoRepository,
+                              NotificacaoService notificacaoService) {
         this.atendimentoRepository = atendimentoRepository;
+        this.notificacaoService = notificacaoService;
     }
 
     public List<Atendimento> listarTodos() {
@@ -50,7 +53,14 @@ public class AtendimentoService {
         atendimento.setStatusAtendimento(status);
         atendimento.setDataHora(LocalDateTime.now());
 
-        return atendimentoRepository.save(atendimento);
+        Atendimento salvo = atendimentoRepository.save(atendimento);
+
+        // Cria notificação automática de chamado aberto
+        notificacaoService.criar(aluno,
+                "Seu chamado #" + salvo.getId() + " foi aberto com sucesso. Aguarde o retorno da secretaria.",
+                "ATENDIMENTO");
+
+        return salvo;
     }
 
     public void deletar(Integer id) {

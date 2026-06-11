@@ -151,14 +151,31 @@ window.NotificationService = (function () {
             if (typeof apiFetch !== 'undefined') {
                 try {
                     const notifs = await apiFetch('/notificacoes/me');
-                    const mapped = notifs.map(n => ({
-                        id: n.id,
-                        type: n.tipo ? n.tipo.toLowerCase() : 'info',
-                        icon: 'info',
-                        text: n.mensagem,
-                        read: n.lida,
-                        date: n.dataHora
-                    }));
+
+                    // Mapeia tipos do back (MATRICULA, ATENDIMENTO, FINANCEIRO, AVISO) para front
+                    const TIPO_MAP = {
+                        'matricula':   { type: 'success', icon: 'school' },
+                        'atendimento': { type: 'info',    icon: 'support_agent' },
+                        'financeiro':  { type: 'warning', icon: 'payments' },
+                        'aviso':       { type: 'warning', icon: 'campaign' },
+                        'success':     { type: 'success', icon: 'check_circle' },
+                        'warning':     { type: 'warning', icon: 'warning' },
+                        'error':       { type: 'error',   icon: 'error' },
+                        'info':        { type: 'info',    icon: 'info' },
+                    };
+
+                    const mapped = notifs.map(n => {
+                        const tipoKey = n.tipo ? n.tipo.toLowerCase() : 'info';
+                        const meta = TIPO_MAP[tipoKey] || { type: 'info', icon: 'info' };
+                        return {
+                            id: n.id,
+                            type: meta.type,
+                            icon: meta.icon,
+                            text: n.mensagem,
+                            read: n.lida,
+                            date: n.dataHora
+                        };
+                    });
                     persist(mapped);
                 } catch (e) {
                     console.error('Erro ao sincronizar notificações', e);

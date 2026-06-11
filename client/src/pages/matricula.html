@@ -9,9 +9,234 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
     <link href="../assets/style.css" rel="stylesheet" />
+    <style>
+        /* ── Seleção de cursos em cards ─────────────────────────────────── */
+        .cursos-selecao-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        @media (min-width: 520px) {
+            .cursos-selecao-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .curso-card-opcao {
+            border: 2px solid var(--outline-variant);
+            border-radius: 10px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+            background: var(--surface-container-lowest);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            user-select: none;
+            position: relative;
+        }
+
+        .curso-card-opcao:hover:not(.disabled) {
+            border-color: var(--primary);
+            background: rgba(0, 79, 43, 0.04);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 79, 43, 0.1);
+        }
+
+        .curso-card-opcao.selecionado {
+            border-color: var(--primary);
+            background: rgba(0, 79, 43, 0.07);
+            box-shadow: 0 0 0 3px rgba(0, 79, 43, 0.12);
+        }
+
+        .curso-card-opcao.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .curso-card-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--outline-variant);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            margin-top: 2px;
+        }
+
+        .curso-card-opcao.selecionado .curso-card-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .curso-card-checkbox .material-symbols-outlined {
+            font-size: 14px;
+            color: white;
+            display: none;
+        }
+
+        .curso-card-opcao.selecionado .curso-card-checkbox .material-symbols-outlined {
+            display: block;
+        }
+
+        .curso-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .curso-card-nome {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--on-surface);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .curso-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .curso-card-tag {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--on-surface-variant);
+            background: var(--surface-variant);
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .curso-card-tag .material-symbols-outlined {
+            font-size: 12px;
+        }
+
+        .curso-card-opcao.selecionado .curso-card-nome {
+            color: var(--primary);
+        }
+
+        .selecionados-resumo {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: rgba(0, 79, 43, 0.06);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 79, 43, 0.15);
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selecionados-resumo.visivel {
+            display: flex;
+        }
+
+        .selecionados-resumo .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        .cursos-loading {
+            padding: 24px;
+            text-align: center;
+            color: var(--on-surface-variant);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .cursos-erro {
+            padding: 16px;
+            background: rgba(229, 62, 62, 0.06);
+            border: 1px solid rgba(229, 62, 62, 0.2);
+            border-radius: 8px;
+            color: #e53e3e;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* ── Validação visual ───────────────────────────────────────────── */
+        .campo-entrada-matricula.campo-invalido,
+        .campo-selecao.campo-invalido {
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 1px #e53e3e;
+        }
+
+        .msg-erro-campo {
+            font-size: 12px;
+            color: #e53e3e;
+            margin-top: 2px;
+            display: none;
+        }
+
+        .msg-erro-campo.visivel {
+            display: block;
+        }
+
+        /* ── Toast de erro/sucesso genérico ────────────────────────────── */
+        .toast-overlay {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            z-index: 200;
+            background: #e53e3e;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            max-width: 90vw;
+            text-align: center;
+        }
+
+        .toast-overlay.visivel {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* ── Spinner de carregamento no botão ──────────────────────────── */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .botao-finalizar:disabled,
+        .botao-voltar-etapa:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 
 <body class="matricula-body">
+    <!-- Toast global de erro -->
+    <div class="toast-overlay" id="toast-erro" role="alert" aria-live="assertive"></div>
+
     <header class="matricula-header">
         <div class="header-content">
             <a href="/client/src/pages/login.html" class="logo-container">
@@ -27,18 +252,20 @@
     <main class="matricula-main">
         <div class="matricula-card">
 
-            <div class="overlay-sucesso escondido">
+            <!-- ── Overlay de sucesso ──────────────────────────────────── -->
+            <div class="overlay-sucesso escondido" id="overlay-sucesso">
                 <div class="icone-sucesso-container">
                     <span class="material-symbols-outlined icone-sucesso"
                         style="font-variation-settings: 'FILL' 1;">check_circle</span>
                 </div>
                 <h3 class="titulo-sucesso">Matrícula realizada com sucesso!</h3>
-                <p class="texto-sucesso">Use seu CPF para entrar no portal do aluno.</p>
-                <button class="botao-acessar" type="button">
+                <p class="texto-sucesso" id="texto-sucesso-cursos">Use seu CPF para entrar no portal do aluno.</p>
+                <button class="botao-acessar" type="button" id="btn-acessar-portal">
                     Acessar Portal
                 </button>
             </div>
 
+            <!-- ── Cabeçalho + Stepper ────────────────────────────────── -->
             <div class="cabecalho-formulario">
                 <h1 class="titulo-formulario">Matrícula Online</h1>
 
@@ -47,32 +274,28 @@
                     <div class="stepper-linha-progresso" id="stepper-linha"></div>
 
                     <div class="passo-container" id="stepper-passo-1">
-                        <div class="passo-circulo-ativo">
-                            1
-                        </div>
+                        <div class="passo-circulo-ativo">1</div>
                         <span class="passo-texto-ativo">Dados Pessoais</span>
                     </div>
 
                     <div class="passo-container" id="stepper-passo-2">
-                        <div class="passo-circulo-inativo">
-                            2
-                        </div>
+                        <div class="passo-circulo-inativo">2</div>
                         <span class="passo-texto-inativo">Escolha do Curso</span>
                     </div>
 
                     <div class="passo-container" id="stepper-passo-3">
-                        <div class="passo-circulo-inativo">
-                            3
-                        </div>
+                        <div class="passo-circulo-inativo">3</div>
                         <span class="passo-texto-inativo">Criação de Acesso</span>
                     </div>
                 </div>
             </div>
 
-            <form class="formulario-matricula">
+            <!-- ── Formulário ─────────────────────────────────────────── -->
+            <form class="formulario-matricula" id="form-matricula" novalidate>
 
+                <!-- ETAPA 1: Dados Pessoais -->
                 <div class="secao-formulario" id="secao-1">
-                    <h2 class="titulo-secao-ativa">
+                    <h2 class="titulo-secao-ativa" id="titulo-secao-1" data-titulo="Etapa 1: Dados Pessoais">
                         <span class="material-symbols-outlined icon-sm">person</span>
                         Etapa 1: Dados Pessoais
                     </h2>
@@ -80,26 +303,30 @@
                         <div class="grupo-campo">
                             <label class="rotulo-campo" for="fullName">Nome Completo</label>
                             <input class="campo-entrada-matricula" id="fullName" name="fullName" type="text"
-                                placeholder="Ex: João Silva" />
+                                placeholder="Ex: João Silva" autocomplete="name" />
+                            <span class="msg-erro-campo" id="erro-fullName">Informe seu nome completo.</span>
                         </div>
                         <div class="grupo-campo">
                             <label class="rotulo-campo" for="cpf">CPF</label>
                             <input class="campo-entrada-matricula" id="cpf" name="cpf" type="text"
-                                placeholder="000.000.000-00" />
+                                placeholder="000.000.000-00" maxlength="14" inputmode="numeric" autocomplete="off" />
+                            <span class="msg-erro-campo" id="erro-cpf">CPF inválido.</span>
                         </div>
                         <div class="grupo-campo">
                             <label class="rotulo-campo" for="email">E-mail</label>
                             <input class="campo-entrada-matricula" id="email" name="email" type="email"
-                                placeholder="exemplo@email.com" />
+                                placeholder="exemplo@email.com" autocomplete="email" />
+                            <span class="msg-erro-campo" id="erro-email">Informe um e-mail válido.</span>
                         </div>
                         <div class="grupo-campo">
                             <label class="rotulo-campo" for="whatsapp">WhatsApp</label>
                             <input class="campo-entrada-matricula" id="whatsapp" name="whatsapp" type="tel"
-                                placeholder="(11) 90000-0000" />
+                                placeholder="(11) 90000-0000" maxlength="15" inputmode="numeric" autocomplete="tel" />
+                            <span class="msg-erro-campo" id="erro-whatsapp">Informe o número do WhatsApp.</span>
                         </div>
                     </div>
-                    <div class="acoes-formulario">
-                        <button class="botao-finalizar" type="button" onclick="avancarEtapa(2)" style="width: auto;">
+                    <div class="acoes-formulario" id="acoes-secao-1">
+                        <button class="botao-finalizar" type="button" id="btn-continuar-1" style="width: auto;">
                             Continuar
                         </button>
                     </div>
@@ -107,22 +334,38 @@
 
                 <hr class="divisor-secao" />
 
+                <!-- ETAPA 2: Escolha do Curso (multi-seleção) -->
                 <div class="secao-formulario-inativa" id="secao-2">
-                    <h2 class="titulo-secao">Etapa 2: Escolha do Curso</h2>
-                    <div class="grupo-campo-selecao">
-                        <label class="rotulo-campo" for="course">Selecione o Curso Desejado</label>
-                        <select class="campo-selecao" id="course" name="course" disabled>
-                            <option disabled="" selected="" value="">Escolha uma opção...</option>
-                        </select>
-                        <div class="icone-selecao-container">
-                            <span class="material-symbols-outlined">arrow_drop_down</span>
+                    <h2 class="titulo-secao" id="titulo-secao-2" data-titulo="Etapa 2: Escolha do Curso">Etapa 2: Escolha do Curso</h2>
+                    <div class="grupo-campo">
+                        <label class="rotulo-campo">Selecione um ou mais cursos</label>
+                        <p style="font-size: 12px; color: var(--on-surface-variant); margin-bottom: 6px;">
+                            Você pode se matricular em quantos cursos quiser. Clique nos cards para selecionar.
+                        </p>
+
+                        <div class="cursos-loading" id="cursos-loading">
+                            <div class="spinner"></div>
+                            Carregando cursos disponíveis...
                         </div>
+                        <div class="cursos-selecao-grid" id="cursos-grid" style="display:none;"></div>
+                        <div class="cursos-erro" id="cursos-erro" style="display:none;">
+                            <span class="material-symbols-outlined" style="vertical-align:middle;font-size:18px;">error</span>
+                            Não foi possível carregar os cursos. Verifique sua conexão.
+                        </div>
+
+                        <!-- Resumo dos cursos selecionados -->
+                        <div class="selecionados-resumo" id="resumo-selecionados">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <span id="texto-resumo">0 curso(s) selecionado(s)</span>
+                        </div>
+                        <span class="msg-erro-campo" id="erro-cursos">Selecione ao menos um curso para continuar.</span>
                     </div>
+
                     <div class="acoes-formulario" id="acoes-secao-2" style="display: none;">
-                        <button class="botao-voltar-etapa" type="button" onclick="voltarEtapa(1)">
+                        <button class="botao-voltar-etapa" type="button" id="btn-voltar-2">
                             Voltar
                         </button>
-                        <button class="botao-finalizar" type="button" onclick="avancarEtapa(3)" style="width: auto;">
+                        <button class="botao-finalizar" type="button" id="btn-continuar-2" style="width: auto;">
                             Continuar
                         </button>
                     </div>
@@ -130,23 +373,25 @@
 
                 <hr class="divisor-secao" />
 
+                <!-- ETAPA 3: Criação de Acesso -->
                 <div class="secao-formulario-inativa" id="secao-3">
-                    <h2 class="titulo-secao">Etapa 3: Criação de Acesso</h2>
+                    <h2 class="titulo-secao" id="titulo-secao-3" data-titulo="Etapa 3: Criação de Acesso">Etapa 3: Criação de Acesso</h2>
                     <div class="grupo-campo">
                         <label class="rotulo-campo" for="birthdate">Data de Nascimento (Sua Senha)</label>
                         <div class="input-wrapper">
                             <input class="campo-entrada-matricula" id="birthdate" name="birthdate"
-                                placeholder="DD/MM/AAAA" type="text" maxlength="10" />
+                                placeholder="DD/MM/AAAA" type="text" maxlength="10" inputmode="numeric" />
                         </div>
                         <p class="texto-ajuda">Sua data de nascimento (DD/MM/AAAA) será usada como senha para acessar o
                             portal.</p>
+                        <span class="msg-erro-campo" id="erro-birthdate">Data de nascimento inválida. Use DD/MM/AAAA.</span>
                     </div>
 
                     <div class="acoes-formulario" id="acoes-secao-3" style="display: none;">
-                        <button class="botao-voltar-etapa" type="button" onclick="voltarEtapa(2)">
+                        <button class="botao-voltar-etapa" type="button" id="btn-voltar-3">
                             Voltar
                         </button>
-                        <button class="botao-finalizar" type="button" onclick="concluirMatricula()">
+                        <button class="botao-finalizar" type="button" id="btn-finalizar">
                             Finalizar Matrícula
                         </button>
                     </div>
@@ -155,74 +400,188 @@
             </form>
         </div>
     </main>
+
     <script src="../services/api.js"></script>
     <script src="../services/cursos.js"></script>
     <script src="../services/auth.js"></script>
     <script src="../services/matriculas.js"></script>
-    <script src="../components/nav.js"></script>
     <script>
+        // ─── Estado ─────────────────────────────────────────────────────────────────
+        const turmasSelecionadas = new Set(); // IDs das turmas selecionadas
+        let todasTurmas = [];                 // cache da lista de turmas da API
+
+        // ─── Toast ──────────────────────────────────────────────────────────────────
+        let toastTimer = null;
+        function mostrarToast(msg, cor = '#e53e3e') {
+            const toast = document.getElementById('toast-erro');
+            toast.textContent = msg;
+            toast.style.background = cor;
+            toast.classList.add('visivel');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('visivel'), 4000);
+        }
+
+        // ─── Máscaras ────────────────────────────────────────────────────────────────
+        document.getElementById('cpf').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 3) v = v.substring(0, 3) + '.' + v.substring(3);
+            if (v.length > 7) v = v.substring(0, 7) + '.' + v.substring(7);
+            if (v.length > 11) v = v.substring(0, 11) + '-' + v.substring(11, 13);
+            e.target.value = v;
+        });
+
+        document.getElementById('whatsapp').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length === 0) { e.target.value = ''; return; }
+            v = '(' + v;
+            if (v.length > 3) v = v.substring(0, 3) + ') ' + v.substring(3);
+            if (v.length > 10) v = v.substring(0, 10) + '-' + v.substring(10, 15);
+            e.target.value = v;
+        });
+
+        document.getElementById('birthdate').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2);
+            if (v.length > 5) v = v.substring(0, 5) + '/' + v.substring(5, 9);
+            e.target.value = v;
+        });
+
+        // Limpa erro de campo ao digitar
+        ['fullName', 'cpf', 'email', 'whatsapp', 'birthdate'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', () => {
+                limparErro(id);
+            });
+        });
+
+        // ─── Validação ───────────────────────────────────────────────────────────────
+        function marcarErro(id, msg) {
+            const campo = document.getElementById(id);
+            const erroEl = document.getElementById('erro-' + id);
+            if (campo) campo.classList.add('campo-invalido');
+            if (erroEl) { erroEl.textContent = msg; erroEl.classList.add('visivel'); }
+        }
+
+        function limparErro(id) {
+            const campo = document.getElementById(id);
+            const erroEl = document.getElementById('erro-' + id);
+            if (campo) campo.classList.remove('campo-invalido');
+            if (erroEl) erroEl.classList.remove('visivel');
+        }
+
+        function validarCPF(cpf) {
+            const nums = cpf.replace(/\D/g, '');
+            if (nums.length !== 11 || /^(\d)\1+$/.test(nums)) return false;
+            let soma = 0;
+            for (let i = 0; i < 9; i++) soma += parseInt(nums[i]) * (10 - i);
+            let r = (soma * 10) % 11;
+            if (r === 10 || r === 11) r = 0;
+            if (r !== parseInt(nums[9])) return false;
+            soma = 0;
+            for (let i = 0; i < 10; i++) soma += parseInt(nums[i]) * (11 - i);
+            r = (soma * 10) % 11;
+            if (r === 10 || r === 11) r = 0;
+            return r === parseInt(nums[10]);
+        }
+
+        function validarEtapa1() {
+            let ok = true;
+            const nome = document.getElementById('fullName').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const whats = document.getElementById('whatsapp').value.trim();
+
+            if (nome.length < 3) { marcarErro('fullName', 'Informe seu nome completo.'); ok = false; }
+            else limparErro('fullName');
+
+            if (!validarCPF(cpf)) { marcarErro('cpf', 'CPF inválido. Verifique os números.'); ok = false; }
+            else limparErro('cpf');
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) { marcarErro('email', 'Informe um e-mail válido.'); ok = false; }
+            else limparErro('email');
+
+            const whatsNums = whats.replace(/\D/g, '');
+            if (whatsNums.length < 10) { marcarErro('whatsapp', 'Informe o número do WhatsApp com DDD.'); ok = false; }
+            else limparErro('whatsapp');
+
+            return ok;
+        }
+
+        function validarEtapa2() {
+            const erroEl = document.getElementById('erro-cursos');
+            if (turmasSelecionadas.size === 0) {
+                erroEl.classList.add('visivel');
+                return false;
+            }
+            erroEl.classList.remove('visivel');
+            return true;
+        }
+
+        function validarEtapa3() {
+            const data = document.getElementById('birthdate').value.trim();
+            const nums = data.replace(/\D/g, '');
+            if (nums.length !== 8) {
+                marcarErro('birthdate', 'Data de nascimento inválida. Use DD/MM/AAAA.');
+                return false;
+            }
+            // Valida dia/mes básico
+            const dia = parseInt(nums.substring(0, 2));
+            const mes = parseInt(nums.substring(2, 4));
+            if (dia < 1 || dia > 31 || mes < 1 || mes > 12) {
+                marcarErro('birthdate', 'Data de nascimento inválida.');
+                return false;
+            }
+            limparErro('birthdate');
+            return true;
+        }
+
+        // ─── Stepper ─────────────────────────────────────────────────────────────────
+        const ICONES_ETAPA = { 1: 'person', 2: 'school', 3: 'lock' };
+
         function avancarEtapa(etapa) {
-            // Atualiza barra de progresso e ícones
             const linhaProgresso = document.getElementById('stepper-linha');
             const passoAnterior = document.getElementById(`stepper-passo-${etapa - 1}`);
             const passoAtual = document.getElementById(`stepper-passo-${etapa}`);
 
-            if (etapa === 2) {
-                linhaProgresso.style.width = '50%';
-            } else if (etapa === 3) {
-                linhaProgresso.style.width = '100%';
-            }
+            // Atualiza barra
+            linhaProgresso.style.width = etapa === 2 ? '50%' : '100%';
 
-            // Atualiza círculo anterior para concluído
-            const circuloAnterior = passoAnterior.querySelector('div');
-            circuloAnterior.className = 'passo-circulo-concluido';
-            const textoAnterior = passoAnterior.querySelector('span');
-            textoAnterior.className = 'passo-texto-ativo';
+            // Passo anterior → concluído
+            passoAnterior.querySelector('div').className = 'passo-circulo-concluido';
+            passoAnterior.querySelector('span').className = 'passo-texto-ativo';
 
-            // Atualiza círculo atual para ativo
-            const circuloAtual = passoAtual.querySelector('div');
-            circuloAtual.className = 'passo-circulo-ativo';
-            const textoAtual = passoAtual.querySelector('span');
-            textoAtual.className = 'passo-texto-ativo';
+            // Passo atual → ativo
+            passoAtual.querySelector('div').className = 'passo-circulo-ativo';
+            passoAtual.querySelector('span').className = 'passo-texto-ativo';
 
-            // Oculta o botão de continuar da etapa anterior
-            const acoesAnteriores = passoAnterior.id === 'stepper-passo-1' ? document.querySelector('#secao-1 .acoes-formulario') : document.getElementById(`acoes-secao-${etapa - 1}`);
-            if (acoesAnteriores) {
-                acoesAnteriores.style.display = 'none';
-            }
-
-            // Torna inativo a seção anterior
+            // Desativa seção anterior
             const secaoAnterior = document.getElementById(`secao-${etapa - 1}`);
             secaoAnterior.className = 'secao-formulario-inativa';
-            // Pega o h2 da secao anterior
-            const tituloAnterior = secaoAnterior.querySelector('h2');
-            tituloAnterior.className = 'titulo-secao';
-            const iconeAnterior = tituloAnterior.querySelector('.material-symbols-outlined');
-            if (iconeAnterior) iconeAnterior.remove();
+            const tituloAnt = secaoAnterior.querySelector('h2');
+            tituloAnt.className = 'titulo-secao';
+            const iconeAnt = tituloAnt.querySelector('.material-symbols-outlined');
+            if (iconeAnt) iconeAnt.remove();
+            secaoAnterior.querySelectorAll('input, select').forEach(el => el.disabled = true);
 
-            const inputsAnteriores = secaoAnterior.querySelectorAll('input, select');
-            inputsAnteriores.forEach(input => input.disabled = true);
+            // Esconde botões da seção anterior (etapa 1 tem id diferente)
+            const acoesAntId = etapa - 1 === 1 ? 'acoes-secao-1' : `acoes-secao-${etapa - 1}`;
+            const acoesAnt = document.getElementById(acoesAntId);
+            if (acoesAnt) acoesAnt.style.display = 'none';
 
-            // Ativa a seção atual
+            // Ativa seção atual
             const secaoAtual = document.getElementById(`secao-${etapa}`);
             secaoAtual.className = 'secao-formulario';
             const tituloAtual = secaoAtual.querySelector('h2');
-            const tituloTexto = tituloAtual.innerText;
+            const tituloTextoFixo = tituloAtual.dataset.titulo || tituloAtual.innerText.trim();
             tituloAtual.className = 'titulo-secao-ativa';
+            tituloAtual.innerHTML = `<span class="material-symbols-outlined icon-sm">${ICONES_ETAPA[etapa]}</span> ${tituloTextoFixo}`;
+            secaoAtual.querySelectorAll('input, select').forEach(el => el.disabled = false);
 
-            // Adiciona o ícone baseado na etapa
-            const icone = etapa === 2 ? 'school' : 'lock';
-            tituloAtual.innerHTML = `<span class="material-symbols-outlined icon-sm">${icone}</span> ${tituloTexto}`;
+            // Mostra botões da seção atual
+            const acoesAtual = document.getElementById(`acoes-secao-${etapa}`);
+            if (acoesAtual) acoesAtual.style.display = 'flex';
 
-            const inputsAtuais = secaoAtual.querySelectorAll('input, select');
-            inputsAtuais.forEach(input => input.disabled = false);
-
-            const acoesAtuais = document.getElementById(`acoes-secao-${etapa}`);
-            if (acoesAtuais) {
-                acoesAtuais.style.display = 'flex';
-            }
-
-            // Foca suavemente na nova etapa
+            // Scroll suave
             secaoAtual.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
@@ -231,172 +590,247 @@
             const passoAtual = document.getElementById(`stepper-passo-${etapaDestino + 1}`);
             const passoDestino = document.getElementById(`stepper-passo-${etapaDestino}`);
 
-            if (etapaDestino === 1) {
-                linhaProgresso.style.width = '0%';
-            } else if (etapaDestino === 2) {
-                linhaProgresso.style.width = '50%';
-            }
+            linhaProgresso.style.width = etapaDestino === 1 ? '0%' : '50%';
 
-            // Atualiza círculo atual para inativo
-            const circuloAtual = passoAtual.querySelector('div');
-            circuloAtual.className = 'passo-circulo-inativo';
-            const textoAtual = passoAtual.querySelector('span');
-            textoAtual.className = 'passo-texto-inativo';
+            // Passo atual → inativo
+            passoAtual.querySelector('div').className = 'passo-circulo-inativo';
+            passoAtual.querySelector('span').className = 'passo-texto-inativo';
 
-            // Atualiza círculo destino para ativo
-            const circuloDestino = passoDestino.querySelector('div');
-            circuloDestino.className = 'passo-circulo-ativo';
-            const textoDestino = passoDestino.querySelector('span');
-            textoDestino.className = 'passo-texto-ativo';
+            // Passo destino → ativo
+            passoDestino.querySelector('div').className = 'passo-circulo-ativo';
+            passoDestino.querySelector('span').className = 'passo-texto-ativo';
 
-            // Oculta o botão de continuar/finalizar da etapa atual
-            const acoesAtuais = document.getElementById(`acoes-secao-${etapaDestino + 1}`);
-            if (acoesAtuais) {
-                acoesAtuais.style.display = 'none';
-            }
+            // Esconde botões da seção atual
+            const acoesAtual = document.getElementById(`acoes-secao-${etapaDestino + 1}`);
+            if (acoesAtual) acoesAtual.style.display = 'none';
 
-            // Torna inativa a seção atual
+            // Desativa seção atual
             const secaoAtual = document.getElementById(`secao-${etapaDestino + 1}`);
             secaoAtual.className = 'secao-formulario-inativa';
             const tituloAtual = secaoAtual.querySelector('h2');
             tituloAtual.className = 'titulo-secao';
             const iconeAtual = tituloAtual.querySelector('.material-symbols-outlined');
             if (iconeAtual) iconeAtual.remove();
+            secaoAtual.querySelectorAll('input, select').forEach(el => el.disabled = true);
 
-            const inputsAtuais = secaoAtual.querySelectorAll('input, select');
-            inputsAtuais.forEach(input => input.disabled = true);
-
-            // Ativa a seção destino
+            // Ativa seção destino
             const secaoDestino = document.getElementById(`secao-${etapaDestino}`);
             secaoDestino.className = 'secao-formulario';
             const tituloDestino = secaoDestino.querySelector('h2');
-            const tituloTexto = tituloDestino.innerText;
             tituloDestino.className = 'titulo-secao-ativa';
+            // Sempre usa o texto fixo do data-titulo para evitar duplicação de ícone
+            const tituloDestinoTexto = tituloDestino.dataset.titulo || tituloDestino.innerText.trim();
+            tituloDestino.innerHTML = `<span class="material-symbols-outlined icon-sm">${ICONES_ETAPA[etapaDestino]}</span> ${tituloDestinoTexto}`;
+            secaoDestino.querySelectorAll('input, select').forEach(el => el.disabled = false);
 
-            const icone = etapaDestino === 1 ? 'person' : 'school';
-            tituloDestino.innerHTML = `<span class="material-symbols-outlined icon-sm">${icone}</span> ${tituloTexto}`;
+            // Mostra botões da seção destino
+            const acoesDestId = etapaDestino === 1 ? 'acoes-secao-1' : `acoes-secao-${etapaDestino}`;
+            const acoesDest = document.getElementById(acoesDestId);
+            if (acoesDest) acoesDest.style.display = 'flex';
 
-            const inputsDestino = secaoDestino.querySelectorAll('input, select');
-            inputsDestino.forEach(input => input.disabled = false);
-
-            const acoesDestino = etapaDestino === 1 ? document.querySelector('#secao-1 .acoes-formulario') : document.getElementById(`acoes-secao-${etapaDestino}`);
-            if (acoesDestino) {
-                acoesDestino.style.display = 'flex';
-            }
-
-            // Foca suavemente na etapa de destino
             secaoDestino.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        // Máscara para Data de Nascimento
-        const dataInput = document.getElementById('birthdate');
-        dataInput.addEventListener('input', function (e) {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length > 2) {
-                valor = valor.substring(0, 2) + '/' + valor.substring(2);
-            }
-            if (valor.length > 5) {
-                valor = valor.substring(0, 5) + '/' + valor.substring(5, 9);
-            }
-            e.target.value = valor;
+        // ─── Botões de navegação ────────────────────────────────────────────────────
+        document.getElementById('btn-continuar-1').addEventListener('click', () => {
+            if (validarEtapa1()) avancarEtapa(2);
         });
 
-        // Máscara para CPF
-        const cpfInput = document.getElementById('cpf');
-        cpfInput.addEventListener('input', function (e) {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length > 3) {
-                valor = valor.substring(0, 3) + '.' + valor.substring(3);
-            }
-            if (valor.length > 7) {
-                valor = valor.substring(0, 7) + '.' + valor.substring(7);
-            }
-            if (valor.length > 11) {
-                valor = valor.substring(0, 11) + '-' + valor.substring(11, 13);
-            }
-            e.target.value = valor;
+        document.getElementById('btn-voltar-2').addEventListener('click', () => voltarEtapa(1));
+
+        document.getElementById('btn-continuar-2').addEventListener('click', () => {
+            if (validarEtapa2()) avancarEtapa(3);
         });
 
-        // Máscara para WhatsApp
-        const whatsInput = document.getElementById('whatsapp');
-        whatsInput.addEventListener('input', function (e) {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length > 0) {
-                valor = '(' + valor;
-            }
-            if (valor.length > 3) {
-                valor = valor.substring(0, 3) + ') ' + valor.substring(3);
-            }
-            if (valor.length > 10) {
-                valor = valor.substring(0, 10) + '-' + valor.substring(10, 14);
-            }
-            e.target.value = valor;
-        });
+        document.getElementById('btn-voltar-3').addEventListener('click', () => voltarEtapa(2));
 
-        // Carrega as turmas disponíveis no select (cada turma tem o curso associado)
+        // ─── Carregamento e renderização dos cursos ─────────────────────────────────
         async function carregarCursos() {
-            const select = document.getElementById('course');
+            const grid = document.getElementById('cursos-grid');
+            const loading = document.getElementById('cursos-loading');
+            const erroEl = document.getElementById('cursos-erro');
+
+            loading.style.display = 'flex';
+            grid.style.display = 'none';
+            erroEl.style.display = 'none';
+
             try {
                 const turmas = await listarTurmas();
-                select.innerHTML = '<option value="">Selecione o curso</option>';
+                todasTurmas = turmas;
+
+                loading.style.display = 'none';
+
+                if (!turmas || turmas.length === 0) {
+                    erroEl.textContent = 'Nenhum curso disponível no momento.';
+                    erroEl.style.display = 'block';
+                    return;
+                }
+
+                grid.innerHTML = '';
                 turmas.forEach(turma => {
-                    const option = document.createElement('option');
-                    option.value = turma.id; // ID da turma (necessário para matrícula)
-                    option.textContent = turma.cursos ? turma.cursos.nome : `Turma ${turma.id}`;
-                    select.appendChild(option);
+                    const nomeCurso = turma.cursos ? turma.cursos.nome : `Turma ${turma.id}`;
+                    const turno = turma.turno || 'N/A';
+                    const prof = turma.professor ? turma.professor.nome : 'Professor não definido';
+                    const vagas = turma.lotacaoMaxima - turma.vagasOcupadas;
+
+                    const card = document.createElement('div');
+                    card.className = 'curso-card-opcao';
+                    card.setAttribute('role', 'checkbox');
+                    card.setAttribute('aria-checked', 'false');
+                    card.setAttribute('tabindex', '0');
+                    card.dataset.turmaId = turma.id;
+
+                    if (vagas <= 0) {
+                        card.classList.add('disabled');
+                        card.setAttribute('aria-disabled', 'true');
+                        card.setAttribute('aria-checked', 'false');
+                    }
+
+                    card.innerHTML = `
+                        <div class="curso-card-checkbox">
+                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check</span>
+                        </div>
+                        <div class="curso-card-info">
+                            <div class="curso-card-nome">${nomeCurso}</div>
+                            <div class="curso-card-meta">
+                                <span class="curso-card-tag">
+                                    <span class="material-symbols-outlined">wb_sunny</span>${turno}
+                                </span>
+                                <span class="curso-card-tag">
+                                    <span class="material-symbols-outlined">person</span>${prof.split(' ')[0]}
+                                </span>
+                                <span class="curso-card-tag" style="${vagas <= 0 ? 'color:#e53e3e;background:rgba(229,62,62,0.08)' : ''}">
+                                    <span class="material-symbols-outlined">group</span>${vagas <= 0 ? 'Sem vagas' : vagas + ' vaga(s)'}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+
+                    if (vagas > 0) {
+                        card.addEventListener('click', () => toggleCurso(card, turma.id));
+                        card.addEventListener('keydown', e => {
+                            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCurso(card, turma.id); }
+                        });
+                    }
+
+                    grid.appendChild(card);
                 });
+
+                grid.style.display = 'grid';
             } catch (erro) {
-                select.innerHTML = '<option disabled selected>Erro ao carregar cursos</option>';
+                console.error('Erro ao carregar cursos:', erro);
+                loading.style.display = 'none';
+                erroEl.style.display = 'block';
             }
         }
+
+        function toggleCurso(card, turmaId) {
+            if (turmasSelecionadas.has(turmaId)) {
+                turmasSelecionadas.delete(turmaId);
+                card.classList.remove('selecionado');
+                card.setAttribute('aria-checked', 'false');
+            } else {
+                turmasSelecionadas.add(turmaId);
+                card.classList.add('selecionado');
+                card.setAttribute('aria-checked', 'true');
+            }
+            atualizarResumo();
+            // Limpa erro ao selecionar
+            document.getElementById('erro-cursos').classList.remove('visivel');
+        }
+
+        function atualizarResumo() {
+            const qtd = turmasSelecionadas.size;
+            const resumo = document.getElementById('resumo-selecionados');
+            const texto = document.getElementById('texto-resumo');
+
+            if (qtd > 0) {
+                const nomes = [...turmasSelecionadas].map(id => {
+                    const t = todasTurmas.find(t => t.id === id);
+                    return t && t.cursos ? t.cursos.nome : `Turma ${id}`;
+                });
+                texto.textContent = `${qtd} curso(s) selecionado(s): ${nomes.join(', ')}`;
+                resumo.classList.add('visivel');
+            } else {
+                resumo.classList.remove('visivel');
+            }
+        }
+
+        // Carrega os cursos assim que a página carrega
         carregarCursos();
 
-        async function concluirMatricula() {
+        // ─── Finalizar Matrícula ────────────────────────────────────────────────────
+        document.getElementById('btn-finalizar').addEventListener('click', async function () {
+            if (!validarEtapa3()) return;
+
             const nome = document.getElementById('fullName').value.trim();
             const cpf = document.getElementById('cpf').value.trim();
             const email = document.getElementById('email').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.trim();
-            const idTurma = document.getElementById('course').value;
-            const dataNascimento = document.getElementById('birthdate').value.replace(/\D/g, ''); // "DDMMYYYY"
+            const dataNascimento = document.getElementById('birthdate').value.replace(/\D/g, ''); // DDMMYYYY
 
-            // Validação básica
-            if (!nome || !cpf || !email || !whatsapp || !dataNascimento) {
-                alert('Por favor, preencha todos os campos antes de finalizar.');
-                return;
-            }
-            if (dataNascimento.length !== 8) {
-                alert('Data de nascimento inválida. Use o formato DD/MM/AAAA.');
-                return;
-            }
+            // Estado de carregamento
+            const btn = this;
+            btn.disabled = true;
+            document.getElementById('btn-voltar-3').disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Aguarde...';
 
             try {
-                // Passo 1: cria o aluno (dataNascimento vira senha)
+                // 1. Cria o aluno
                 const aluno = await cadastrar(nome, whatsapp, cpf, email, dataNascimento);
 
-                // Passo 2: cria a matrícula se uma turma foi selecionada
-                if (idTurma && aluno && aluno.id) {
-                    await realizarMatricula({ idAluno: aluno.id, idTurma: parseInt(idTurma) });
+                if (!aluno || !aluno.id) {
+                    throw new Error('Resposta inválida do servidor ao criar aluno.');
                 }
 
-                // Exibe o feedback visual de sucesso
-                const overlay = document.querySelector('.overlay-sucesso');
-                overlay.classList.remove('escondido');
+                // 2. Cria uma matrícula para cada turma selecionada (em paralelo)
+                const idsArray = [...turmasSelecionadas];
+
+                if (idsArray.length > 0) {
+                    await Promise.all(
+                        idsArray.map(idTurma =>
+                            realizarMatricula({ idAluno: aluno.id, idTurma: parseInt(idTurma) })
+                        )
+                    );
+                }
+
+                // 3. Sucesso visual
+                const nomesMatriculados = idsArray.map(id => {
+                    const t = todasTurmas.find(t => t.id === id);
+                    return t && t.cursos ? t.cursos.nome : `Turma ${id}`;
+                });
+                const textoSucesso = idsArray.length > 0
+                    ? `Você foi matriculado em: ${nomesMatriculados.join(', ')}. Use seu CPF para entrar.`
+                    : 'Seu cadastro foi realizado. Use seu CPF e data de nascimento para entrar no portal.';
+
+                document.getElementById('texto-sucesso-cursos').textContent = textoSucesso;
+                document.getElementById('overlay-sucesso').classList.remove('escondido');
+
             } catch (erro) {
-                // Trata erros comuns do back-end
-                const msg = erro && erro.message ? erro.message.toLowerCase() : '';
-                if (msg.includes('cpf') || msg.includes('duplicate') || msg.includes('unique')) {
-                    alert('CPF já cadastrado. Acesse o portal com seu CPF e data de nascimento.');
-                } else {
-                    alert('Erro ao realizar matrícula. Verifique seus dados e tente novamente.');
-                }
-            }
-        }
+                // Reabilita botões
+                btn.disabled = false;
+                document.getElementById('btn-voltar-3').disabled = false;
+                btn.innerHTML = 'Finalizar Matrícula';
 
-        // Botão "Acessar Portal" redireciona para o login
-        document.querySelector('.botao-acessar').addEventListener('click', () => {
+                const msg = erro && erro.message ? erro.message.toLowerCase() : '';
+                if (msg.includes('cpf') || msg.includes('duplicate') || msg.includes('unique') || msg.includes('já cadastrado')) {
+                    mostrarToast('CPF já cadastrado. Acesse o portal com seu CPF e data de nascimento.');
+                } else if (msg.includes('vagas') || msg.includes('lotação') || msg.includes('lotado')) {
+                    mostrarToast('Uma ou mais turmas estão sem vagas. Tente selecionar outros cursos.');
+                } else {
+                    mostrarToast('Erro ao realizar matrícula. Verifique seus dados e tente novamente.');
+                }
+
+                console.error('Erro ao finalizar matrícula:', erro);
+            }
+        });
+
+        // Botão "Acessar Portal"
+        document.getElementById('btn-acessar-portal').addEventListener('click', () => {
             window.location.href = 'login.html';
         });
     </script>
+
 </body>
 
-</html>
+</html>
