@@ -276,6 +276,50 @@ INSERT INTO `turma` VALUES (4,1,1,'Matutino',30,1),(5,2,2,'Vespertino',25,1),(6,
 /*!40000 ALTER TABLE `turma` ENABLE KEYS */;
 
 --
+-- Table structure for table `admin`
+--
+
+DROP TABLE IF EXISTS `admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `admin` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `NOME` varchar(150) NOT NULL,
+  `EMAIL` varchar(255) NOT NULL,
+  `SENHA` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `EMAIL` (`EMAIL`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin`
+--
+-- Senha inicial é "admin123" criptografada com BCrypt
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (1,'Secretaria CEBE','admin@cebe.com','$2a$10$wN1I2FzT9bYfC.sD0n2D/O1pY7V6n3R3X4tL0QhG9eQ4mR9H0yWqG');
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+
+--
+-- Table structure for table `mensagem_atendimento`
+--
+
+DROP TABLE IF EXISTS `mensagem_atendimento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mensagem_atendimento` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `ID_ATENDIMENTO` int NOT NULL,
+  `REMETENTE_TIPO` varchar(20) NOT NULL,
+  `MENSAGEM` varchar(1000) NOT NULL,
+  `DATA_HORA` datetime NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_ATENDIMENTO_MENSAGEM` (`ID_ATENDIMENTO`),
+  CONSTRAINT `FK_ATENDIMENTO_MENSAGEM` FOREIGN KEY (`ID_ATENDIMENTO`) REFERENCES `atendimento` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping routines for database 'cebe'
 --
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;

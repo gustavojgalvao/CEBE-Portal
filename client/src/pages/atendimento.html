@@ -266,6 +266,9 @@
             });
         }
 
+        let currentAtendimentoId = null;
+        let chatPollInterval = null;
+
         function selectConversation(item, chamado) {
             document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
             if(item) item.classList.add('active');
@@ -275,11 +278,17 @@
             if (isMobile()) convPanel.classList.add('mobile-hidden');
             
             if(chamado) {
+                currentAtendimentoId = chamado.id;
                 document.getElementById('chat-system-message').textContent = 'Chamado #' + chamado.id + ' criado em ' + new Date(chamado.dataHora).toLocaleString();
-                document.getElementById('chat-message-text').textContent = chamado.mensagem;
+                // Clear previous messages except system message
+                chatMessages.innerHTML = '<div class="system-message" id="chat-system-message">' + document.getElementById('chat-system-message').textContent + '</div>';
+                
+                carregarMensagensDoChamado(chamado.id);
+                
+                // Clear existing interval
+                if (chatPollInterval) clearInterval(chatPollInterval);
+                chatPollInterval = setInterval(() => carregarMensagensDoChamado(chamado.id), 3000);
             }
-
-            scrollToBottom();
         }
 
         document.getElementById('chat-back-btn').addEventListener('click', () => {
@@ -287,6 +296,8 @@
             chatEmpty.style.display = 'flex';
             chatWindow.style.display = 'none';
             document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
+            if (chatPollInterval) clearInterval(chatPollInterval);
+            currentAtendimentoId = null;
         });
 
         // Inicialização
@@ -297,57 +308,81 @@
             chatWindow.style.display = 'none';
         }
 
-        // ── Envio de mensagem ──────────────────────────────────────────────────
-        const RESPOSTAS = [
-            'Entendido! Vou verificar e retorno em breve.',
-            'Obrigada pelo contato, João! Estamos analisando.',
-            'Certo! Assim que tivermos a resposta, avisamos aqui.',
-            'Recebido! Nosso time está verificando para você.',
-        ];
+        // ── Carregamento de mensagens via API ─────────────────────────────────
+        let lastMessagesCount = 0;
 
-        function now() {
-            const d = new Date();
-            return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-        }
+        async function carregarMensagensDoChamado(id) {
+            if (!id) return;
+            try {
+                const mensagens = await apiFetch(`/atendimentos/${id}/mensagens`);
+                if (mensagens.length === lastMessagesCount && mensagens.length > 0) return; // No new messages
+                
+                lastMessagesCount = mensagens.length;
+                
+                const sysMsgText = document.getElementById('chat-system-message').textContent;
+                let html = '<div class="system-message" id="chat-system-message">' + sysMsgText + '</div>';
+                
+                // Mensagem original de abertura
+                const chamado = chamadosGlobais.find(c => c.id === id);
+                if (chamado) {
+                    const dataAbertura = new Date(chamado.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    html += `
+                        <div class="message-row outgoing">
+                            <div class="message-bubble-wrapper">
+                                <div class="message-bubble">${chamado.mensagem}</div>
+                                <div class="message-meta"><span>${dataAbertura}</span></div>
+                            </div>
+                        </div>
+                    `;
+                }
 
-        function addMessage(text, type) {
-            const row = document.createElement('div');
-            row.className = `message-row ${type}`;
+                mensagens.forEach(m => {
+                    const data = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const isIncoming = m.remetenteTipo === 'ADMIN';
+                    const cssType = isIncoming ? 'incoming' : 'outgoing';
+                    
+                    html += `
+                        <div class="message-row ${cssType}">
+                            ${isIncoming ? '<div class="message-avatar green" aria-hidden="true">SE</div>' : '<div class="message-avatar hidden-avatar" aria-hidden="true"></div>'}
+                            <div class="message-bubble-wrapper">
+                                ${isIncoming ? '<span class="message-sender-name">Secretaria</span>' : ''}
+                                <div class="message-bubble">${m.mensagem}</div>
+                                <div class="message-meta">
+                                    <span>${data}</span>
+                                    ${!isIncoming ? '<span class="material-symbols-outlined message-status-icon">done</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
 
-            const isIncoming = type === 'incoming';
-            row.innerHTML = `
-            <div class="message-avatar${isIncoming ? ' green' : ' hidden-avatar'}" aria-hidden="true">
-                ${isIncoming ? 'SE' : ''}
-            </div>
-            <div class="message-bubble-wrapper">
-                <div class="message-bubble">${text}</div>
-                <div class="message-meta">
-                    <span>${now()}</span>
-                    ${!isIncoming ? '<span class="material-symbols-outlined message-status-icon">done</span>' : ''}
-                </div>
-            </div>`;
-
-            chatMessages.insertBefore(row, typingIndicator);
-            scrollToBottom();
-            return row;
-        }
-
-        function sendMessage() {
-            const text = chatInput.value.trim();
-            if (!text) return;
-
-            addMessage(text, 'outgoing');
-            chatInput.value = '';
-            chatInput.style.height = 'auto';
-
-            setTimeout(() => {
-                typingIndicator.style.display = 'flex';
+                chatMessages.innerHTML = html;
                 scrollToBottom();
-                setTimeout(() => {
-                    typingIndicator.style.display = 'none';
-                    addMessage(RESPOSTAS[Math.floor(Math.random() * RESPOSTAS.length)], 'incoming');
-                }, 2500);
-            }, 800);
+
+            } catch(e) {
+                console.error("Erro ao carregar mensagens:", e);
+            }
+        }
+
+        async function sendMessage() {
+            if (!currentAtendimentoId) return;
+            
+            const input = document.getElementById('chat-input');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            input.value = '';
+            input.style.height = 'auto';
+
+            try {
+                await apiFetch(`/atendimentos/${currentAtendimentoId}/mensagens`, {
+                    method: 'POST',
+                    body: JSON.stringify({ texto })
+                });
+                carregarMensagensDoChamado(currentAtendimentoId);
+            } catch(e) {
+                alert('Erro ao enviar mensagem: ' + e.message);
+            }
         }
 
         document.getElementById('chat-send-btn').addEventListener('click', sendMessage);

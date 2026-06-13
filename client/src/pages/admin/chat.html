@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEBE Admin - Chat</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--background-light);
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .admin-sidebar {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .admin-sidebar h2 {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .admin-nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .admin-nav-item:hover:not(.active) {
+            background: var(--background-main);
+        }
+
+        .admin-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-topbar {
+            height: 70px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--surface);
+            margin: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--background-main);
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.125rem;
+            color: var(--text-main);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: #e5ddd5; /* WhatsApp-like background */
+        }
+
+        .msg-bubble {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            position: relative;
+            line-height: 1.4;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .msg-aluno {
+            background: #ffffff;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        .msg-admin {
+            background: #dcf8c6;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+
+        .msg-info {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            background: var(--surface);
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .chat-input-area input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-send {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-send:hover {
+            background: var(--primary-dark);
+        }
+
+        .status-select {
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="admin-sidebar">
+        <h2><span class="material-symbols-outlined">admin_panel_settings</span> CEBE Admin</h2>
+        <a href="dashboard.html" class="admin-nav-item active">
+            <span class="material-symbols-outlined">forum</span> Atendimentos
+        </a>
+        <div style="flex:1"></div>
+        <a href="#" onclick="logoutAdmin()" class="admin-nav-item" style="color: var(--danger);">
+            <span class="material-symbols-outlined">logout</span> Sair
+        </a>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-topbar">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <a href="dashboard.html" class="btn btn-outline" style="padding: 0.5rem; border: none;">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a>
+                <h1 style="font-size: 1.25rem; font-weight: 600;">Detalhes do Chamado</h1>
+            </div>
+            <div id="adminName" style="font-weight: 500;">Secretaria</div>
+        </header>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <div>
+                    <h3 id="chatTitle">Carregando...</h3>
+                    <p id="chatSubtitle" style="font-size: 0.875rem; color: var(--text-light); margin: 0;"></p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <label style="font-size: 0.875rem; font-weight: 500;">Status:</label>
+                    <select id="statusSelect" class="status-select" onchange="atualizarStatus(this.value)">
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Finalizado">Finalizado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Mensagens aparecerão aqui -->
+            </div>
+
+            <form class="chat-input-area" id="chatForm">
+                <input type="text" id="chatInput" placeholder="Digite sua resposta..." required autocomplete="off">
+                <button type="submit" class="btn-send">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="../../src/services/api.js"></script>
+    <script>
+        if (localStorage.getItem('cebe_role') !== 'ADMIN') {
+            window.location.href = 'login.html';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const atendimentoId = urlParams.get('id');
+
+        if (!atendimentoId) {
+            alert('ID do chamado não fornecido');
+            window.location.href = 'dashboard.html';
+        }
+
+        let firstLoad = true;
+        let originalAtendimento = null;
+
+        async function carregarCabecalho() {
+            try {
+                // To get student info, we might need a specific endpoint, or we get the full list and filter.
+                // For simplicity, we fetch all and find ours.
+                const todos = await apiFetch('/admin/atendimentos');
+                originalAtendimento = todos.find(a => a.id == atendimentoId);
+                
+                if (originalAtendimento) {
+                    document.getElementById('chatTitle').textContent = `Chamado #${originalAtendimento.id} — ${originalAtendimento.aluno.nome}`;
+                    document.getElementById('statusSelect').value = originalAtendimento.statusAtendimento;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function carregarMensagens() {
+            try {
+                const mensagens = await apiFetch(`/admin/atendimentos/${atendimentoId}/mensagens`);
+                const container = document.getElementById('chatMessages');
+                
+                let html = '';
+                
+                // Mensagem original que abriu o chamado
+                if (originalAtendimento) {
+                    const dataOriginal = new Date(originalAtendimento.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    html += `
+                        <div class="msg-bubble msg-aluno">
+                            <div>${originalAtendimento.mensagem}</div>
+                            <span class="msg-info">${dataOriginal}</span>
+                        </div>
+                    `;
+                }
+
+                mensagens.forEach(m => {
+                    const data = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const isAdmin = m.remetenteTipo === 'ADMIN';
+                    const cssClass = isAdmin ? 'msg-admin' : 'msg-aluno';
+                    
+                    html += `
+                        <div class="msg-bubble ${cssClass}">
+                            <div>${m.mensagem}</div>
+                            <span class="msg-info">${data}</span>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+                if (firstLoad) {
+                    container.scrollTop = container.scrollHeight;
+                    firstLoad = false;
+                }
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function atualizarStatus(novoStatus) {
+            try {
+                await apiFetch(`/admin/atendimentos/${atendimentoId}/status`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: novoStatus })
+                });
+            } catch (err) {
+                alert('Erro ao atualizar status: ' + err.message);
+            }
+        }
+
+        document.getElementById('chatForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            input.value = '';
+            
+            try {
+                await apiFetch(`/admin/atendimentos/${atendimentoId}/mensagens`, {
+                    method: 'POST',
+                    body: JSON.stringify({ texto: texto })
+                });
+                carregarMensagens();
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+                
+                // Se estava pendente, o backend muda para "Em andamento". Atualizamos o select:
+                if (document.getElementById('statusSelect').value === 'Pendente') {
+                    document.getElementById('statusSelect').value = 'Em andamento';
+                }
+            } catch (err) {
+                alert('Erro ao enviar mensagem: ' + err.message);
+            }
+        });
+
+        function logoutAdmin() {
+            localStorage.removeItem('cebe_token');
+            localStorage.removeItem('cebe_role');
+            window.location.href = 'login.html';
+        }
+
+        // Inicialização
+        carregarCabecalho().then(carregarMensagens);
+        
+        // Polling a cada 3 segundos para novas mensagens
+        setInterval(carregarMensagens, 3000);
+
+    </script>
+</body>
+</html>

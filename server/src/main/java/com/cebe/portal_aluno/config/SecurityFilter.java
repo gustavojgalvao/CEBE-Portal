@@ -1,5 +1,6 @@
 package com.cebe.portal_aluno.config;
 
+import com.cebe.portal_aluno.repository.AdminRepository;
 import com.cebe.portal_aluno.repository.AlunoRepository;
 import com.cebe.portal_aluno.service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -24,6 +25,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private AlunoRepository repository;
 
+    @Autowired
+    private AdminRepository adminRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -31,7 +35,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             String email = tokenService.validateToken(token);
             if (!email.isEmpty()) {
-                UserDetails user = repository.findByEmail(email).orElse(null);
+                String role = tokenService.getRoleFromToken(token);
+                UserDetails user = null;
+
+                if ("ROLE_ADMIN".equals(role)) {
+                    user = adminRepository.findByEmail(email).orElse(null);
+                } else {
+                    user = repository.findByEmail(email).orElse(null);
+                }
+
                 if (user != null) {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

@@ -26,15 +26,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // ATENÇÃO: Permitindo todos os endpoints temporariamente para facilitar o desenvolvimento local.
-                        // Quando quiser ativar a autenticação real nas rotas protegidas, mude para o bloco comentado abaixo:
-                        /*
+                        // Proteger endpoints de administração
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // Rotas de login
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/alunos").permitAll()
-                        // Permitir rotas públicas do Swagger UI e documentação OpenAPI:
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated()
-                        */
+                        .requestMatchers(HttpMethod.POST, "/auth/admin/login").permitAll()
+                        // ATENÇÃO: Restante público para desenvolvimento local.
+                        // Quando quiser ativar a autenticação real nas rotas protegidas, mude para:
+                        // .anyRequest().authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

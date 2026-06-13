@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEBE - Login Secretaria</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--background-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .admin-login-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            border-top: 4px solid var(--primary-dark);
+        }
+        .admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .admin-header h1 {
+            color: var(--text-main);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .admin-header p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .error-message {
+            color: var(--danger);
+            background: #ffebee;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-login-card">
+        <div class="admin-header">
+            <h1>Secretaria CEBE</h1>
+            <p>Acesso restrito para administradores</p>
+        </div>
+
+        <div id="errorBox" class="error-message"></div>
+
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label class="form-label" for="email">E-mail Corporativo</label>
+                <input type="email" id="email" class="form-input" placeholder="admin@cebe.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="senha">Senha</label>
+                <input type="password" id="senha" class="form-input" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                Entrar no Painel
+            </button>
+            
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="../login.html" style="color: var(--text-light); text-decoration: none; font-size: 0.875rem;">
+                    Voltar para o portal do aluno
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../../src/services/api.js"></script>
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const errorBox = document.getElementById('errorBox');
+
+            try {
+                const response = await fetch('http://localhost:8080/auth/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(text || 'Credenciais inválidas');
+                }
+
+                const data = await response.json();
+                // Salvar token e ir para o dashboard
+                localStorage.setItem('cebe_token', data.token);
+                localStorage.setItem('cebe_role', 'ADMIN');
+                window.location.href = 'dashboard.html';
+                
+            } catch (err) {
+                errorBox.textContent = err.message;
+                errorBox.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

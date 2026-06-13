@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEBE Admin - Atendimentos</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--background-light);
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .admin-sidebar {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .admin-sidebar h2 {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .admin-nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .admin-nav-item:hover:not(.active) {
+            background: var(--background-main);
+        }
+
+        .admin-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-topbar {
+            height: 70px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .admin-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Tabela de chamados */
+        .tickets-table-container {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .tickets-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tickets-table th, .tickets-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .tickets-table th {
+            background: var(--background-main);
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .tickets-table tr:hover {
+            background: var(--background-main);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-badge.Pendente { background: #fff3e0; color: #e65100; }
+        .status-badge.Em.andamento { background: #e3f2fd; color: #1565c0; }
+        .status-badge.Finalizado { background: #e8f5e9; color: #2e7d32; }
+    </style>
+</head>
+<body>
+
+    <aside class="admin-sidebar">
+        <h2><span class="material-symbols-outlined">admin_panel_settings</span> CEBE Admin</h2>
+        <a href="dashboard.html" class="admin-nav-item active">
+            <span class="material-symbols-outlined">forum</span> Atendimentos
+        </a>
+        <div style="flex:1"></div>
+        <a href="#" onclick="logoutAdmin()" class="admin-nav-item" style="color: var(--danger);">
+            <span class="material-symbols-outlined">logout</span> Sair
+        </a>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-topbar">
+            <h1 style="font-size: 1.25rem; font-weight: 600;">Central de Atendimento</h1>
+            <div id="adminName" style="font-weight: 500;">Secretaria</div>
+        </header>
+
+        <div class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="color: var(--text-light);">Todos os chamados abertos pelos alunos.</p>
+                <button class="btn btn-outline" onclick="carregarChamados()">
+                    <span class="material-symbols-outlined">refresh</span> Atualizar
+                </button>
+            </div>
+
+            <div class="tickets-table-container">
+                <table class="tickets-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Aluno</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketsTbody">
+                        <tr><td colspan="5" style="text-align: center;">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../src/services/api.js"></script>
+    <script>
+        // Check role
+        if (localStorage.getItem('cebe_role') !== 'ADMIN') {
+            window.location.href = 'login.html';
+        }
+
+        async function carregarChamados() {
+            const tbody = document.getElementById('ticketsTbody');
+            try {
+                // apiFetch is defined in api.js and uses cebe_token
+                const atendimentos = await apiFetch('/admin/atendimentos');
+                
+                if (atendimentos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-light);">Nenhum chamado encontrado.</td></tr>';
+                    return;
+                }
+
+                // Sort by ID DESC (newest first)
+                atendimentos.sort((a, b) => b.id - a.id);
+
+                tbody.innerHTML = atendimentos.map(a => {
+                    const data = new Date(a.dataHora).toLocaleString('pt-BR');
+                    // O status tem espaço: "Em andamento"
+                    const badgeClass = a.statusAtendimento.replace(' ', '.');
+                    
+                    return `
+                        <tr>
+                            <td>#${a.id}</td>
+                            <td style="font-weight: 500;">${a.aluno?.nome || 'Desconhecido'}</td>
+                            <td><span class="status-badge ${badgeClass}">${a.statusAtendimento}</span></td>
+                            <td style="color: var(--text-light); font-size: 0.9rem;">${data}</td>
+                            <td>
+                                <a href="chat.html?id=${a.id}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                    Responder
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Erro ao carregar chamados: ${err.message}</td></tr>`;
+                if(err.message.includes('403') || err.message.includes('401')) {
+                    logoutAdmin();
+                }
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('cebe_token');
+            localStorage.removeItem('cebe_role');
+            window.location.href = 'login.html';
+        }
+
+        // Load initially
+        carregarChamados();
+    </script>
+</body>
+</html>
