@@ -5,8 +5,11 @@ import com.cebe.portal_aluno.entity.MensagemAtendimento;
 import com.cebe.portal_aluno.entity.enums.StatusAtendimento;
 import com.cebe.portal_aluno.repository.AtendimentoRepository;
 import com.cebe.portal_aluno.repository.MensagemAtendimentoRepository;
+import com.cebe.portal_aluno.service.SseService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,10 +21,12 @@ public class AdminAtendimentoController {
 
     private final AtendimentoRepository atendimentoRepository;
     private final MensagemAtendimentoRepository mensagemRepository;
+    private final SseService sseService;
 
-    public AdminAtendimentoController(AtendimentoRepository atendimentoRepository, MensagemAtendimentoRepository mensagemRepository) {
+    public AdminAtendimentoController(AtendimentoRepository atendimentoRepository, MensagemAtendimentoRepository mensagemRepository, SseService sseService) {
         this.atendimentoRepository = atendimentoRepository;
         this.mensagemRepository = mensagemRepository;
+        this.sseService = sseService;
     }
 
     @GetMapping
@@ -32,6 +37,12 @@ public class AdminAtendimentoController {
     @GetMapping("/{id}/mensagens")
     public ResponseEntity<List<MensagemAtendimento>> listarMensagens(@PathVariable Integer id) {
         return ResponseEntity.ok(mensagemRepository.findByAtendimentoIdOrderByDataHoraAsc(id));
+    }
+
+    @GetMapping(value = "/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamMensagens(@PathVariable Integer id) {
+        // Admin also subscribes to the same Atendimento channel
+        return sseService.subscribe(id);
     }
 
     @PostMapping("/{id}/mensagens")
@@ -55,7 +66,10 @@ public class AdminAtendimentoController {
                 .dataHora(LocalDateTime.now())
                 .build();
                 
-        return ResponseEntity.ok(mensagemRepository.save(msg));
+        MensagemAtendimento savedMsg = mensagemRepository.save(msg);
+        sseService.notifySubscribers(id, savedMsg);
+        
+        return ResponseEntity.ok(savedMsg);
     }
     
     @PutMapping("/{id}/status")

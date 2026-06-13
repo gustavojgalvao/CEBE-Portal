@@ -5,9 +5,12 @@ import com.cebe.portal_aluno.entity.Atendimento;
 import com.cebe.portal_aluno.entity.MensagemAtendimento;
 import com.cebe.portal_aluno.repository.MensagemAtendimentoRepository;
 import com.cebe.portal_aluno.service.AtendimentoService;
+import com.cebe.portal_aluno.service.SseService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,10 +24,12 @@ public class AtendimentoController {
 
     private final AtendimentoService atendimentoService;
     private final MensagemAtendimentoRepository mensagemRepository;
+    private final SseService sseService;
 
-    public AtendimentoController(AtendimentoService atendimentoService, MensagemAtendimentoRepository mensagemRepository) {
+    public AtendimentoController(AtendimentoService atendimentoService, MensagemAtendimentoRepository mensagemRepository, SseService sseService) {
         this.atendimentoService = atendimentoService;
         this.mensagemRepository = mensagemRepository;
+        this.sseService = sseService;
     }
 
     @GetMapping
@@ -53,6 +58,22 @@ public class AtendimentoController {
 
         Atendimento atendimento = atendimentoService.abrirChamado(aluno, mensagem, statusStr);
         return ResponseEntity.ok(atendimento);
+    }
+
+    @GetMapping(value = "/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamMensagens(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal Aluno aluno) {
+        
+        Atendimento atendimento = atendimentoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
+                
+        // Verifica se o chamado pertence ao aluno logado
+        if (!atendimento.getAluno().getId().equals(aluno.getId())) {
+            throw new RuntimeException("Acesso negado");
+        }
+        
+        return sseService.subscribe(id);
     }
 
     @GetMapping("/{id}/mensagens")
@@ -97,7 +118,10 @@ public class AtendimentoController {
                 .dataHora(LocalDateTime.now())
                 .build();
                 
-        return ResponseEntity.ok(mensagemRepository.save(msg));
+        MensagemAtendimento savedMsg = mensagemRepository.save(msg);
+        sseService.notifySubscribers(id, savedMsg);
+        
+        return ResponseEntity.ok(savedMsg);
     }
 
     @PutMapping("/{id}")
