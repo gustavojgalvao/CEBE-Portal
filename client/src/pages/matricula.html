@@ -764,7 +764,8 @@
             if (!validarEtapa3()) return;
 
             const nome = document.getElementById('fullName').value.trim();
-            const cpf = document.getElementById('cpf').value.trim();
+            const cpfRaw = document.getElementById('cpf').value.trim();
+            const cpfLimpo = cpfRaw.replace(/\D/g, '');
             const email = document.getElementById('email').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.trim();
             const dataNascimento = document.getElementById('birthdate').value.replace(/\D/g, ''); // DDMMYYYY
@@ -777,7 +778,7 @@
 
             try {
                 // 1. Cria o aluno
-                const aluno = await cadastrar(nome, whatsapp, cpf, email, dataNascimento);
+                const aluno = await cadastrar(nome, whatsapp, cpfLimpo, email, dataNascimento);
 
                 if (!aluno || !aluno.id) {
                     throw new Error('Resposta inválida do servidor ao criar aluno.');

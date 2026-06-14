@@ -16,6 +16,10 @@
 <body class="login-body">
     <main class="login-container">
         <div class="login-header">
+            <a href="/client/index.html" style="display: flex; align-items: center; gap: 4px; color: #64748b; text-decoration: none; font-size: 0.875rem; position: absolute; top: 1.5rem; left: 1.5rem; transition: color 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#64748b'">
+                <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+                Voltar
+            </a>
             <img alt="Centro Educacional Boa Esperança Logo" class="login-logo"
                 data-alt="Logotipo oficial do Centro Educacional Boa Esperança (CEBE) com as cores verde e branco."
                 src="/client/public/logo.png" />
@@ -58,6 +62,9 @@
                 Ainda não é aluno?
                 <a class="signup-link" href="/client/src/pages/matricula.html">Matricule-se aqui</a>
             </p>
+            <p class="footer-text" style="margin-top: 12px; font-size: 0.85rem;">
+                <a class="signup-link" href="/client/src/pages/admin/login.html" style="color: #a0aec0;">Acesso Administrativo</a>
+            </p>
         </div>
     </main>
 
@@ -76,9 +83,12 @@
             const [ano, mes, dia] = dataRaw.split('-');
             const dataNascimento = dia + mes + ano; // ex: "01011990"
 
+            // Limpa formatação do CPF (remove pontos e traços)
+            const cpfLimpo = document.getElementById('cpf').value.replace(/\D/g, '');
+
             try {
                 await login(
-                    document.getElementById('cpf').value,
+                    cpfLimpo,
                     dataNascimento
                 );
                 window.location.href = 'dashboard.html';
