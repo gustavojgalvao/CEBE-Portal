@@ -19,7 +19,6 @@
 </head>
 
 <body class="dashboard-body">
-
     <div class="dashboard-layout">
         <!-- sidebar + topbar injetados por nav.js -->
         <div class="main-wrapper">
@@ -269,21 +268,21 @@
                     matriculas.forEach(mat => {
                         const cursoNome = mat.turma?.cursos?.nome || `Turma ${mat.turma?.id || 'Desconhecida'}`;
                         const turno = mat.turma?.turno || 'N/A';
-                        
-                            // Define as informações extras baseado no turno para simular
-                            let horario = "08:00 – 11:00";
-                            let dias = "Seg, Qua, Sex";
-                            let icone = "menu_book";
-                            
-                            if(turno === "Vespertino") {
-                                horario = "14:00 – 17:00";
-                                dias = "Ter, Qui";
-                            }
-                            
-                            if(cursoNome.toLowerCase().includes("confeitaria")) icone = "cake";
-                            if(cursoNome.toLowerCase().includes("auxiliar") || cursoNome.toLowerCase().includes("info")) icone = "computer";
-                            
-                            container.innerHTML += `
+
+                        // Define as informações extras baseado no turno para simular
+                        let horario = "08:00 – 11:00";
+                        let dias = "Seg, Qua, Sex";
+                        let icone = "menu_book";
+
+                        if (turno === "Vespertino") {
+                            horario = "14:00 – 17:00";
+                            dias = "Ter, Qui";
+                        }
+
+                        if (cursoNome.toLowerCase().includes("confeitaria")) icone = "cake";
+                        if (cursoNome.toLowerCase().includes("auxiliar") || cursoNome.toLowerCase().includes("info")) icone = "computer";
+
+                        container.innerHTML += `
                                 <article class="course-card" tabindex="0" onclick="window.location.href='cursos.html'">
                                     <div class="course-card-bg"></div>
                                     <div class="course-card-header">
