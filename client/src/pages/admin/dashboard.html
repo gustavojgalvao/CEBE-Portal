@@ -4,8 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CEBE Admin - Atendimentos</title>
-    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #1a7a4a;
+            --primary-dark: #0f5c35;
+            --primary-light: #e8f5ee;
+            --surface: #ffffff;
+            --background-main: #f5f5f5;
+            --background-light: #fafafa;
+            --border-light: #e0e0e0;
+            --text-main: #1a1a1a;
+            --text-light: #666666;
+            --danger: #ba1a1a;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        a { text-decoration: none; }
+        .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; transition: background 0.2s, opacity 0.2s; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-light); color: var(--text-main); }
+        .btn-outline:hover { background: var(--background-main); }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; display: inline-block; line-height: 1; text-transform: none; letter-spacing: normal; }
+    </style>
     <style>
         body {
             background-color: var(--background-light);

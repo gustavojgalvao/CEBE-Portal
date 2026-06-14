@@ -438,7 +438,11 @@
             sseConnection.addEventListener('nova-mensagem', (event) => {
                 try {
                     const msg = JSON.parse(event.data);
-                    appendMensagem(msg);
+                    // Admin já adicionou sua própria mensagem otimisticamente.
+                    // Via SSE só processamos mensagens do ALUNO (o outro lado).
+                    if (msg.remetenteTipo === 'ALUNO') {
+                        appendMensagem(msg);
+                    }
                 } catch (e) {
                     console.error('Erro ao parsear mensagem SSE:', e);
                 }
@@ -474,9 +478,16 @@
             input.value = '';
             input.disabled = true;
 
+            // Adiciona otimisticamente a própria mensagem do admin na UI
+            appendMensagem({
+                remetenteTipo: 'ADMIN',
+                mensagem: texto,
+                dataHora: new Date().toISOString()
+            });
+
             try {
-                // O back-end notifica o aluno via SSE após salvar. Nós NÃO adicionamos a mensagem
-                // manualmente aqui — ela virá de volta pelo nosso próprio EventSource.
+                // O back-end notifica via SSE — filtramos mensagens ADMIN no listener
+                // para evitar duplicação (a mensagem já foi adicionada otimisticamente)
                 await apiFetch(`/admin/atendimentos/${atendimentoId}/mensagens`, {
                     method: 'POST',
                     body: JSON.stringify({ texto })

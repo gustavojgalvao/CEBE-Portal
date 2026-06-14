@@ -64,15 +64,25 @@ public class AtendimentoController {
     public SseEmitter streamMensagens(
             @PathVariable Integer id,
             @AuthenticationPrincipal Aluno aluno) {
-        
+
+        // O SecurityFilter valida o token (vindo de ?token= para EventSource).
+        // Se o token for inválido, aluno será null e retornamos sem subscrever.
+        if (aluno == null) {
+            SseEmitter rejected = new SseEmitter();
+            rejected.complete();
+            return rejected;
+        }
+
         Atendimento atendimento = atendimentoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
-                
+
         // Verifica se o chamado pertence ao aluno logado
         if (!atendimento.getAluno().getId().equals(aluno.getId())) {
-            throw new RuntimeException("Acesso negado");
+            SseEmitter rejected = new SseEmitter();
+            rejected.complete();
+            return rejected;
         }
-        
+
         return sseService.subscribe(id);
     }
 
