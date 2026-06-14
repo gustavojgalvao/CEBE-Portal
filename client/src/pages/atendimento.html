@@ -83,9 +83,16 @@
                                 <button class="chat-action-btn" aria-label="Informações">
                                     <span class="material-symbols-outlined">info</span>
                                 </button>
-                                <button class="chat-action-btn" aria-label="Mais opções">
-                                    <span class="material-symbols-outlined">more_vert</span>
-                                </button>
+                                <div style="position: relative;" id="alunoDropdownContainer">
+                                    <button class="chat-action-btn" aria-label="Mais opções" onclick="toggleAlunoMenu()">
+                                        <span class="material-symbols-outlined">more_vert</span>
+                                    </button>
+                                    <div id="alunoDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e0e0e0; z-index: 10; width: max-content; margin-top: 0.5rem;">
+                                        <button onclick="deletarChamadoAluno()" style="width: 100%; text-align: left; padding: 0.75rem 1rem; background: none; border: none; cursor: pointer; color: #ba1a1a; font-family: inherit; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <span class="material-symbols-outlined" style="font-size: 18px;">delete</span> Apagar Chamado
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -442,6 +449,31 @@
             chatInput.style.height = 'auto';
             chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
         });
+
+        function toggleAlunoMenu() {
+            const menu = document.getElementById('alunoDropdownMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', (e) => {
+            const container = document.getElementById('alunoDropdownContainer');
+            if (container && !container.contains(e.target)) {
+                document.getElementById('alunoDropdownMenu').style.display = 'none';
+            }
+        });
+
+        async function deletarChamadoAluno() {
+            if (!currentAtendimentoId) return;
+            if (!confirm(`Tem certeza que deseja apagar este chamado? Esta ação não pode ser desfeita.`)) return;
+            try {
+                await apiFetch(`/atendimentos/${currentAtendimentoId}`, { method: 'DELETE' });
+                // Volta para a tela inicial
+                document.getElementById('chat-back-btn').click();
+                await carregarAtendimentos();
+            } catch (err) {
+                alert('Erro ao apagar chamado: ' + err.message);
+            }
+        }
 
         // Modal
         function openModal() { modalOverlay.classList.add('open'); }

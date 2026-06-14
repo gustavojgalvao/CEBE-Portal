@@ -23,13 +23,16 @@ public class AdminAtendimentoController {
     private final AtendimentoRepository atendimentoRepository;
     private final MensagemAtendimentoRepository mensagemRepository;
     private final SseService sseService;
+    private final com.cebe.portal_aluno.service.AtendimentoService atendimentoService;
 
     public AdminAtendimentoController(AtendimentoRepository atendimentoRepository,
                                        MensagemAtendimentoRepository mensagemRepository,
-                                       SseService sseService) {
+                                       SseService sseService,
+                                       com.cebe.portal_aluno.service.AtendimentoService atendimentoService) {
         this.atendimentoRepository = atendimentoRepository;
         this.mensagemRepository = mensagemRepository;
         this.sseService = sseService;
+        this.atendimentoService = atendimentoService;
     }
 
     // converte a entidade para DTO para não expor dados sensíveis do aluno (como a senha)
@@ -116,6 +119,12 @@ public class AdminAtendimentoController {
         }
 
         return ResponseEntity.ok(toDTO(atendimentoRepository.save(atendimento)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+        atendimentoService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
     public record MensagemRequest(String texto) {}

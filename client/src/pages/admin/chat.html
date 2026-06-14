@@ -304,6 +304,17 @@
                         <option value="Em_andamento">Em andamento</option>
                         <option value="Finalizado">Finalizado</option>
                     </select>
+
+                    <div style="position: relative; margin-left: 0.5rem;" id="dropdownMenuContainer">
+                        <button class="btn-back" style="padding: 0.2rem;" onclick="toggleMenu()" aria-label="Opções">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
+                        <div id="dropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid var(--border-light); z-index: 10; width: max-content; margin-top: 0.5rem;">
+                            <button onclick="deletarChamadoAtual()" style="width: 100%; text-align: left; padding: 0.75rem 1rem; background: none; border: none; cursor: pointer; color: var(--danger); font-family: inherit; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">delete</span> Apagar Chamado
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -320,7 +331,7 @@
         </div>
     </main>
 
-    <script src="../services/api.js"></script>
+    <script src="../../services/api.js?v=2"></script>
     <script>
         // redireciona se não for admin
         if (localStorage.getItem('cebe_role') !== 'ADMIN') {
@@ -439,6 +450,28 @@
                 });
             } catch (err) {
                 alert('Erro ao atualizar status: ' + (err.message || err));
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', (e) => {
+            const container = document.getElementById('dropdownMenuContainer');
+            if (container && !container.contains(e.target)) {
+                document.getElementById('dropdownMenu').style.display = 'none';
+            }
+        });
+
+        async function deletarChamadoAtual() {
+            if (!confirm(`Tem certeza que deseja apagar este chamado?`)) return;
+            try {
+                await apiFetch(`/admin/atendimentos/${atendimentoId}`, { method: 'DELETE' });
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                alert('Erro ao apagar chamado: ' + err.message);
             }
         }
 

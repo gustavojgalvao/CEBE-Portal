@@ -15,11 +15,14 @@ public class AtendimentoService {
 
     private final AtendimentoRepository atendimentoRepository;
     private final NotificacaoService notificacaoService;
+    private final com.cebe.portal_aluno.repository.MensagemAtendimentoRepository mensagemRepository;
 
     public AtendimentoService(AtendimentoRepository atendimentoRepository,
-                              NotificacaoService notificacaoService) {
+                              NotificacaoService notificacaoService,
+                              com.cebe.portal_aluno.repository.MensagemAtendimentoRepository mensagemRepository) {
         this.atendimentoRepository = atendimentoRepository;
         this.notificacaoService = notificacaoService;
+        this.mensagemRepository = mensagemRepository;
     }
 
     public List<Atendimento> listarTodos() {
@@ -63,7 +66,9 @@ public class AtendimentoService {
         return salvo;
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void deletar(Integer id) {
+        mensagemRepository.deleteByAtendimentoId(id);
         atendimentoRepository.deleteById(id);
     }
 }

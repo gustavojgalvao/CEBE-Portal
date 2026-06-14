@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MensagemAtendimentoRepository extends JpaRepository<MensagemAtendimento, Integer> {
     List<MensagemAtendimento> findByAtendimentoIdOrderByDataHoraAsc(Integer atendimentoId);
+    void deleteByAtendimentoId(Integer atendimentoId);
 }

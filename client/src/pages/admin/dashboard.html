@@ -194,7 +194,7 @@
         </div>
     </main>
 
-    <script src="../services/api.js"></script>
+    <script src="../../services/api.js?v=2"></script>
     <script>
         // Check role
         if (localStorage.getItem('cebe_role') !== 'ADMIN') {
@@ -228,9 +228,14 @@
                             <td><span class="status-badge ${badgeClass}">${statusDisplay}</span></td>
                             <td style="color: var(--text-light); font-size: 0.9rem;">${data}</td>
                             <td>
-                                <a href="chat.html?id=${a.id}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
-                                    Responder
-                                </a>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <a href="chat.html?id=${a.id}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                        Responder
+                                    </a>
+                                    <button class="btn btn-outline" style="padding: 0.5rem; color: var(--danger); border-color: var(--danger);" onclick="deletarChamado(${a.id})" title="Apagar Chamado">
+                                        <span class="material-symbols-outlined" style="font-size: 1.1rem;">delete</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -242,6 +247,16 @@
                 if(err.message.includes('403') || err.message.includes('401')) {
                     logoutAdmin();
                 }
+            }
+        }
+
+        async function deletarChamado(id) {
+            if (!confirm(`Tem certeza que deseja apagar o chamado #${id}?`)) return;
+            try {
+                await apiFetch(`/admin/atendimentos/${id}`, { method: 'DELETE' });
+                carregarChamados();
+            } catch (err) {
+                alert('Erro ao apagar chamado: ' + err.message);
             }
         }
 
