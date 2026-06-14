@@ -269,7 +269,7 @@
         let currentAtendimentoId = null;
         let sseConnection = null;
 
-        // ── Conexão SSE ────────────────────────────────────────────────────────
+        // Conexão SSE
         function conectarSSE(id) {
             if (sseConnection) {
                 sseConnection.close();
@@ -298,7 +298,7 @@
             };
         }
 
-        // ── Adicionar uma única mensagem na UI sem re-renderizar tudo ─────────
+        // Adicionar uma única mensagem na UI sem re-renderizar tudo
         function adicionarMensagemNaUI(m) {
             const data = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             const isIncoming = m.remetenteTipo === 'ADMIN';
@@ -356,7 +356,7 @@
             chatWindow.style.display = 'none';
         }
 
-        // ── Carregamento inicial de mensagens via API ──────────────────────────
+        // Carregamento inicial de mensagens via API
         async function carregarMensagensDoChamado(id) {
             if (!id) return;
             try {
@@ -443,7 +443,7 @@
             chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
         });
 
-        // ── Modal ──────────────────────────────────────────────────────────────
+        // Modal
         function openModal() { modalOverlay.classList.add('open'); }
         function closeModal() { modalOverlay.classList.remove('open'); }
 
@@ -508,7 +508,7 @@
             }
         });
 
-        // ── Busca de conversas ─────────────────────────────────────────────────
+        // Busca de conversas
         document.getElementById('search-conversations').addEventListener('input', e => {
             const q = e.target.value.toLowerCase();
             document.querySelectorAll('.conversation-item').forEach(item => {
@@ -518,7 +518,7 @@
             });
         });
 
-        // ── Autopreenchimento via URL (Agendar Visita) ─────────────────────────
+        // Autopreenchimento via URL (Agendar Visita)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('action') === 'agendar') {
             openModal();
