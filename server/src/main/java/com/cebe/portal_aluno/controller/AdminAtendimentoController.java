@@ -55,7 +55,7 @@ public class AdminAtendimentoController {
                 
         // Atualizar o status do atendimento se a atendente responder
         if (atendimento.getStatusAtendimento() == StatusAtendimento.Pendente) {
-            atendimento.setStatusAtendimento(StatusAtendimento.valueOf("Em andamento"));
+            atendimento.setStatusAtendimento(StatusAtendimento.Em_andamento);
             atendimentoRepository.save(atendimento);
         }
 
@@ -78,7 +78,13 @@ public class AdminAtendimentoController {
             @RequestBody StatusRequest request) {
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
-        atendimento.setStatusAtendimento(StatusAtendimento.valueOf(request.status()));
+        // Normaliza o valor recebido (substitui espaços por underscore) para compatibilidade com o enum
+        String statusNormalizado = request.status().replace(" ", "_");
+        try {
+            atendimento.setStatusAtendimento(StatusAtendimento.valueOf(statusNormalizado));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(atendimentoRepository.save(atendimento));
     }
 
