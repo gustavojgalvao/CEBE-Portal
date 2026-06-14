@@ -1,5 +1,6 @@
 package com.cebe.portal_aluno.controller;
 
+import com.cebe.portal_aluno.dto.response.AtendimentoResponseDTO;
 import com.cebe.portal_aluno.entity.Atendimento;
 import com.cebe.portal_aluno.entity.MensagemAtendimento;
 import com.cebe.portal_aluno.entity.enums.StatusAtendimento;
@@ -29,9 +30,32 @@ public class AdminAtendimentoController {
         this.sseService = sseService;
     }
 
+    private AtendimentoResponseDTO toDTO(Atendimento a) {
+        return new AtendimentoResponseDTO(
+            a.getId(),
+            a.getAluno() != null ? a.getAluno().getId() : null,
+            a.getAluno() != null ? a.getAluno().getNome() : "Desconhecido",
+            a.getStatusAtendimento() != null ? a.getStatusAtendimento().name() : null,
+            a.getMensagem(),
+            a.getDataHora()
+        );
+    }
+
     @GetMapping
-    public ResponseEntity<List<Atendimento>> listarTodos() {
-        return ResponseEntity.ok(atendimentoRepository.findAll());
+    public ResponseEntity<List<AtendimentoResponseDTO>> listarTodos() {
+        List<AtendimentoResponseDTO> dtos = atendimentoRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AtendimentoResponseDTO> buscarPorId(@PathVariable Integer id) {
+        return atendimentoRepository.findById(id)
+                .map(this::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/mensagens")
@@ -41,7 +65,8 @@ public class AdminAtendimentoController {
 
     @GetMapping(value = "/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamMensagens(@PathVariable Integer id) {
-        // Admin also subscribes to the same Atendimento channel
+        // Admin subscribes to the Atendimento SSE channel
+        // Token auth is handled by SecurityFilter via query param ?token=xxx
         return sseService.subscribe(id);
     }
 
@@ -49,10 +74,10 @@ public class AdminAtendimentoController {
     public ResponseEntity<MensagemAtendimento> enviarMensagem(
             @PathVariable Integer id,
             @RequestBody MensagemRequest request) {
-        
+
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
-                
+
         // Atualizar o status do atendimento se a atendente responder
         if (atendimento.getStatusAtendimento() == StatusAtendimento.Pendente) {
             atendimento.setStatusAtendimento(StatusAtendimento.Em_andamento);
@@ -65,15 +90,15 @@ public class AdminAtendimentoController {
                 .mensagem(request.texto())
                 .dataHora(LocalDateTime.now())
                 .build();
-                
+
         MensagemAtendimento savedMsg = mensagemRepository.save(msg);
         sseService.notifySubscribers(id, savedMsg);
-        
+
         return ResponseEntity.ok(savedMsg);
     }
-    
+
     @PutMapping("/{id}/status")
-    public ResponseEntity<Atendimento> atualizarStatus(
+    public ResponseEntity<AtendimentoResponseDTO> atualizarStatus(
             @PathVariable Integer id,
             @RequestBody StatusRequest request) {
         Atendimento atendimento = atendimentoRepository.findById(id)
@@ -85,9 +110,10 @@ public class AdminAtendimentoController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(atendimentoRepository.save(atendimento));
+        return ResponseEntity.ok(toDTO(atendimentoRepository.save(atendimento)));
     }
 
     public record MensagemRequest(String texto) {}
     public record StatusRequest(String status) {}
 }
+

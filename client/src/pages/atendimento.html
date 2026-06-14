@@ -267,27 +267,74 @@
         }
 
         let currentAtendimentoId = null;
-        let chatPollInterval = null;
+        let sseConnection = null;
+
+        // ── Conexão SSE ────────────────────────────────────────────────────────
+        function conectarSSE(id) {
+            if (sseConnection) {
+                sseConnection.close();
+                sseConnection = null;
+            }
+            const token = localStorage.getItem('cebe_token');
+            const sseUrl = `http://localhost:8080/atendimentos/${id}/stream?token=${encodeURIComponent(token)}`;
+            sseConnection = new EventSource(sseUrl);
+
+            sseConnection.addEventListener('nova-mensagem', (event) => {
+                try {
+                    const msg = JSON.parse(event.data);
+                    // Só renderiza se a mensagem for do ADMIN (admin respondendo ao aluno)
+                    // As do próprio aluno já foram adicionadas otimisticamente ao enviar
+                    if (msg.remetenteTipo === 'ADMIN') {
+                        adicionarMensagemNaUI(msg);
+                    }
+                } catch (e) {
+                    console.error('Erro ao parsear mensagem SSE:', e);
+                }
+            });
+
+            sseConnection.onerror = () => {
+                // Reconexão automática é gerenciada pelo navegador para EventSource
+                console.warn('SSE: erro de conexão, tentando reconectar...');
+            };
+        }
+
+        // ── Adicionar uma única mensagem na UI sem re-renderizar tudo ─────────
+        function adicionarMensagemNaUI(m) {
+            const data = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const isIncoming = m.remetenteTipo === 'ADMIN';
+            const cssType = isIncoming ? 'incoming' : 'outgoing';
+
+            const div = document.createElement('div');
+            div.className = `message-row ${cssType}`;
+            div.innerHTML = `
+                ${isIncoming ? '<div class="message-avatar green" aria-hidden="true">SE</div>' : '<div class="message-avatar hidden-avatar" aria-hidden="true"></div>'}
+                <div class="message-bubble-wrapper">
+                    ${isIncoming ? '<span class="message-sender-name">Secretaria</span>' : ''}
+                    <div class="message-bubble">${m.mensagem}</div>
+                    <div class="message-meta">
+                        <span>${data}</span>
+                        ${!isIncoming ? '<span class="material-symbols-outlined message-status-icon">done</span>' : ''}
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
 
         function selectConversation(item, chamado) {
             document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
             if(item) item.classList.add('active');
-            
+
             chatEmpty.style.display = 'none';
             chatWindow.style.display = 'flex';
             if (isMobile()) convPanel.classList.add('mobile-hidden');
-            
+
             if(chamado) {
                 currentAtendimentoId = chamado.id;
-                document.getElementById('chat-system-message').textContent = 'Chamado #' + chamado.id + ' criado em ' + new Date(chamado.dataHora).toLocaleString();
-                // Clear previous messages except system message
-                chatMessages.innerHTML = '<div class="system-message" id="chat-system-message">' + document.getElementById('chat-system-message').textContent + '</div>';
-                
+                chatMessages.innerHTML = '<div class="system-message" id="chat-system-message">Chamado #' + chamado.id + ' criado em ' + new Date(chamado.dataHora).toLocaleString() + '</div>';
+
                 carregarMensagensDoChamado(chamado.id);
-                
-                // Clear existing interval
-                if (chatPollInterval) clearInterval(chatPollInterval);
-                chatPollInterval = setInterval(() => carregarMensagensDoChamado(chamado.id), 3000);
+                conectarSSE(chamado.id);
             }
         }
 
@@ -296,7 +343,8 @@
             chatEmpty.style.display = 'flex';
             chatWindow.style.display = 'none';
             document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
-            if (chatPollInterval) clearInterval(chatPollInterval);
+            // Fecha a conexão SSE ao voltar
+            if (sseConnection) { sseConnection.close(); sseConnection = null; }
             currentAtendimentoId = null;
         });
 
@@ -308,20 +356,15 @@
             chatWindow.style.display = 'none';
         }
 
-        // ── Carregamento de mensagens via API ─────────────────────────────────
-        let lastMessagesCount = 0;
-
+        // ── Carregamento inicial de mensagens via API ──────────────────────────
         async function carregarMensagensDoChamado(id) {
             if (!id) return;
             try {
                 const mensagens = await apiFetch(`/atendimentos/${id}/mensagens`);
-                if (mensagens.length === lastMessagesCount && mensagens.length > 0) return; // No new messages
-                
-                lastMessagesCount = mensagens.length;
-                
+
                 const sysMsgText = document.getElementById('chat-system-message').textContent;
                 let html = '<div class="system-message" id="chat-system-message">' + sysMsgText + '</div>';
-                
+
                 // Mensagem original de abertura
                 const chamado = chamadosGlobais.find(c => c.id === id);
                 if (chamado) {
@@ -340,7 +383,7 @@
                     const data = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                     const isIncoming = m.remetenteTipo === 'ADMIN';
                     const cssType = isIncoming ? 'incoming' : 'outgoing';
-                    
+
                     html += `
                         <div class="message-row ${cssType}">
                             ${isIncoming ? '<div class="message-avatar green" aria-hidden="true">SE</div>' : '<div class="message-avatar hidden-avatar" aria-hidden="true"></div>'}
@@ -366,7 +409,7 @@
 
         async function sendMessage() {
             if (!currentAtendimentoId) return;
-            
+
             const input = document.getElementById('chat-input');
             const texto = input.value.trim();
             if (!texto) return;
@@ -374,12 +417,18 @@
             input.value = '';
             input.style.height = 'auto';
 
+            // Adiciona otimisticamente a mensagem do próprio aluno na UI
+            adicionarMensagemNaUI({
+                remetenteTipo: 'ALUNO',
+                mensagem: texto,
+                dataHora: new Date().toISOString()
+            });
+
             try {
                 await apiFetch(`/atendimentos/${currentAtendimentoId}/mensagens`, {
                     method: 'POST',
                     body: JSON.stringify({ texto })
                 });
-                carregarMensagensDoChamado(currentAtendimentoId);
             } catch(e) {
                 alert('Erro ao enviar mensagem: ' + e.message);
             }

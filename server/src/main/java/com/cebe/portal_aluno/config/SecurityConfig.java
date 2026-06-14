@@ -27,8 +27,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // Proteger endpoints de administração
+                        // Proteger endpoints de administração (exceto o stream SSE, tratado via token no filtro)
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // SSE streams — EventSource não suporta headers, token vem como query param
+                        .requestMatchers("/atendimentos/*/stream").permitAll()
+                        .requestMatchers("/admin/atendimentos/*/stream").permitAll()
                         // Rotas de login
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/admin/login").permitAll()

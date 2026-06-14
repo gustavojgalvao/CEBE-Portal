@@ -56,7 +56,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recoverToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null) return null;
-        return authHeader.replace("Bearer ", "");
+        if (authHeader != null) {
+            return authHeader.replace("Bearer ", "");
+        }
+        // Fallback: EventSource (SSE) cannot send headers, so token can come as ?token=xxx
+        String queryToken = request.getParameter("token");
+        return queryToken;
     }
 }

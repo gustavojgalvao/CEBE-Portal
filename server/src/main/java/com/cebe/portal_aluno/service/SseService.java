@@ -32,16 +32,21 @@ public class SseService {
     public void notifySubscribers(Integer atendimentoId, MensagemAtendimento mensagem) {
         List<SseEmitter> emitters = emittersMap.get(atendimentoId);
         if (emitters != null) {
+            List<SseEmitter> deadEmitters = new java.util.ArrayList<>();
             for (SseEmitter emitter : emitters) {
                 try {
                     emitter.send(SseEmitter.event()
                             .name("nova-mensagem")
                             .data(mensagem));
                 } catch (IOException e) {
-                    emitter.complete();
-                    emitters.remove(emitter);
+                    deadEmitters.add(emitter);
                 }
             }
+            // Remove dead emitters after iteration to avoid ConcurrentModificationException
+            deadEmitters.forEach(e -> {
+                emitters.remove(e);
+                e.completeWithError(new IOException("Client disconnected"));
+            });
         }
     }
 }
