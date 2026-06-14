@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,41 +13,33 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Service
 public class SseService {
 
-    // Maps atendimentoId to a list of SseEmitters
     private final ConcurrentHashMap<Integer, List<SseEmitter>> emittersMap = new ConcurrentHashMap<>();
 
     public SseEmitter subscribe(Integer atendimentoId) {
-        // Set timeout to 30 minutes (or use 0L for infinite, but infinite can cause memory leaks if not careful)
-        SseEmitter emitter = new SseEmitter(30 * 60 * 1000L);
+        SseEmitter emitter = new SseEmitter(30 * 60 * 1000L); // 30 minutos de timeout
 
-        List<SseEmitter> emitters = emittersMap.computeIfAbsent(atendimentoId, k -> new CopyOnWriteArrayList<>());
-        emitters.add(emitter);
+        List<SseEmitter> lista = emittersMap.computeIfAbsent(atendimentoId, k -> new CopyOnWriteArrayList<>());
+        lista.add(emitter);
 
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        emitter.onTimeout(() -> emitters.remove(emitter));
-        emitter.onError((e) -> emitters.remove(emitter));
+        emitter.onCompletion(() -> lista.remove(emitter));
+        emitter.onTimeout(() -> lista.remove(emitter));
+        emitter.onError(e -> lista.remove(emitter));
 
         return emitter;
     }
 
     public void notifySubscribers(Integer atendimentoId, MensagemAtendimento mensagem) {
-        List<SseEmitter> emitters = emittersMap.get(atendimentoId);
-        if (emitters != null) {
-            List<SseEmitter> deadEmitters = new java.util.ArrayList<>();
-            for (SseEmitter emitter : emitters) {
-                try {
-                    emitter.send(SseEmitter.event()
-                            .name("nova-mensagem")
-                            .data(mensagem));
-                } catch (IOException e) {
-                    deadEmitters.add(emitter);
-                }
+        List<SseEmitter> lista = emittersMap.get(atendimentoId);
+        if (lista == null) return;
+
+        List<SseEmitter> mortos = new ArrayList<>();
+        for (SseEmitter emitter : lista) {
+            try {
+                emitter.send(SseEmitter.event().name("nova-mensagem").data(mensagem));
+            } catch (IOException e) {
+                mortos.add(emitter);
             }
-            // Remove dead emitters after iteration to avoid ConcurrentModificationException
-            deadEmitters.forEach(e -> {
-                emitters.remove(e);
-                e.completeWithError(new IOException("Client disconnected"));
-            });
         }
+        lista.removeAll(mortos);
     }
 }

@@ -26,7 +26,9 @@ public class AtendimentoController {
     private final MensagemAtendimentoRepository mensagemRepository;
     private final SseService sseService;
 
-    public AtendimentoController(AtendimentoService atendimentoService, MensagemAtendimentoRepository mensagemRepository, SseService sseService) {
+    public AtendimentoController(AtendimentoService atendimentoService,
+                                  MensagemAtendimentoRepository mensagemRepository,
+                                  SseService sseService) {
         this.atendimentoService = atendimentoService;
         this.mensagemRepository = mensagemRepository;
         this.sseService = sseService;
@@ -47,40 +49,36 @@ public class AtendimentoController {
         return ResponseEntity.ok(atendimentoService.buscarPorId(id));
     }
 
-    // O aluno logado abre um chamado — o idAluno vem do token, não do body
+    // o aluno logado abre um chamado; o id do aluno vem do token JWT
     @PostMapping
     public ResponseEntity<Atendimento> abrirChamado(
             @RequestBody Map<String, String> body,
             @AuthenticationPrincipal Aluno aluno) {
 
         String mensagem = body.getOrDefault("mensagem", "Sem descrição");
-        String statusStr = body.getOrDefault("statusAtendimento", "Pendente");
+        String status = body.getOrDefault("statusAtendimento", "Pendente");
 
-        Atendimento atendimento = atendimentoService.abrirChamado(aluno, mensagem, statusStr);
+        Atendimento atendimento = atendimentoService.abrirChamado(aluno, mensagem, status);
         return ResponseEntity.ok(atendimento);
     }
 
+    // conexão SSE para receber mensagens em tempo real
+    // o token vem na URL (?token=...) porque o EventSource do browser não suporta headers
     @GetMapping(value = "/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter streamMensagens(
-            @PathVariable Integer id,
-            @AuthenticationPrincipal Aluno aluno) {
-
-        // O SecurityFilter valida o token (vindo de ?token= para EventSource).
-        // Se o token for inválido, aluno será null e retornamos sem subscrever.
+    public SseEmitter abrirStream(@PathVariable Integer id, @AuthenticationPrincipal Aluno aluno) {
         if (aluno == null) {
-            SseEmitter rejected = new SseEmitter();
-            rejected.complete();
-            return rejected;
+            SseEmitter emitter = new SseEmitter();
+            emitter.complete();
+            return emitter;
         }
 
         Atendimento atendimento = atendimentoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
 
-        // Verifica se o chamado pertence ao aluno logado
         if (!atendimento.getAluno().getId().equals(aluno.getId())) {
-            SseEmitter rejected = new SseEmitter();
-            rejected.complete();
-            return rejected;
+            SseEmitter emitter = new SseEmitter();
+            emitter.complete();
+            return emitter;
         }
 
         return sseService.subscribe(id);
@@ -90,15 +88,14 @@ public class AtendimentoController {
     public ResponseEntity<List<MensagemAtendimento>> listarMensagens(
             @PathVariable Integer id,
             @AuthenticationPrincipal Aluno aluno) {
-        
+
         Atendimento atendimento = atendimentoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
-                
-        // Verifica se o chamado pertence ao aluno logado
+
         if (!atendimento.getAluno().getId().equals(aluno.getId())) {
             return ResponseEntity.status(403).build();
         }
-        
+
         return ResponseEntity.ok(mensagemRepository.findByAtendimentoIdOrderByDataHoraAsc(id));
     }
 
@@ -107,15 +104,14 @@ public class AtendimentoController {
             @PathVariable Integer id,
             @RequestBody Map<String, String> body,
             @AuthenticationPrincipal Aluno aluno) {
-            
+
         Atendimento atendimento = atendimentoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
-                
-        // Verifica se o chamado pertence ao aluno logado
+
         if (!atendimento.getAluno().getId().equals(aluno.getId())) {
             return ResponseEntity.status(403).build();
         }
-        
+
         String texto = body.getOrDefault("texto", "");
         if (texto.isBlank()) {
             return ResponseEntity.badRequest().build();
@@ -127,11 +123,11 @@ public class AtendimentoController {
                 .mensagem(texto)
                 .dataHora(LocalDateTime.now())
                 .build();
-                
-        MensagemAtendimento savedMsg = mensagemRepository.save(msg);
-        sseService.notifySubscribers(id, savedMsg);
-        
-        return ResponseEntity.ok(savedMsg);
+
+        MensagemAtendimento salva = mensagemRepository.save(msg);
+        sseService.notifySubscribers(id, salva);
+
+        return ResponseEntity.ok(salva);
     }
 
     @PutMapping("/{id}")
@@ -148,4 +144,3 @@ public class AtendimentoController {
         return ResponseEntity.noContent().build();
     }
 }
-

@@ -31,7 +31,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = recoverToken(request);
+
+        String token = pegarToken(request);
+
         if (token != null) {
             String email = tokenService.validateToken(token);
             if (!email.isEmpty()) {
@@ -45,22 +47,21 @@ public class SecurityFilter extends OncePerRequestFilter {
                 }
 
                 if (user != null) {
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
         }
+
         filterChain.doFilter(request, response);
     }
 
-    private String recoverToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null) {
-            return authHeader.replace("Bearer ", "");
+    private String pegarToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null) {
+            return header.replace("Bearer ", "");
         }
-        // Fallback: EventSource (SSE) cannot send headers, so token can come as ?token=xxx
-        String queryToken = request.getParameter("token");
-        return queryToken;
+        // para conexões SSE o token vem na URL porque o EventSource não suporta headers
+        return request.getParameter("token");
     }
 }

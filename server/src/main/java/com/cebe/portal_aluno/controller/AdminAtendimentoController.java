@@ -24,12 +24,15 @@ public class AdminAtendimentoController {
     private final MensagemAtendimentoRepository mensagemRepository;
     private final SseService sseService;
 
-    public AdminAtendimentoController(AtendimentoRepository atendimentoRepository, MensagemAtendimentoRepository mensagemRepository, SseService sseService) {
+    public AdminAtendimentoController(AtendimentoRepository atendimentoRepository,
+                                       MensagemAtendimentoRepository mensagemRepository,
+                                       SseService sseService) {
         this.atendimentoRepository = atendimentoRepository;
         this.mensagemRepository = mensagemRepository;
         this.sseService = sseService;
     }
 
+    // converte a entidade para DTO para não expor dados sensíveis do aluno (como a senha)
     private AtendimentoResponseDTO toDTO(Atendimento a) {
         return new AtendimentoResponseDTO(
             a.getId(),
@@ -43,11 +46,11 @@ public class AdminAtendimentoController {
 
     @GetMapping
     public ResponseEntity<List<AtendimentoResponseDTO>> listarTodos() {
-        List<AtendimentoResponseDTO> dtos = atendimentoRepository.findAll()
+        List<AtendimentoResponseDTO> lista = atendimentoRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .toList();
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
@@ -63,10 +66,9 @@ public class AdminAtendimentoController {
         return ResponseEntity.ok(mensagemRepository.findByAtendimentoIdOrderByDataHoraAsc(id));
     }
 
+    // conexão SSE para a secretaria receber mensagens em tempo real
     @GetMapping(value = "/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter streamMensagens(@PathVariable Integer id) {
-        // Admin subscribes to the Atendimento SSE channel
-        // Token auth is handled by SecurityFilter via query param ?token=xxx
+    public SseEmitter abrirStream(@PathVariable Integer id) {
         return sseService.subscribe(id);
     }
 
@@ -78,7 +80,7 @@ public class AdminAtendimentoController {
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
 
-        // Atualizar o status do atendimento se a atendente responder
+        // se o chamado ainda estava pendente, muda para em andamento
         if (atendimento.getStatusAtendimento() == StatusAtendimento.Pendente) {
             atendimento.setStatusAtendimento(StatusAtendimento.Em_andamento);
             atendimentoRepository.save(atendimento);
@@ -91,29 +93,31 @@ public class AdminAtendimentoController {
                 .dataHora(LocalDateTime.now())
                 .build();
 
-        MensagemAtendimento savedMsg = mensagemRepository.save(msg);
-        sseService.notifySubscribers(id, savedMsg);
+        MensagemAtendimento salva = mensagemRepository.save(msg);
+        sseService.notifySubscribers(id, salva);
 
-        return ResponseEntity.ok(savedMsg);
+        return ResponseEntity.ok(salva);
     }
 
     @PutMapping("/{id}/status")
     public ResponseEntity<AtendimentoResponseDTO> atualizarStatus(
             @PathVariable Integer id,
             @RequestBody StatusRequest request) {
+
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
-        // Normaliza o valor recebido (substitui espaços por underscore) para compatibilidade com o enum
-        String statusNormalizado = request.status().replace(" ", "_");
+
+        // aceita "Em andamento" (com espaço) ou "Em_andamento" (com underscore)
+        String status = request.status().replace(" ", "_");
         try {
-            atendimento.setStatusAtendimento(StatusAtendimento.valueOf(statusNormalizado));
+            atendimento.setStatusAtendimento(StatusAtendimento.valueOf(status));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok(toDTO(atendimentoRepository.save(atendimento)));
     }
 
     public record MensagemRequest(String texto) {}
     public record StatusRequest(String status) {}
 }
-

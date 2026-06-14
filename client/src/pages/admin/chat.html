@@ -308,7 +308,7 @@
             </div>
 
             <div class="chat-messages" id="chatMessages">
-                <!-- Mensagens aparecem aqui -->
+                <!-- mensagens aparecem aqui -->
             </div>
 
             <form class="chat-input-area" id="chatForm">
@@ -322,7 +322,7 @@
 
     <script src="../services/api.js"></script>
     <script>
-        // ── Auth guard ─────────────────────────────────────────────────────────
+        // redireciona se não for admin
         if (localStorage.getItem('cebe_role') !== 'ADMIN') {
             window.location.href = 'login.html';
         }
@@ -335,84 +335,70 @@
             window.location.href = 'dashboard.html';
         }
 
-        let originalAtendimento = null;
+        let atendimentoAtual = null;
         let sseConnection = null;
 
-        // ── Indicador de status SSE ────────────────────────────────────────────
-        function setSseStatus(status) {
+        function atualizarIndicadorSSE(status) {
             const dot = document.getElementById('sseIndicator');
             dot.className = 'sse-indicator ' + status;
-            dot.title = status === 'connected' ? 'Tempo real ativo' :
-                        status === 'error'     ? 'Erro na conexão em tempo real' : 'Conectando...';
         }
 
-        // ── Carregar cabeçalho do chamado ─────────────────────────────────────
         async function carregarCabecalho() {
             try {
                 const atendimento = await apiFetch(`/admin/atendimentos/${atendimentoId}`);
-                originalAtendimento = atendimento;
+                atendimentoAtual = atendimento;
 
                 if (atendimento) {
                     document.getElementById('chatTitle').textContent =
                         `Chamado #${atendimento.id} — ${atendimento.alunoNome || 'Aluno'}`;
-                    const dataAbertura = new Date(atendimento.dataHora).toLocaleString('pt-BR');
-                    document.getElementById('chatSubtitle').textContent = `Aberto em ${dataAbertura}`;
+                    const data = new Date(atendimento.dataHora).toLocaleString('pt-BR');
+                    document.getElementById('chatSubtitle').textContent = `Aberto em ${data}`;
                     document.getElementById('statusSelect').value = atendimento.statusAtendimento || 'Pendente';
                 }
             } catch (err) {
-                console.error('Erro ao carregar cabeçalho:', err);
+                console.error('Erro ao carregar chamado:', err);
             }
         }
 
-        // ── Renderização de mensagens ──────────────────────────────────────────
-        function appendMensagem(m, scroll = true) {
+        function adicionarMensagem(m, rolar = true) {
             const container = document.getElementById('chatMessages');
-            const data = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const hora = new Date(m.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             const isAdmin = m.remetenteTipo === 'ADMIN';
             const cssClass = isAdmin ? 'msg-admin' : 'msg-aluno';
-            const label = isAdmin ? 'Secretaria' : (originalAtendimento?.alunoNome || 'Aluno');
+            const nome = isAdmin ? 'Secretaria' : (atendimentoAtual?.alunoNome || 'Aluno');
 
             const div = document.createElement('div');
             div.className = `msg-bubble ${cssClass}`;
             div.innerHTML = `
-                <div class="msg-label">${label}</div>
-                <div>${escapeHtml(m.mensagem)}</div>
-                <span class="msg-info">${data}</span>
+                <div class="msg-label">${nome}</div>
+                <div>${m.mensagem}</div>
+                <span class="msg-info">${hora}</span>
             `;
             container.appendChild(div);
-            if (scroll) container.scrollTop = container.scrollHeight;
+            if (rolar) container.scrollTop = container.scrollHeight;
         }
 
-        function escapeHtml(text) {
-            return text
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-        }
-
-        // ── Carregar histórico de mensagens ───────────────────────────────────
         async function carregarMensagens() {
             try {
                 const container = document.getElementById('chatMessages');
                 container.innerHTML = '';
 
-                // Mensagem original de abertura do chamado
-                if (originalAtendimento) {
-                    const dataOriginal = new Date(originalAtendimento.dataHora)
+                // mostra a mensagem inicial que abriu o chamado
+                if (atendimentoAtual) {
+                    const hora = new Date(atendimentoAtual.dataHora)
                         .toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                     const div = document.createElement('div');
                     div.className = 'msg-bubble msg-aluno';
                     div.innerHTML = `
-                        <div class="msg-label">${originalAtendimento.alunoNome || 'Aluno'}</div>
-                        <div>${escapeHtml(originalAtendimento.mensagem)}</div>
-                        <span class="msg-info">${dataOriginal}</span>
+                        <div class="msg-label">${atendimentoAtual.alunoNome || 'Aluno'}</div>
+                        <div>${atendimentoAtual.mensagem}</div>
+                        <span class="msg-info">${hora}</span>
                     `;
                     container.appendChild(div);
                 }
 
                 const mensagens = await apiFetch(`/admin/atendimentos/${atendimentoId}/mensagens`);
-                mensagens.forEach(m => appendMensagem(m, false));
+                mensagens.forEach(m => adicionarMensagem(m, false));
 
                 container.scrollTop = container.scrollHeight;
             } catch (err) {
@@ -420,43 +406,31 @@
             }
         }
 
-        // ── SSE: conexão em tempo real ─────────────────────────────────────────
         function conectarSSE() {
-            if (sseConnection) {
-                sseConnection.close();
-            }
+            if (sseConnection) sseConnection.close();
 
             const token = localStorage.getItem('cebe_token');
-            const sseUrl = `http://localhost:8080/admin/atendimentos/${atendimentoId}/stream?token=${encodeURIComponent(token)}`;
+            const url = `http://localhost:8080/admin/atendimentos/${atendimentoId}/stream?token=${encodeURIComponent(token)}`;
 
-            sseConnection = new EventSource(sseUrl);
+            sseConnection = new EventSource(url);
 
-            sseConnection.onopen = () => {
-                setSseStatus('connected');
-            };
+            sseConnection.onopen = () => atualizarIndicadorSSE('connected');
 
             sseConnection.addEventListener('nova-mensagem', (event) => {
-                try {
-                    const msg = JSON.parse(event.data);
-                    // Admin já adicionou sua própria mensagem otimisticamente.
-                    // Via SSE só processamos mensagens do ALUNO (o outro lado).
-                    if (msg.remetenteTipo === 'ALUNO') {
-                        appendMensagem(msg);
-                    }
-                } catch (e) {
-                    console.error('Erro ao parsear mensagem SSE:', e);
+                const msg = JSON.parse(event.data);
+                // só mostra mensagens do aluno; as da secretaria já foram adicionadas ao enviar
+                if (msg.remetenteTipo === 'ALUNO') {
+                    adicionarMensagem(msg);
                 }
             });
 
             sseConnection.onerror = () => {
-                setSseStatus('error');
-                // Tenta reconectar após 5s
+                atualizarIndicadorSSE('error');
                 sseConnection.close();
                 setTimeout(conectarSSE, 5000);
             };
         }
 
-        // ── Atualizar status ───────────────────────────────────────────────────
         async function atualizarStatus(novoStatus) {
             try {
                 await apiFetch(`/admin/atendimentos/${atendimentoId}/status`, {
@@ -468,7 +442,6 @@
             }
         }
 
-        // ── Enviar mensagem ────────────────────────────────────────────────────
         document.getElementById('chatForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('chatInput');
@@ -478,22 +451,19 @@
             input.value = '';
             input.disabled = true;
 
-            // Adiciona otimisticamente a própria mensagem do admin na UI
-            appendMensagem({
+            // adiciona a mensagem na tela imediatamente, sem esperar a API responder
+            adicionarMensagem({
                 remetenteTipo: 'ADMIN',
                 mensagem: texto,
                 dataHora: new Date().toISOString()
             });
 
             try {
-                // O back-end notifica via SSE — filtramos mensagens ADMIN no listener
-                // para evitar duplicação (a mensagem já foi adicionada otimisticamente)
                 await apiFetch(`/admin/atendimentos/${atendimentoId}/mensagens`, {
                     method: 'POST',
                     body: JSON.stringify({ texto })
                 });
 
-                // Atualiza o select localmente se estava Pendente
                 if (document.getElementById('statusSelect').value === 'Pendente') {
                     document.getElementById('statusSelect').value = 'Em_andamento';
                 }
@@ -505,21 +475,18 @@
             }
         });
 
-        // ── Logout ─────────────────────────────────────────────────────────────
         function logoutAdmin() {
             localStorage.removeItem('cebe_token');
             localStorage.removeItem('cebe_role');
             window.location.href = 'login.html';
         }
 
-        // ── Inicialização ──────────────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', async () => {
             await carregarCabecalho();
             await carregarMensagens();
             conectarSSE();
         });
 
-        // Fechar SSE ao sair da página
         window.addEventListener('beforeunload', () => {
             if (sseConnection) sseConnection.close();
         });
