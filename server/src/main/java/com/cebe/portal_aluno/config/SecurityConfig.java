@@ -40,6 +40,10 @@ public class SecurityConfig {
                         // Rotas de login
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/admin/login").permitAll()
+                        // Rotas públicas para matrícula
+                        .requestMatchers(HttpMethod.GET, "/turmas").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/alunos").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/matriculas").permitAll()
                         // Força a autenticação para todas as outras rotas (evita erro de usuário nulo)
                         .anyRequest().authenticated()
                 )
